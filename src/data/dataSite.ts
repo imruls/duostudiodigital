@@ -307,6 +307,7 @@ export interface ClientReview {
 }
 
 export const clientReviews: ClientReview[] = [
+  // Orden de Figma: la primera página muestra Karina, Alejandro y Flor.
   {
     rating: 5,
     name: "Karina Fernandez",
@@ -316,6 +317,11 @@ export const clientReviews: ClientReview[] = [
     rating: 5,
     name: "Alejandro Cuello",
     text: "Excelente servicio el de Duo, siempre generando herramientas para que el cliente o el producto esté donde tiene que estar, la pasión y el profesionalismo de las chicas hacen la diferencia…. No duden en sumarse a este hermoso equipo!!!",
+  },
+  {
+    rating: 5,
+    name: "Flor Ruiz",
+    text: "Excelente experiencia con Dúo. Cami y Mica son unas genias, súper profesionales, creativas y siempre atentas a cada detalle. Da gusto trabajar con ellas y los resultados hablan por sí solos. Las recomiendo totalmente!",
   },
   {
     rating: 5,
@@ -329,15 +335,25 @@ export const clientReviews: ClientReview[] = [
   },
   {
     rating: 5,
-    name: "Flor Ruiz",
-    text: "Excelente experiencia con Dúo. Cami y Mica son unas genias, súper profesionales, creativas y siempre atentas a cada detalle. Da gusto trabajar con ellas y los resultados hablan por sí solos. Las recomiendo totalmente!",
-  },
-  {
-    rating: 5,
     name: "Alexo Str",
     text: "Excelente Duo. Resolvieron mi inquietud de manera rápida y eficaz logrando aumentar la cantidad de gente a la que le llegó mi trabajo como entrenador. Hoy con mas trabajo que antes, por la amabilidad de Mica y de Cami...no dudo en pedirle ayuda a DÚO STUDIO DIGITAL. Gracias chicas!",
   },
 ];
+
+export const resenasSeccion = {
+  badge: "Reseñas",
+  titulo: { antes: "Lo que dicen nuestros ", destacado: "clientes" },
+  bajada: "Historias reales de personas que ya trabajaron con nosotras.",
+  // A CONFIRMAR CON EL ESTUDIO (CLAUDE.md: no inventar datos).
+  puntaje: "5,0",
+  puntajeDetalle: "Promedio de 6 reseñas en Google",
+  carruselLabel: "Reseñas de clientes",
+  carruselRol: "carrusel",
+  /** Indicador desktop; en tablet/mobile se usa carouselLabels.estado. */
+  pagina: (actual: number, total: number) => `Página ${actual} de ${total}`,
+  pregunta: "¿Ya trabajaste con nosotras?",
+  ctaGoogle: "Dejanos tu reseña en Google",
+};
 
 export const googleReviewHref =
   "https://www.google.com/maps/place/D%C3%BAo+Studio+Digital/@-37.0323467,-65.3129713,6z/data=!3m1!4b1!4m6!3m5!1s0x64ba177cf6cee76b:0xf62dadc4ff0ba53d!8m2!3d-37.1498821!4d-60.0254816!16s%2Fg%2F11ms1qqxbr?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D";

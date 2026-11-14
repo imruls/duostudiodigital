@@ -8,7 +8,8 @@
  *   [data-carrusel-pista]      contenedor que scrollea (hijos = ítems)
  *   [data-carrusel-punto]      botones de página (opcional)
  *   [data-carrusel-anterior] / [data-carrusel-siguiente] (opcional)
- *   [data-carrusel-estado]     región aria-live con data-plantilla="{a} de {t}"
+ *   [data-carrusel-estado]     uno o más textos con data-plantilla="{a} de {t}"
+ *                              (el visible lleva aria-live="polite")
  * Si la pista no scrollea (desktop en grilla) no hace nada visible.
  */
 export function initCarrusel(root: HTMLElement): void {
@@ -22,7 +23,11 @@ export function initCarrusel(root: HTMLElement): void {
   const siguiente = root.querySelector<HTMLElement>(
     "[data-carrusel-siguiente]",
   );
-  const estado = root.querySelector<HTMLElement>("[data-carrusel-estado]");
+  // Puede haber más de un indicador (p. ej. "Página 1 de 2" en desktop y
+  // "1 de 3" en tablet/mobile); cada uno con su plantilla.
+  const estados = Array.from(
+    root.querySelectorAll<HTMLElement>("[data-carrusel-estado]"),
+  );
   let paginaActual = -1;
 
   // Ítems visibles por página (1 en mobile, 2 o 3 en reseñas).
@@ -74,11 +79,13 @@ export function initCarrusel(root: HTMLElement): void {
     });
     anterior?.setAttribute("aria-disabled", String(pagina <= 0));
     siguiente?.setAttribute("aria-disabled", String(pagina >= total - 1));
-    if (estado && pagina !== paginaActual) {
-      const plantilla = estado.dataset.plantilla ?? "{a} / {t}";
-      estado.textContent = plantilla
-        .replace("{a}", String(pagina + 1))
-        .replace("{t}", String(total));
+    if (pagina !== paginaActual) {
+      for (const estado of estados) {
+        const plantilla = estado.dataset.plantilla ?? "{a} / {t}";
+        estado.textContent = plantilla
+          .replace("{a}", String(pagina + 1))
+          .replace("{t}", String(total));
+      }
     }
     paginaActual = pagina;
   };

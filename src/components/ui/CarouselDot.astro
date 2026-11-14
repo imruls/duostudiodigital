@@ -35,6 +35,11 @@ const { activo = false, class: className, ...rest } = Astro.props;
     transition: background-color var(--duo-transition);
   }
 
+  /* El carrusel oculta los puntos que sobran con [hidden] */
+  .indicador[hidden] {
+    display: none;
+  }
+
   .indicador__marca {
     width: 10px;
     height: 10px;

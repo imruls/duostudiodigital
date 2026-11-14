@@ -1,275 +1,540 @@
 ---
-import { clientReviews as reviews, googleReviewHref } from "@data/dataSite";
-import Icon from "@ui/Icon.astro";
+/**
+ * Reseñas — Figma: desktop 21:252 · tablet 54:2576 · mobile 25:528.
+ * Nota de cumplimiento: "Nota/Reseñas".
+ * - Carrusel sin autoplay: 3 por página en desktop, 2 en tablet, 1 en mobile.
+ *   Flechas con aria-label (deshabilitadas en los extremos), puntos en
+ *   desktop e indicador "x de y" en una región aria-live.
+ * - Reseñas largas: se recortan a 5 líneas con "Leer más"; al expandir, la
+ *   card crece y las demás de la fila mantienen su alto.
+ * - Las estrellas siempre van con texto ("5 de 5").
+ */
+import BadgeSection from "@ui/BadgeSection.astro";
+import ReviewCard from "@ui/ReviewCard.astro";
+import Stars from "@ui/Stars.astro";
+import IconButton from "@ui/IconButton.astro";
+import CarouselDot from "@ui/CarouselDot.astro";
+import Button from "@ui/Button.astro";
+import GridBackground from "@ui/GridBackground.astro";
+import Sticker from "@ui/Sticker.astro";
+import {
+  clientReviews,
+  resenasSeccion as r,
+  googleReviewHref,
+  carouselLabels,
+} from "@data/dataSite";
+
+// Plantillas "{a} de {t}" para el script del carrusel.
+const plantilla = (fn: (a: number, t: number) => string) =>
+  fn(1, 2).replace("1", "{a}").replace("2", "{t}");
+// Se generan puntos para el máximo de páginas posible; el script oculta los
+// que sobran según cuántas reseñas entran por página.
+const maxPaginas = clientReviews.length;
 ---
 
-<section class="section resenas" id="resenas">
-  <div class="container">
-    <div class="resenas__header reveal">
-      <span class="section-label">Reseñas</span>
-      <h2 class="section-title">
-        Lo que dicen nuestros <span>clientes</span>
-      </h2>
-      <p class="section-subtitle">
-        Historias reales de personas que ya trabajaron con nosotras.
-      </p>
-    </div>
+<section class="section resenas" id="resenas" aria-labelledby="resenas-titulo">
+  <GridBackground class="resenas__grilla" />
 
-    <div
-      class="resenas__carousel"
-      role="region"
-      aria-label="Reseñas de clientes"
-      aria-roledescription="carousel"
-    >
-      <button
-        class="resenas__arrow resenas__arrow--prev"
-        aria-label="Reseña anterior"
-      >
-        <Icon name="chevron-left" size={20} />
-      </button>
-      <div class="resenas__track-wrapper">
-        <div class="resenas__track">
-          {
-            reviews.map((r) => (
-              <div class="resena-card">
-                <span class="resena-card__name">{r.name}</span>
-                <div class="resena-card__stars">
-                  {Array.from({ length: r.rating }).map(() => (
-                    <Icon name="star" size={16} />
-                  ))}
-                </div>
-                <p class="resena-card__text">"{r.text}"</p>
-              </div>
-            ))
-          }
+  <div class="resenas__stickers" aria-hidden="true">
+    <div class="container resenas__stickers-desktop">
+      <div class="resenas__stickers-caja">
+        <Sticker
+          tipo="corazon"
+          tamano={56}
+          rotacion={10}
+          class="resenas__st resenas__st--corazon"
+        />
+        <Sticker
+          tipo="burbuja"
+          tamano={61.6}
+          rotacion={-8}
+          class="resenas__st resenas__st--burbuja"
+        />
+        <Sticker
+          tipo="destellos"
+          tamano={56}
+          rotacion={8}
+          class="resenas__st resenas__st--destellos"
+        />
+        <Sticker
+          tipo="estrella"
+          tamano={50.4}
+          rotacion={-12}
+          class="resenas__st resenas__st--estrella"
+        />
+      </div>
+    </div>
+    <Sticker
+      tipo="corazon"
+      tamano={39.2}
+      rotacion={10}
+      class="resenas__st resenas__st--corazon-c"
+    />
+    <Sticker
+      tipo="burbuja"
+      tamano={33.6}
+      rotacion={-8}
+      class="resenas__st resenas__st--burbuja-c"
+    />
+  </div>
+
+  <div class="resenas__cuerpo">
+    <header class="container resenas__encabezado">
+      <div class="resenas__titulos">
+        <BadgeSection>{r.badge}</BadgeSection>
+        <h2 class="section-title" id="resenas-titulo">
+          {r.titulo.antes}<span>{r.titulo.destacado}</span>
+        </h2>
+        <p class="section-subtitle resenas__bajada">{r.bajada}</p>
+      </div>
+
+      <div class="resenas__puntaje">
+        <p class="resenas__puntaje-numero">{r.puntaje}</p>
+        <div class="resenas__puntaje-detalle">
+          <Stars rating={5} mostrarTexto={false} />
+          <p class="resenas__puntaje-texto">{r.puntajeDetalle}</p>
         </div>
       </div>
-      <button
-        class="resenas__arrow resenas__arrow--next"
-        aria-label="Siguiente reseña"
-      >
-        <Icon name="chevron-right" size={20} />
-      </button>
-    </div>
-    <div class="resenas__dots" aria-hidden="true">
-      {
-        reviews.map((_, i) => (
-          <span class:list={["resenas__dot", { active: i === 0 }]} />
-        ))
-      }
-    </div>
+    </header>
 
-    <div class="resenas__cta-wrap reveal">
-      <p class="resenas__cta-text">¿Ya trabajaste con nosotras?</p>
-      <a
-        href={googleReviewHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="resenas__cta"
-      >
-        Dejanos tu reseña en Google
-        <Icon name="star" />
-      </a>
+    <div
+      class="resenas__carrusel"
+      role="region"
+      aria-roledescription={r.carruselRol}
+      aria-label={r.carruselLabel}
+      data-carrusel
+    >
+      <ul class="resenas__pista" data-carrusel-pista>
+        {
+          clientReviews.map((resena, i) => (
+            <li class="resenas__item">
+              <ReviewCard
+                id={`resena-${i + 1}`}
+                nombre={resena.name}
+                texto={resena.text}
+                rating={resena.rating}
+              />
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="container resenas__controles">
+        <div class="resenas__navegacion">
+          <IconButton
+            direccion="anterior"
+            aria-label={carouselLabels.anterior}
+            deshabilitado
+            data-carrusel-anterior
+          />
+          <div class="resenas__puntos">
+            {
+              Array.from({ length: maxPaginas }).map((_, i) => (
+                <CarouselDot
+                  aria-label={carouselLabels.irAPagina(i + 1)}
+                  activo={i === 0}
+                  data-carrusel-punto
+                />
+              ))
+            }
+          </div>
+          <p
+            class="resenas__estado resenas__estado--compacto"
+            aria-live="polite"
+            data-carrusel-estado
+            data-plantilla={plantilla(carouselLabels.estado)}
+          >
+            {carouselLabels.estado(1, maxPaginas)}
+          </p>
+          <IconButton
+            direccion="siguiente"
+            aria-label={carouselLabels.siguiente}
+            data-carrusel-siguiente
+          />
+          <p
+            class="resenas__estado resenas__estado--desktop"
+            aria-live="polite"
+            data-carrusel-estado
+            data-plantilla={plantilla(r.pagina)}
+          >
+            {r.pagina(1, 2)}
+          </p>
+        </div>
+
+        <div class="resenas__google">
+          <p class="resenas__pregunta">{r.pregunta}</p>
+          <Button
+            estilo="secundario"
+            href={googleReviewHref}
+            icono="external"
+            externo
+            class="resenas__cta"
+          >
+            {r.ctaGoogle}
+          </Button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <script>
-  import { initScrollDots } from "@scripts/scrollDots";
+  import { initCarrusel } from "@scripts/carousel";
 
-  const wrapper = document.querySelector<HTMLElement>(
-    ".resenas__track-wrapper",
-  );
-  const track = document.querySelector<HTMLElement>(".resenas__track");
-  const prevBtn = document.querySelector<HTMLButtonElement>(
-    ".resenas__arrow--prev",
-  );
-  const nextBtn = document.querySelector<HTMLButtonElement>(
-    ".resenas__arrow--next",
-  );
+  document
+    .querySelectorAll<HTMLElement>(".resenas [data-carrusel]")
+    .forEach((carrusel) => {
+      initCarrusel(carrusel);
 
-  if (wrapper && track) {
-    const cardWidth = 280 + 16; // card width + gap approximation
-    const cards = Array.from(
-      track.querySelectorAll<HTMLElement>(".resena-card"),
-    );
-    const dots = Array.from(
-      document.querySelectorAll<HTMLElement>(".resenas__dot"),
-    );
+      // Alto común de las cards cerradas: al expandir una ("Leer más"),
+      // solo esa crece y las demás conservan el alto de la fila.
+      const pista = carrusel.querySelector<HTMLElement>(
+        "[data-carrusel-pista]",
+      );
+      if (!pista) return;
+      const pistaEl = pista;
+      const cards = Array.from(
+        pistaEl.querySelectorAll<HTMLElement>("[data-card-resena]"),
+      );
+      const abierta = (card: HTMLElement) =>
+        card
+          .querySelector(".card-resena__toggle")
+          ?.getAttribute("aria-expanded") === "true";
 
-    initScrollDots({ container: wrapper, items: cards, dots });
+      const igualar = () => {
+        pistaEl.style.removeProperty("--resenas-alto");
+        const alto = Math.max(
+          0,
+          ...cards.filter((c) => !abierta(c)).map((c) => c.offsetHeight),
+        );
+        pistaEl.style.setProperty("--resenas-alto", `${alto}px`);
+      };
 
-    nextBtn?.addEventListener("click", () => {
-      wrapper.scrollBy({ left: cardWidth, behavior: "smooth" });
+      let ancho = 0;
+      new ResizeObserver(([entrada]) => {
+        // Solo recalcula si cambia el ancho (no al expandir una card).
+        const nuevo = entrada?.contentRect.width ?? 0;
+        if (nuevo !== ancho) {
+          ancho = nuevo;
+          requestAnimationFrame(igualar);
+        }
+      }).observe(pistaEl);
+      document.fonts.ready.then(igualar);
     });
-
-    prevBtn?.addEventListener("click", () => {
-      wrapper.scrollBy({ left: -cardWidth, behavior: "smooth" });
-    });
-  }
 </script>
 
 <style>
+  /* ---------- Sección (mobile first) ---------- */
   .resenas {
-    background: linear-gradient(
-      to bottom,
-      var(--duo-bg-cream),
-      var(--duo-bg-page)
-    );
+    background: var(--duo-bg-rosa);
   }
 
-  .resenas__header {
-    text-align: center;
-    margin-bottom: var(--duo-space-9);
+  .resenas :global(.resenas__grilla) {
+    opacity: 0.7;
   }
 
-  .resenas__header .section-subtitle {
-    margin-inline: auto;
-  }
-
-  .resenas__carousel {
+  .resenas__cuerpo {
     display: flex;
-    align-items: center;
-    gap: var(--duo-space-4);
-  }
-
-  .resenas__arrow {
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 2px solid var(--duo-color-verde-600);
-    background: transparent;
-    color: var(--duo-text-accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--duo-transition);
-  }
-
-  .resenas__arrow:hover {
-    background: var(--duo-action-secondary-bg);
-    color: var(--duo-text-inverse);
-  }
-
-  .resenas__track-wrapper {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    flex: 1;
-  }
-
-  .resenas__track-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-
-  .resenas__track {
-    display: flex;
+    flex-direction: column;
     gap: var(--duo-space-6);
   }
 
-  .resena-card {
-    min-width: 280px;
-    flex: 0 0 280px;
+  .resenas__encabezado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-3);
+  }
+
+  .resenas__titulos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-3);
+  }
+
+  /* Figma: la bajada solo aparece en desktop */
+  .resenas__bajada {
+    display: none;
+  }
+
+  /* Resumen de puntaje */
+  .resenas__puntaje {
+    display: flex;
+    align-items: center;
+    gap: var(--duo-space-4);
+    padding: var(--duo-space-4);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-lg);
+    background: var(--duo-card-verde);
+    box-shadow: var(--duo-shadow-toggle);
+    color: var(--duo-text-primary);
+  }
+
+  .resenas__puntaje-numero {
+    font-size: var(--duo-fs-section-title);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .resenas__puntaje-detalle {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-1);
+  }
+
+  .resenas__puntaje-texto {
+    font-size: var(--duo-fs-caption);
+    line-height: 1.5;
+    color: var(--duo-text-secondary);
+  }
+
+  /* ---------- Carrusel ---------- */
+  .resenas__carrusel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-6);
+  }
+
+  .resenas__pista {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--duo-space-4);
+    margin: 0;
+    /* Recorte solo horizontal; aire arriba/abajo para la sombra rosa */
+    padding: var(--duo-space-1) var(--duo-container-margin) var(--duo-space-4);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--duo-container-margin);
+    scrollbar-width: none;
+    list-style: none;
+  }
+
+  .resenas__pista::-webkit-scrollbar {
+    display: none;
+  }
+
+  .resenas__item {
+    display: flex;
+    flex: 0 0 310px;
     scroll-snap-align: start;
-    background: var(--duo-bg-page);
-    border-radius: var(--duo-radius-md);
-    padding: 1.5rem;
-    box-shadow: 0 2px 12px
-      color-mix(in srgb, var(--duo-color-verde-900) 6%, transparent);
   }
 
-  .resena-card__stars {
+  .resenas__item :global(.card-resena) {
+    min-height: var(--resenas-alto, 0);
+  }
+
+  /* ---------- Controles ---------- */
+  .resenas__controles {
     display: flex;
-    gap: 2px;
-    color: var(--duo-text-primary);
-    margin-bottom: 0.75rem;
+    flex-direction: column;
+    gap: var(--duo-space-6);
   }
 
-  .resena-card__text {
-    font-size: 0.9rem;
-    color: var(--duo-text-primary);
-    line-height: 1.6;
-    font-style: italic;
-  }
-
-  .resena-card__name {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--duo-text-primary);
-    margin-bottom: 0.35rem;
-  }
-
-  /* Dots indicator */
-  .resenas__dots {
+  .resenas__navegacion {
     display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: var(--duo-space-6);
-  }
-
-  .resenas__dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--duo-color-verde-300);
-    transition: var(--duo-transition);
-  }
-
-  .resenas__dot.active {
-    background: var(--duo-action-secondary-bg);
-    transform: scale(1.25);
-  }
-
-  /* CTA para dejar reseña en Google */
-  .resenas__cta-wrap {
-    margin-top: var(--duo-space-9);
-    text-align: center;
-  }
-
-  .resenas__cta-text {
-    font-size: 0.95rem;
-    color: var(--duo-text-primary);
-    margin-bottom: var(--duo-space-4);
-  }
-
-  .resenas__cta {
-    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    background: var(--duo-action-secondary-bg);
-    color: var(--duo-text-inverse);
-    border-radius: var(--duo-radius-full);
-    font-size: 0.95rem;
+    gap: var(--duo-space-3);
+  }
+
+  .resenas__puntos,
+  .resenas__estado--desktop {
+    display: none;
+  }
+
+  .resenas__estado--compacto {
+    font-size: var(--duo-fs-button);
     font-weight: 600;
-    transition: var(--duo-transition);
-    box-shadow: 0 4px 20px
-      color-mix(in srgb, var(--duo-color-verde-700) 30%, transparent);
+    line-height: 1;
+    color: var(--duo-text-primary);
   }
 
-  .resenas__cta:hover {
-    background: var(--duo-color-verde-800);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px
-      color-mix(in srgb, var(--duo-color-verde-700) 40%, transparent);
+  .resenas__estado--desktop {
+    font-size: var(--duo-fs-caption);
+    line-height: 1.5;
+    color: var(--duo-text-secondary);
   }
 
-  /* Mobile: hide arrows, rely on swipe + dots */
-  @media (max-width: 639px) {
-    .resenas__arrow {
-      display: none;
+  .resenas__google {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .resenas__pregunta {
+    display: none;
+    font-size: var(--duo-fs-body);
+    line-height: 1.6;
+    color: var(--duo-text-secondary);
+  }
+
+  .resenas__google :global(.resenas__cta) {
+    width: 100%;
+  }
+
+  /* ---------- Stickers ---------- */
+  .resenas__stickers {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .resenas__stickers-desktop {
+    display: none;
+  }
+
+  .resenas__stickers-caja {
+    position: relative;
+  }
+
+  .resenas :global(.resenas__st) {
+    position: absolute;
+  }
+
+  .resenas :global(.resenas__st--corazon-c) {
+    top: 20px;
+    left: 150px;
+  }
+
+  .resenas :global(.resenas__st--burbuja-c) {
+    top: 20px;
+    right: 31px;
+  }
+
+  /* ---------- Tablet (768–1023): 2 por vista ---------- */
+  @media (min-width: 768px) {
+    .resenas__pista {
+      gap: var(--duo-grid-gutter);
+    }
+
+    .resenas__item {
+      flex-basis: 340px;
     }
   }
 
-  /* Desktop: hide dots */
-  @media (min-width: 640px) {
-    .resenas__dots {
+  /* ---------- Desktop (≥1024): 3 por página ---------- */
+  @media (min-width: 1024px) {
+    .resenas__cuerpo,
+    .resenas__carrusel {
+      gap: var(--duo-space-8);
+    }
+
+    .resenas__encabezado {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--duo-space-8);
+    }
+
+    .resenas__titulos {
+      gap: var(--duo-space-4);
+    }
+
+    .resenas__titulos .section-title {
+      max-width: 720px;
+    }
+
+    .resenas__bajada {
+      display: block;
+    }
+
+    .resenas__puntaje {
+      flex-shrink: 0;
+      gap: var(--duo-space-5);
+      padding: var(--duo-space-6);
+    }
+
+    /* La pista queda alineada con el contenido de 1200px. El aire de 8px a
+       la derecha evita recortar la sombra de la última card visible. */
+    .resenas__pista {
+      --aire-sombra: var(--duo-space-2);
+      box-sizing: content-box;
+      width: min(
+        100% - 2 * var(--duo-container-margin),
+        var(--duo-container-max)
+      );
+      margin-left: max(
+        var(--duo-container-margin),
+        (100% - var(--duo-container-max)) / 2
+      );
+      padding-inline: 0 var(--aire-sombra);
+      scroll-padding-inline: 0;
+    }
+
+    .resenas__item {
+      flex-basis: calc((100% - 2 * var(--duo-grid-gutter)) / 3);
+    }
+
+    .resenas__controles {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--duo-space-4);
+    }
+
+    .resenas__navegacion {
+      justify-content: flex-start;
+      gap: var(--duo-space-4);
+    }
+
+    .resenas__puntos {
+      display: flex;
+    }
+
+    .resenas__estado--compacto {
       display: none;
+    }
+
+    .resenas__estado--desktop {
+      display: block;
+    }
+
+    .resenas__google {
+      flex-direction: row;
+      align-items: center;
+      gap: var(--duo-space-4);
+    }
+
+    .resenas__pregunta {
+      display: block;
+    }
+
+    .resenas__google :global(.resenas__cta) {
+      width: auto;
+    }
+
+    .resenas__stickers-desktop {
+      position: absolute;
+      inset: var(--duo-section-space) 0 auto;
+      display: block;
+      height: 0;
+    }
+
+    .resenas__stickers > :global(.resenas__st--corazon-c),
+    .resenas__stickers > :global(.resenas__st--burbuja-c) {
+      display: none;
+    }
+
+    .resenas :global(.resenas__st--corazon) {
+      left: 39.6%;
+      top: -42px;
+    }
+
+    .resenas :global(.resenas__st--burbuja) {
+      left: 101.2%;
+      top: -65px;
+    }
+
+    .resenas :global(.resenas__st--destellos) {
+      left: -5.35%;
+      top: 508px;
+    }
+
+    .resenas :global(.resenas__st--estrella) {
+      left: 101.2%;
+      top: 498px;
     }
   }
 </style>
