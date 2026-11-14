@@ -126,19 +126,19 @@ import photoDuo from "@images/photo-duo.jpg";
 
 <style>
   .about {
-    padding: var(--space-2xl) 0;
-    background: var(--white);
+    padding: var(--duo-space-10) 0;
+    background: var(--duo-bg-page);
   }
 
   .about__header {
     text-align: center;
-    margin-bottom: var(--space-sm);
+    margin-bottom: var(--duo-space-4);
   }
 
   .about__grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    gap: var(--duo-space-9);
   }
 
   /* Image */
@@ -149,13 +149,13 @@ import photoDuo from "@images/photo-duo.jpg";
   .about__image {
     width: 100%;
     aspect-ratio: 4 / 5;
-    border-radius: var(--radius-xl);
+    border-radius: var(--duo-radius-lg);
     overflow: hidden;
     background: linear-gradient(
       135deg,
-      var(--cream) 0%,
-      var(--blush) 50%,
-      var(--pink-light) 100%
+      var(--duo-color-crema-500) 0%,
+      var(--duo-color-rosa-100) 50%,
+      var(--duo-color-rosa-500) 100%
     );
   }
 
@@ -170,10 +170,11 @@ import photoDuo from "@images/photo-duo.jpg";
     position: absolute;
     bottom: -1rem;
     right: -0.5rem;
-    background: var(--white);
-    border-radius: var(--radius-lg);
+    background: var(--duo-bg-page);
+    border-radius: var(--duo-radius-lg);
     padding: 1.25rem;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 40px
+      color-mix(in srgb, var(--duo-color-verde-900) 10%, transparent);
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -183,7 +184,7 @@ import photoDuo from "@images/photo-duo.jpg";
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(123, 139, 62, 0.1);
+    background: color-mix(in srgb, var(--duo-color-verde-600) 10%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -192,61 +193,61 @@ import photoDuo from "@images/photo-duo.jpg";
   .about__float-icon svg {
     width: 20px;
     height: 20px;
-    color: var(--olive);
+    color: var(--duo-text-accent);
   }
 
   .about__float-number {
     display: block;
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
     line-height: 1;
   }
 
   .about__float-label {
     display: block;
     font-size: 0.7rem;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
   }
 
   /* Content */
   .about__content .section-title {
-    margin-top: var(--space-sm);
+    margin-top: var(--duo-space-4);
   }
 
   .about__text {
     font-size: 1rem;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
     line-height: 1.8;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--duo-space-6);
   }
 
   /* Values */
   .about__values {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-sm);
-    margin-bottom: var(--space-lg);
+    gap: var(--duo-space-4);
+    margin-bottom: var(--duo-space-7);
   }
 
   .about__value {
     display: flex;
     gap: 1rem;
     padding: 1.25rem;
-    border-radius: var(--radius-md);
-    background: var(--white);
-    transition: var(--transition);
+    border-radius: var(--duo-radius-md);
+    background: var(--duo-bg-page);
+    transition: var(--duo-transition);
   }
 
   .about__value:hover {
-    background: var(--cream);
+    background: var(--duo-bg-cream);
   }
 
   .about__value-icon {
     width: 40px;
     height: 40px;
-    border-radius: var(--radius-sm);
-    background: var(--white);
+    border-radius: var(--duo-radius-sm);
+    background: var(--duo-bg-page);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -256,19 +257,19 @@ import photoDuo from "@images/photo-duo.jpg";
   .about__value-icon svg {
     width: 20px;
     height: 20px;
-    color: var(--olive);
+    color: var(--duo-text-accent);
   }
 
   .about__value-title {
     font-size: 0.95rem;
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
     margin-bottom: 0.15rem;
   }
 
   .about__value-desc {
     font-size: 0.8rem;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
     line-height: 1.5;
   }
 

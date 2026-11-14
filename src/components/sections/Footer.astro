@@ -61,17 +61,17 @@ import { navLinks, socialLinks } from "@data/dataSite";
 
 <style>
   .footer {
-    background: var(--text-dark);
-    color: var(--white);
-    padding: var(--space-xl) 0 var(--space-lg);
+    background: var(--duo-text-primary);
+    color: var(--duo-text-inverse);
+    padding: var(--duo-space-9) 0 var(--duo-space-7);
     position: relative;
   }
 
   .footer__top {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-lg);
-    padding-bottom: var(--space-md);
+    gap: var(--duo-space-7);
+    padding-bottom: var(--duo-space-6);
   }
 
   .footer__brand {
@@ -79,7 +79,7 @@ import { navLinks, socialLinks } from "@data/dataSite";
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: var(--space-sm);
+    gap: var(--duo-space-4);
   }
 
   .footer__logo img {
@@ -91,12 +91,12 @@ import { navLinks, socialLinks } from "@data/dataSite";
     font-size: 0.85rem;
     line-height: 1.7;
     max-width: 400px;
-    color: var(--white);
+    color: var(--duo-text-inverse);
   }
 
   .footer__location {
     font-size: 0.8rem;
-    color: var(--white);
+    color: var(--duo-text-inverse);
   }
 
   .footer__label {
@@ -120,12 +120,12 @@ import { navLinks, socialLinks } from "@data/dataSite";
 
   .footer__links a {
     font-size: 0.9rem;
-    color: var(--white);
-    transition: var(--transition);
+    color: var(--duo-text-inverse);
+    transition: var(--duo-transition);
   }
 
   .footer__links a:hover {
-    color: var(--olive);
+    color: var(--duo-text-accent);
   }
 
   .footer__contact {
@@ -150,49 +150,50 @@ import { navLinks, socialLinks } from "@data/dataSite";
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
+    background: color-mix(in srgb, var(--duo-color-crema-50) 8%, transparent);
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition);
+    transition: var(--duo-transition);
   }
 
   .footer__social a:hover {
-    background: var(--olive);
+    background: var(--duo-action-secondary-bg);
     transform: translateY(-2px);
   }
 
   .footer__social a :global(svg) {
     width: 18px;
     height: 18px;
-    color: var(--white);
-    transition: var(--transition);
+    color: var(--duo-text-inverse);
+    transition: var(--duo-transition);
   }
 
   .footer__social a:hover :global(svg) {
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
   }
 
   .footer__bottom {
-    padding-top: var(--space-md);
+    padding-top: var(--duo-space-6);
     text-align: center;
   }
 
   .footer__copyright {
     font-size: 0.8rem;
-    color: var(--white);
+    color: var(--duo-text-inverse);
   }
 
   /* Mobile: separators between footer groups + FAB safe area */
   @media (max-width: 767px) {
     .footer {
-      padding-bottom: calc(var(--space-lg) + 4rem);
+      padding-bottom: calc(var(--duo-space-7) + 4rem);
     }
 
     .footer__nav,
     .footer__contact {
-      padding-top: var(--space-md);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: var(--duo-space-6);
+      border-top: 1px solid
+        color-mix(in srgb, var(--duo-color-crema-50) 10%, transparent);
     }
   }
 
@@ -201,7 +202,7 @@ import { navLinks, socialLinks } from "@data/dataSite";
     .footer__top {
       grid-template-columns: 1.2fr 0.8fr 1fr;
       justify-items: center;
-      gap: var(--space-lg) var(--space-md);
+      gap: var(--duo-space-7) var(--duo-space-6);
     }
 
     .footer__nav {

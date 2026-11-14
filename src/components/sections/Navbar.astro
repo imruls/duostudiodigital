@@ -70,15 +70,16 @@ import isotipo from "@images/isotipo.png";
     width: 100%;
     z-index: 1000;
     padding: 0.25rem 0;
-    transition: var(--transition);
-    background: rgba(254, 253, 251, 0);
+    transition: var(--duo-transition);
+    background: color-mix(in srgb, var(--duo-color-crema-50) 0%, transparent);
   }
 
   .navbar.scrolled {
-    background: rgba(254, 253, 251, 0.95);
+    background: color-mix(in srgb, var(--duo-color-crema-50) 95%, transparent);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 1px 20px
+      color-mix(in srgb, var(--duo-color-verde-900) 6%, transparent);
     padding: 0.2rem 0;
   }
 
@@ -93,21 +94,21 @@ import isotipo from "@images/isotipo.png";
   .nav-logo {
     display: flex;
     align-items: center;
-    transition: var(--transition);
+    transition: var(--duo-transition);
   }
 
   .nav-logo__mobile {
     height: 40px;
     width: 40px;
     object-fit: contain;
-    transition: var(--transition);
+    transition: var(--duo-transition);
   }
 
   .nav-logo__desktop {
     display: none;
     height: 60px;
     width: auto;
-    transition: var(--transition);
+    transition: var(--duo-transition);
   }
 
   .nav-logo:hover img {
@@ -126,8 +127,8 @@ import isotipo from "@images/isotipo.png";
   .nav-links a {
     font-size: 0.85rem;
     font-weight: 500;
-    color: var(--text-dark);
-    transition: var(--transition);
+    color: var(--duo-text-primary);
+    transition: var(--duo-transition);
     position: relative;
   }
 
@@ -138,12 +139,12 @@ import isotipo from "@images/isotipo.png";
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--olive);
-    transition: var(--transition);
+    background: var(--duo-action-secondary-bg);
+    transition: var(--duo-transition);
   }
 
   .nav-links a:hover {
-    color: var(--olive);
+    color: var(--duo-text-accent);
   }
 
   .nav-links a:hover::after {
@@ -154,16 +155,16 @@ import isotipo from "@images/isotipo.png";
   .nav-cta {
     display: none;
     padding: 0.6rem 1.5rem;
-    background: var(--olive);
-    color: var(--white);
-    border-radius: var(--radius-full);
+    background: var(--duo-action-secondary-bg);
+    color: var(--duo-text-inverse);
+    border-radius: var(--duo-radius-full);
     font-size: 0.85rem;
     font-weight: 500;
-    transition: var(--transition);
+    transition: var(--duo-transition);
   }
 
   .nav-cta:hover {
-    background: var(--olive-dark);
+    background: var(--duo-action-secondary-bg-hover);
     transform: translateY(-1px);
   }
 
@@ -182,9 +183,9 @@ import isotipo from "@images/isotipo.png";
   .nav-toggle span {
     width: 24px;
     height: 2px;
-    background: var(--olive-dark);
+    background: var(--duo-action-secondary-bg-hover);
     border-radius: 2px;
-    transition: var(--transition);
+    transition: var(--duo-transition);
   }
 
   .nav-toggle.active span:nth-child(1) {
@@ -201,11 +202,11 @@ import isotipo from "@images/isotipo.png";
   .mobile-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background: color-mix(in srgb, var(--duo-color-verde-900) 30%, transparent);
     z-index: 998;
     opacity: 0;
     visibility: hidden;
-    transition: var(--transition);
+    transition: var(--duo-transition);
   }
 
   .mobile-overlay.open {
@@ -222,11 +223,12 @@ import isotipo from "@images/isotipo.png";
     max-width: 320px;
     height: 100vh;
     height: 100dvh;
-    background: var(--white);
+    background: var(--duo-bg-page);
     z-index: 999;
     padding: 5rem 2rem 2rem;
-    transition: var(--transition-slow);
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+    transition: var(--duo-transition);
+    box-shadow: -10px 0 40px
+      color-mix(in srgb, var(--duo-color-verde-900) 10%, transparent);
   }
 
   .mobile-menu.open {
@@ -238,21 +240,21 @@ import isotipo from "@images/isotipo.png";
     padding: 1rem 0;
     font-size: 1.1rem;
     font-weight: 500;
-    color: var(--text-dark);
-    border-bottom: 1px solid var(--cream);
-    transition: var(--transition);
+    color: var(--duo-text-primary);
+    border-bottom: 1px solid var(--duo-color-crema-500);
+    transition: var(--duo-transition);
   }
 
   .mobile-menu a:hover {
-    color: var(--olive);
+    color: var(--duo-text-accent);
     padding-left: 0.5rem;
   }
 
   .mobile-menu__cta {
-    color: var(--olive) !important;
+    color: var(--duo-text-accent) !important;
     font-weight: 600 !important;
     border-bottom: none !important;
-    margin-top: var(--space-sm);
+    margin-top: var(--duo-space-4);
   }
 
   /* Desktop breakpoint */

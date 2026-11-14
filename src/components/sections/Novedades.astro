@@ -59,47 +59,49 @@ import { novedadDuoSystemClient as novedad } from "@data/dataSite";
 
 <style>
   .novedades {
-    padding: var(--space-2xl) 0;
-    background: var(--cream);
+    padding: var(--duo-space-10) 0;
+    background: var(--duo-bg-cream);
   }
 
   .novedades__card {
     position: relative;
     max-width: 900px;
     margin: 0 auto;
-    padding: var(--space-lg);
-    border-radius: var(--radius-lg);
-    background: var(--white);
-    border: 1px solid rgba(123, 139, 62, 0.2);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.05);
+    padding: var(--duo-space-7);
+    border-radius: var(--duo-radius-lg);
+    background: var(--duo-bg-page);
+    border: 1px solid
+      color-mix(in srgb, var(--duo-color-verde-600) 20%, transparent);
+    box-shadow: 0 12px 40px
+      color-mix(in srgb, var(--duo-color-verde-900) 5%, transparent);
   }
 
   .novedades__badge {
     display: inline-block;
     padding: 0.35rem 0.9rem;
-    background: var(--olive);
-    color: var(--white);
-    border-radius: var(--radius-full);
+    background: var(--duo-action-secondary-bg);
+    color: var(--duo-text-inverse);
+    border-radius: var(--duo-radius-full);
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--duo-space-6);
   }
 
   .novedades__header {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--duo-space-7);
   }
 
   .novedades__title {
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
   }
 
   .novedades__desc {
-    margin-top: var(--space-sm);
+    margin-top: var(--duo-space-4);
     max-width: 620px;
     font-size: 1rem;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
     line-height: 1.7;
   }
 
@@ -108,7 +110,7 @@ import { novedadDuoSystemClient as novedad } from "@data/dataSite";
     flex-direction: column;
     gap: 0.1rem;
     list-style: none;
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--duo-space-7);
   }
 
   .novedades__list-item {
@@ -117,9 +119,10 @@ import { novedadDuoSystemClient as novedad } from "@data/dataSite";
     gap: 0.6rem;
     padding: 0.55rem 0;
     font-size: 0.9rem;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
     line-height: 1.5;
-    border-bottom: 1px solid rgba(123, 139, 62, 0.15);
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--duo-color-verde-600) 15%, transparent);
   }
 
   .novedades__list-item:last-child {
@@ -130,15 +133,15 @@ import { novedadDuoSystemClient as novedad } from "@data/dataSite";
     width: 18px;
     height: 18px;
     margin-top: 2px;
-    color: var(--olive);
+    color: var(--duo-text-accent);
     flex-shrink: 0;
   }
 
   .novedades__audience {
     max-width: 620px;
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--duo-space-7);
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--duo-text-secondary);
     line-height: 1.6;
   }
 
@@ -158,13 +161,13 @@ import { novedadDuoSystemClient as novedad } from "@data/dataSite";
 
   @media (min-width: 1024px) {
     .novedades__card {
-      padding: var(--space-xl);
+      padding: var(--duo-space-9);
     }
 
     .novedades__list {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      column-gap: var(--space-xl);
+      column-gap: var(--duo-space-9);
     }
   }
 </style>

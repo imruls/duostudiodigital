@@ -31,19 +31,21 @@ const { whatsappUrl = defaultWhatsappUrl } = Astro.props;
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: #25d366;
-    color: white;
+    background: var(--duo-action-primary-bg);
+    color: var(--duo-action-primary-text);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
-    transition: var(--transition);
+    box-shadow: var(--duo-shadow-cta);
+    transition: var(--duo-transition);
     z-index: 90;
   }
 
   .whatsapp-btn:hover {
-    transform: scale(1.1) translateY(-2px);
-    box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
+    background: var(--duo-action-primary-bg-hover);
+    transform: var(--duo-hover-translate);
+    box-shadow: var(--duo-shadow-hover);
   }
 
   .whatsapp-btn svg {

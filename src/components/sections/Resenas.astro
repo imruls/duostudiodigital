@@ -116,13 +116,17 @@ import Icon from "@ui/Icon.astro";
 
 <style>
   .resenas {
-    padding: var(--space-2xl) 0;
-    background: linear-gradient(to bottom, var(--cream), var(--white));
+    padding: var(--duo-space-10) 0;
+    background: linear-gradient(
+      to bottom,
+      var(--duo-bg-cream),
+      var(--duo-bg-page)
+    );
   }
 
   .resenas__header {
     text-align: center;
-    margin-bottom: var(--space-xl);
+    margin-bottom: var(--duo-space-9);
   }
 
   .resenas__header .section-subtitle {
@@ -132,7 +136,7 @@ import Icon from "@ui/Icon.astro";
   .resenas__carousel {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--duo-space-4);
   }
 
   .resenas__arrow {
@@ -140,19 +144,19 @@ import Icon from "@ui/Icon.astro";
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    border: 2px solid var(--olive);
+    border: 2px solid var(--duo-color-verde-600);
     background: transparent;
-    color: var(--olive);
+    color: var(--duo-text-accent);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: var(--transition);
+    transition: var(--duo-transition);
   }
 
   .resenas__arrow:hover {
-    background: var(--olive);
-    color: var(--white);
+    background: var(--duo-action-secondary-bg);
+    color: var(--duo-text-inverse);
   }
 
   .resenas__track-wrapper {
@@ -169,29 +173,30 @@ import Icon from "@ui/Icon.astro";
 
   .resenas__track {
     display: flex;
-    gap: var(--space-md);
+    gap: var(--duo-space-6);
   }
 
   .resena-card {
     min-width: 280px;
     flex: 0 0 280px;
     scroll-snap-align: start;
-    background: var(--white);
-    border-radius: var(--radius-md);
+    background: var(--duo-bg-page);
+    border-radius: var(--duo-radius-md);
     padding: 1.5rem;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 12px
+      color-mix(in srgb, var(--duo-color-verde-900) 6%, transparent);
   }
 
   .resena-card__stars {
     display: flex;
     gap: 2px;
-    color: var(--star-color);
+    color: var(--duo-text-primary);
     margin-bottom: 0.75rem;
   }
 
   .resena-card__text {
     font-size: 0.9rem;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
     line-height: 1.6;
     font-style: italic;
   }
@@ -200,7 +205,7 @@ import Icon from "@ui/Icon.astro";
     display: block;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text-dark);
+    color: var(--duo-text-primary);
     margin-bottom: 0.35rem;
   }
 
@@ -209,32 +214,32 @@ import Icon from "@ui/Icon.astro";
     display: flex;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: var(--space-md);
+    margin-top: var(--duo-space-6);
   }
 
   .resenas__dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: var(--tan);
-    transition: var(--transition);
+    background: var(--duo-color-verde-300);
+    transition: var(--duo-transition);
   }
 
   .resenas__dot.active {
-    background: var(--olive);
+    background: var(--duo-action-secondary-bg);
     transform: scale(1.25);
   }
 
   /* CTA para dejar reseña en Google */
   .resenas__cta-wrap {
-    margin-top: var(--space-xl);
+    margin-top: var(--duo-space-9);
     text-align: center;
   }
 
   .resenas__cta-text {
     font-size: 0.95rem;
-    color: var(--text-dark);
-    margin-bottom: var(--space-sm);
+    color: var(--duo-text-primary);
+    margin-bottom: var(--duo-space-4);
   }
 
   .resenas__cta {
@@ -243,19 +248,21 @@ import Icon from "@ui/Icon.astro";
     justify-content: center;
     gap: 0.5rem;
     padding: 1rem 2rem;
-    background: var(--olive);
-    color: var(--white);
-    border-radius: var(--radius-full);
+    background: var(--duo-action-secondary-bg);
+    color: var(--duo-text-inverse);
+    border-radius: var(--duo-radius-full);
     font-size: 0.95rem;
     font-weight: 600;
-    transition: var(--transition);
-    box-shadow: 0 4px 20px rgba(85, 107, 47, 0.3);
+    transition: var(--duo-transition);
+    box-shadow: 0 4px 20px
+      color-mix(in srgb, var(--duo-color-verde-700) 30%, transparent);
   }
 
   .resenas__cta:hover {
-    background: var(--olive-deep);
+    background: var(--duo-color-verde-800);
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(85, 107, 47, 0.4);
+    box-shadow: 0 8px 30px
+      color-mix(in srgb, var(--duo-color-verde-700) 40%, transparent);
   }
 
   /* Mobile: hide arrows, rely on swipe + dots */

@@ -1,47 +1,146 @@
 /* ===================================================
    DÚO STUDIO DIGITAL — Design Tokens & Global Styles
+   Fuente: variables de Figma (colecciones "Dúo / ...").
+   Cada nombre es el Code Syntax (WEB) de la variable.
    =================================================== */
 
-/* ---------- Brand Tokens ---------- */
 :root {
-  /* Colors */
-  --olive: #7b8b3e;
-  --olive-dark: #5c6a2e;
-  --olive-deep: #4a5524;
-  --pink-light: #f2c4ce;
-  --blush: #eacfc8;
-  --tan: #c4b9a0;
-  --cream: #f0ede4;
-  --white: #fefdfb;
-  --text-dark: #0c0d0d;
-  --text-muted: #6b6b5a;
-  --text-light: #9b9b8a;
-  --star-color: #f5a623;
+  /* ---------- Dúo / Primitives ---------- */
+  --duo-color-verde-50: #f0f2eb;
+  --duo-color-verde-100: #e0e3d6;
+  --duo-color-verde-200: #c7cdb4;
+  --duo-color-verde-300: #a8b18b;
+  --duo-color-verde-500: #828f59;
+  --duo-color-verde-600: #6c774a;
+  --duo-color-verde-700: #565f3a;
+  --duo-color-verde-800: #40482b;
+  --duo-color-verde-900: #2c321d;
+  --duo-color-rosa-50: #fcecef;
+  --duo-color-rosa-100: #fadee4;
+  --duo-color-rosa-500: #f8d0d8;
+  --duo-color-rosa-600: #eaadbb;
+  --duo-color-rosa-700: #de8fa3;
+  --duo-color-rosa-800: #cf6c86;
+  --duo-color-crema-50: #f9f8f1;
+  --duo-color-crema-500: #efeddc;
+  --duo-color-crema-600: #dfdfc8;
+  --duo-color-blanco: #ffffff;
 
-  /* Typography */
-  --font-display: "Pacifico", cursive;
-  --font-body: "Poppins", sans-serif;
+  /* ---------- Dúo / Color (Light) ---------- */
+  --duo-bg-page: var(--duo-color-crema-50);
+  --duo-bg-brand: var(--duo-color-verde-500);
+  --duo-bg-hero: var(--duo-color-verde-600);
+  --duo-bg-surface: var(--duo-color-blanco);
+  --duo-bg-cream: var(--duo-color-crema-500);
+  --duo-bg-rosa: var(--duo-color-rosa-50);
+  --duo-bg-inverse: var(--duo-color-verde-900);
+  --duo-bg-hover-inverse: var(--duo-color-verde-700);
 
-  /* Spacing scale */
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 2.5rem;
-  --space-xl: 4rem;
-  --space-2xl: 6rem;
-  --space-3xl: 8rem;
+  --duo-text-primary: var(--duo-color-verde-900);
+  --duo-text-secondary: var(--duo-color-verde-700);
+  --duo-text-inverse: var(--duo-color-crema-50);
+  --duo-text-accent: var(--duo-color-verde-600);
+  --duo-text-brand: var(--duo-color-verde-500);
+  --duo-text-highlight: var(--duo-color-rosa-500);
 
-  /* Radii */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
-  --radius-full: 9999px;
+  --duo-border-strong: var(--duo-color-verde-900);
+  --duo-border-inverse: var(--duo-color-crema-50);
+  --duo-border-disabled: var(--duo-color-verde-300);
+  --duo-border-focus: var(--duo-color-verde-900);
+  --duo-border-focus-inverse: var(--duo-color-rosa-500);
 
-  /* Motion */
-  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --transition: 0.3s var(--ease-out);
-  --transition-slow: 0.6s var(--ease-out);
+  --duo-action-primary-bg: var(--duo-color-rosa-500);
+  --duo-action-primary-bg-hover: var(--duo-color-rosa-600);
+  --duo-action-primary-text: var(--duo-color-verde-900);
+  --duo-action-secondary-bg: var(--duo-color-verde-600);
+  --duo-action-secondary-bg-hover: var(--duo-color-verde-700);
+  --duo-action-secondary-text: var(--duo-color-crema-50);
+  --duo-action-selected-bg: var(--duo-color-verde-900);
+  --duo-action-disabled-bg: var(--duo-color-crema-600);
+  --duo-action-disabled-text: var(--duo-color-verde-700);
+
+  --duo-card-verde: var(--duo-color-verde-100);
+  --duo-card-rosa: var(--duo-color-rosa-500);
+  --duo-card-crema: var(--duo-color-crema-500);
+  --duo-card-salvia: var(--duo-color-verde-200);
+  --duo-badge-bg: var(--duo-color-rosa-500);
+
+  /* ---------- Dúo / Dimensions ---------- */
+  --duo-space-1: 4px;
+  --duo-space-2: 8px;
+  --duo-space-3: 12px;
+  --duo-space-4: 16px;
+  --duo-space-5: 20px;
+  --duo-space-6: 24px;
+  --duo-space-7: 32px;
+  --duo-space-8: 48px;
+  --duo-space-9: 64px;
+  --duo-space-10: 96px;
+
+  --duo-radius-sm: 12px;
+  --duo-radius-md: 16px;
+  --duo-radius-lg: 24px;
+  --duo-radius-full: 999px;
+
+  --duo-border-thin: 0.8px;
+  --duo-border-thick: 1.6px;
+
+  /* ---------- Dúo / Typography ---------- */
+  --duo-font-display: "Pacifico", cursive;
+  --duo-font-body: "Poppins", sans-serif;
+
+  --duo-fs-hero: 72px;
+  --duo-fs-section-title: 44px;
+  --duo-fs-h3: 20px;
+  --duo-fs-price: 24px;
+  --duo-fs-script-m: 24px;
+  --duo-fs-body-l: 18px;
+  --duo-fs-body: 16px;
+  --duo-fs-body-s: 14.4px;
+  --duo-fs-button: 15.2px;
+  --duo-fs-caption: 12.8px;
+  --duo-fs-eyebrow: 12px;
+  --duo-fs-tag: 11.2px;
+
+  /* ---------- Estilos de efecto "Dúo/Shadow/..." ----------
+     Figma no los exporta como variables: el nombre CSS se deriva del
+     nombre del estilo. El color es verde/900 con la opacidad del estilo. */
+  --duo-shadow-badge: 2px 2px 0
+    color-mix(in srgb, var(--duo-color-verde-900) 25%, transparent); /* Hard XS - Badge */
+  --duo-shadow-cta: 3px 3px 0
+    color-mix(in srgb, var(--duo-color-verde-900) 35%, transparent); /* Hard SM - CTA */
+  --duo-shadow-toggle: 4px 4px 0
+    color-mix(in srgb, var(--duo-color-verde-900) 18%, transparent); /* Hard MD - Toggle */
+  --duo-shadow-hover: 5px 5px 0
+    color-mix(in srgb, var(--duo-color-verde-900) 45%, transparent); /* Hard MD - Hover */
+  --duo-shadow-card: 6px 6px 0
+    color-mix(in srgb, var(--duo-color-verde-900) 20%, transparent); /* Hard LG - Card */
+  --duo-shadow-card-rosa: 6px 6px 0 var(--duo-color-rosa-700); /* Hard LG - Rosa */
+  --duo-shadow-hero-btn: 0 8px 24px
+    color-mix(in srgb, var(--duo-color-verde-900) 22%, transparent); /* Soft - Boton hero */
+  --duo-shadow-sticker: 0 6px 12px
+    color-mix(in srgb, var(--duo-color-verde-900) 18%, transparent); /* Soft - Sticker */
+
+  /* ---------- Derivados de la ficha "Convención de estados" ----------
+     No son variables de Figma; se documentan en la ficha. */
+  --duo-transition: 150ms ease-out;
+  --duo-hover-translate: translate(-2px, -2px);
+  --duo-focus-ring: 4px;
+}
+
+/* Títulos responsive: estilos Dúo/Tablet/... y Dúo/Mobile/... */
+@media (max-width: 1023px) {
+  :root {
+    --duo-fs-hero: 56px;
+    --duo-fs-section-title: 36px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --duo-fs-hero: 40px;
+    --duo-fs-section-title: 28px;
+  }
 }
 
 /* ---------- Reset ---------- */
@@ -60,9 +159,10 @@ html {
 }
 
 body {
-  font-family: var(--font-body);
-  color: var(--text-dark);
-  background: var(--white);
+  font-family: var(--duo-font-body);
+  font-size: var(--duo-fs-body);
+  color: var(--duo-text-primary);
+  background: var(--duo-bg-page);
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -82,7 +182,7 @@ a {
 button {
   border: none;
   cursor: pointer;
-  font-family: var(--font-body);
+  font-family: var(--duo-font-body);
   background: none;
 }
 
@@ -117,47 +217,185 @@ ul {
   }
 }
 
-/* ---------- Shared UI ---------- */
+/* ---------- Tipografía (estilos de texto "Dúo/...") ---------- */
+
+/* Dúo/Display/Hero H1 + Dúo/Accent/Script Hero (span) */
+.hero-title {
+  font-family: var(--duo-font-body);
+  font-weight: 700;
+  font-size: var(--duo-fs-hero);
+  line-height: 1.08;
+  color: var(--duo-text-inverse);
+}
+
+.hero-title span {
+  font-family: var(--duo-font-display);
+  font-weight: 400;
+  color: var(--duo-text-highlight);
+}
+
+/* Dúo/Heading/H2 - Titulo seccion + Dúo/Accent/Script Seccion (span) */
+.section-title {
+  font-family: var(--duo-font-body);
+  font-weight: 700;
+  font-size: var(--duo-fs-section-title);
+  line-height: 1.15;
+  color: var(--duo-text-primary);
+}
+
+.section-title span {
+  font-family: var(--duo-font-display);
+  font-weight: 400;
+  color: var(--duo-text-accent);
+}
+
+@media (max-width: 1023px) {
+  .hero-title {
+    line-height: 1.1;
+  }
+  .section-title {
+    line-height: 1.18;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-title {
+    line-height: 1.12;
+  }
+  .section-title {
+    line-height: 1.2;
+  }
+}
+
+/* Bajada de sección (Dúo/Body/M en text/secondary) */
+.section-subtitle {
+  font-size: var(--duo-fs-body);
+  line-height: 1.6;
+  color: var(--duo-text-secondary);
+  max-width: 560px;
+}
+
+/* Dúo/Heading/H3 - Card */
+.text-h3 {
+  font-weight: 700;
+  font-size: var(--duo-fs-h3);
+  line-height: 1.3;
+}
+
+/* Dúo/Heading/Precio */
+.text-price {
+  font-weight: 700;
+  font-size: var(--duo-fs-price);
+  line-height: 1.2;
+}
+
+/* Dúo/Accent/Script M */
+.text-script-m {
+  font-family: var(--duo-font-display);
+  font-weight: 400;
+  font-size: var(--duo-fs-script-m);
+  line-height: 1.3;
+}
+
+/* Dúo/Body/L - Bajada */
+.text-body-l {
+  font-size: var(--duo-fs-body-l);
+  line-height: 1.7;
+}
+
+/* Dúo/Body/M */
+.text-body {
+  font-size: var(--duo-fs-body);
+  line-height: 1.6;
+}
+
+/* Dúo/Body/S - Card */
+.text-body-s {
+  font-size: var(--duo-fs-body-s);
+  line-height: 1.6;
+}
+
+/* Dúo/Body/Caption */
+.text-caption {
+  font-size: var(--duo-fs-caption);
+  line-height: 1.5;
+}
+
+/* Dúo/Label/Button y Dúo/Label/Button secundario */
+.text-button {
+  font-size: var(--duo-fs-button);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.text-button-secundario {
+  font-size: var(--duo-fs-button);
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* Dúo/Label/Eyebrow */
+.text-eyebrow {
+  font-size: var(--duo-fs-eyebrow);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Dúo/Label/Tag */
+.text-tag {
+  font-size: var(--duo-fs-tag);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Badge de sección (componente "Badge sección") ----------
+   Tono=Oscuro por defecto; .badge-section--rosa para Tono=Rosa. */
+.badge-section {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--duo-space-2) var(--duo-space-5);
+  border: var(--duo-border-thick) solid var(--duo-border-strong);
+  border-radius: var(--duo-radius-full);
+  background: var(--duo-bg-inverse);
+  color: var(--duo-text-inverse);
+  box-shadow: var(--duo-shadow-cta);
+  transform: rotate(2deg);
+  font-size: var(--duo-fs-eyebrow);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.badge-section--rosa {
+  background: var(--duo-action-primary-bg);
+  color: var(--duo-text-primary);
+}
+
+/* Legacy: etiqueta de sección de la versión anterior.
+   Se elimina cuando todas las secciones usen .badge-section (Paso 4). */
 .section-label {
-  font-size: 0.75rem;
+  font-size: var(--duo-fs-eyebrow);
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--olive);
+  color: var(--duo-text-accent);
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: var(--space-sm);
+  gap: var(--duo-space-2);
+  margin-bottom: var(--duo-space-4);
 }
 
 .section-label::before {
   content: "";
   width: 24px;
   height: 2px;
-  background: var(--olive);
+  background: var(--duo-text-accent);
   display: inline-block;
-}
-
-.section-title {
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: clamp(1.75rem, 5vw, 2.75rem);
-  line-height: 1.15;
-  color: var(--text-dark);
-  margin-bottom: var(--space-md);
-}
-
-.section-title span {
-  font-family: var(--font-display);
-  color: var(--olive);
-  font-weight: 400;
-}
-
-.section-subtitle {
-  font-size: 1rem;
-  color: var(--text-dark);
-  line-height: 1.7;
-  max-width: 540px;
 }
 
 /* ---------- Buttons ---------- */
@@ -167,25 +405,27 @@ ul {
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
-  background: var(--olive);
-  color: var(--white);
-  border-radius: var(--radius-full);
+  background: var(--duo-action-secondary-bg);
+  color: var(--duo-text-inverse);
+  border-radius: var(--duo-radius-full);
   font-size: 0.95rem;
   font-weight: 600;
-  transition: var(--transition);
-  box-shadow: 0 4px 20px rgba(123, 139, 62, 0.3);
+  transition: var(--duo-transition);
+  box-shadow: 0 4px 20px
+    color-mix(in srgb, var(--duo-color-verde-600) 30%, transparent);
 }
 
 .btn-primary:hover {
-  background: var(--olive-dark);
+  background: var(--duo-action-secondary-bg-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(123, 139, 62, 0.35);
+  box-shadow: 0 8px 30px
+    color-mix(in srgb, var(--duo-color-verde-600) 35%, transparent);
 }
 
 .btn-primary svg {
   width: 18px;
   height: 18px;
-  transition: var(--transition);
+  transition: var(--duo-transition);
 }
 
 .btn-primary:hover svg {
@@ -199,17 +439,17 @@ ul {
   gap: 0.5rem;
   padding: 1rem 2rem;
   background: transparent;
-  color: var(--text-dark);
-  border: 1.5px solid var(--tan);
-  border-radius: var(--radius-full);
+  color: var(--duo-text-primary);
+  border: 1.5px solid var(--duo-color-verde-300);
+  border-radius: var(--duo-radius-full);
   font-size: 0.95rem;
   font-weight: 500;
-  transition: var(--transition);
+  transition: var(--duo-transition);
 }
 
 .btn-secondary:hover {
-  border-color: var(--olive);
-  color: var(--olive);
+  border-color: var(--duo-color-verde-600);
+  color: var(--duo-text-accent);
   transform: translateY(-2px);
 }
 
@@ -240,10 +480,12 @@ ul {
   transition-delay: 0.4s;
 }
 
-/* ---------- Focus (a11y) ---------- */
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--olive);
+/* ---------- Focus (a11y) — ficha "Convención de estados" ----------
+   Anillo de 4px por fuera. Sobre fondos verdes, el contenedor define
+   --duo-focus-color: var(--duo-border-focus-inverse). */
+:focus-visible {
+  outline: var(--duo-focus-ring) solid
+    var(--duo-focus-color, var(--duo-border-focus));
   outline-offset: 2px;
 }
 
@@ -269,14 +511,8 @@ button:focus-visible {
   }
 }
 
-/* ---------- Mobile spacing overrides ---------- */
+/* ---------- Mobile overrides ---------- */
 @media (max-width: 639px) {
-  :root {
-    --space-xl: 2.5rem;
-    --space-2xl: 3rem;
-    --space-3xl: 4rem;
-  }
-
   .btn-primary,
   .btn-secondary {
     padding: 0.875rem 1.75rem;
