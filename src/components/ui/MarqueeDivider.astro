@@ -1,0 +1,84 @@
+---
+/**
+ * MarqueeDivider — divisores "Divisor marquee" de los frames (aria-hidden).
+ * - cruzado: dos cintas cruzadas (rosa arriba, verde abajo). Figma 32:918
+ *   (desktop, 140px), 54:2476 (tablet, 120px) y 34:1770 (mobile, 120px).
+ * - verde / rosa: una cinta recta a todo el ancho (32:1145, 32:1350).
+ * Rotaciones de Figma (antihorario positivo) pasadas a CSS (horario positivo).
+ */
+import Marquee from "@ui/Marquee.astro";
+
+interface Props {
+  variante?: "cruzado" | "verde" | "rosa";
+  class?: string;
+}
+
+const { variante = "verde", class: className } = Astro.props;
+---
+
+{
+  variante === "cruzado" ? (
+    <div
+      class:list={["divisor-marquee", "divisor-marquee--cruzado", className]}
+      aria-hidden="true"
+    >
+      <Marquee
+        tono="rosa"
+        class="divisor-marquee__cinta divisor-marquee__cinta--rosa"
+      />
+      <Marquee
+        tono="verde"
+        class="divisor-marquee__cinta divisor-marquee__cinta--verde"
+      />
+    </div>
+  ) : (
+    <Marquee tono={variante} class:list={["divisor-marquee", className]} />
+  )
+}
+
+<style>
+  .divisor-marquee--cruzado {
+    position: relative;
+    height: 120px;
+    overflow: hidden;
+    background: var(--duo-bg-page);
+  }
+
+  .divisor-marquee--cruzado :global(.divisor-marquee__cinta) {
+    --marquee-origen: top left;
+    position: absolute;
+    left: -60px;
+    right: -60px;
+  }
+
+  .divisor-marquee--cruzado :global(.divisor-marquee__cinta--rosa) {
+    --marquee-rotacion: -3deg;
+    top: 24px;
+  }
+
+  .divisor-marquee--cruzado :global(.divisor-marquee__cinta--verde) {
+    --marquee-rotacion: 2deg;
+    top: 40px;
+  }
+
+  @media (min-width: 1024px) {
+    .divisor-marquee--cruzado {
+      height: 140px;
+    }
+
+    .divisor-marquee--cruzado :global(.divisor-marquee__cinta) {
+      left: -80px;
+      right: -80px;
+    }
+
+    .divisor-marquee--cruzado :global(.divisor-marquee__cinta--rosa) {
+      --marquee-rotacion: -2deg;
+      top: 30px;
+    }
+
+    .divisor-marquee--cruzado :global(.divisor-marquee__cinta--verde) {
+      --marquee-rotacion: 1.5deg;
+      top: 40px;
+    }
+  }
+</style>

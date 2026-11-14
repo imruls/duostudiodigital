@@ -10,6 +10,8 @@ interface Props {
   rating?: number;
   max?: number;
   mostrarTexto?: boolean;
+  /** acento: verde/600 sobre claro · claro: rosa sobre verde (Hero) */
+  tono?: "acento" | "claro";
   class?: string;
 }
 
@@ -17,12 +19,13 @@ const {
   rating = 5,
   max = 5,
   mostrarTexto = true,
+  tono = "acento",
   class: className,
 } = Astro.props;
 const label = ratingLabel(rating, max);
 ---
 
-<span class:list={["estrellas", className]}>
+<span class:list={["estrellas", `estrellas--${tono}`, className]}>
   <span class="estrellas__iconos" aria-hidden="true">
     {
       Array.from({ length: max }).map((_, i) => (
@@ -50,6 +53,10 @@ const label = ratingLabel(rating, max);
     display: inline-flex;
     gap: var(--duo-space-1);
     color: var(--duo-text-accent);
+  }
+
+  .estrellas--claro .estrellas__iconos {
+    color: var(--duo-text-highlight);
   }
 
   .estrellas__iconos :global(.estrellas__vacia) {

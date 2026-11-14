@@ -61,9 +61,16 @@ const copias = 4;
   .marquee {
     display: flex;
     align-items: center;
-    height: 56px;
+    height: 48px;
     overflow: hidden;
     transform: rotate(var(--marquee-rotacion, 0deg));
+    transform-origin: var(--marquee-origen, center);
+  }
+
+  @media (min-width: 1024px) {
+    .marquee {
+      height: 56px;
+    }
   }
 
   .marquee--verde {

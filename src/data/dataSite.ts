@@ -281,6 +281,30 @@ export const clientReviews: ClientReview[] = [
 export const googleReviewHref =
   "https://www.google.com/maps/place/D%C3%BAo+Studio+Digital/@-37.0323467,-65.3129713,6z/data=!3m1!4b1!4m6!3m5!1s0x64ba177cf6cee76b:0xf62dadc4ff0ba53d!8m2!3d-37.1498821!4d-60.0254816!16s%2Fg%2F11ms1qqxbr?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D";
 
+// ─── Hero (rediseño 2026) ───────────────────────────────
+// El hero usa una bajada más corta que companyDescription (Figma: "se acorta
+// el texto del hero"); companyDescription sigue en Nosotras.
+
+export const hero = {
+  badge: "Agencia de Marketing Digital",
+  titulo: {
+    antes: "Impulsamos tu marca con ",
+    destacado: "estrategia",
+    despues: " y creatividad",
+  },
+  bajada:
+    "Branding, estrategia, diseño web y contenido para emprendedores, marcas personales y negocios que buscan crecer de manera auténtica, ordenada y profesional.",
+  ctaPrincipal: { label: "Ver servicios", href: "#servicios" },
+  ctaSecundario: { label: "Conocé al equipo", href: "#nosotras" },
+  fotoAlt:
+    "Cami y Mica, las fundadoras de Dúo Studio Digital, sonriendo juntas en el estudio",
+  respuestaRapida: "Respuesta rápida por WhatsApp",
+};
+
+// A CONFIRMAR CON EL ESTUDIO (CLAUDE.md: no inventar datos).
+export const googleRatingResumen = "5,0 en Google · 6 reseñas";
+export const fundadorasLabel = "Cami & Mica, fundadoras";
+
 // ─── About / Hero ───────────────────────────────────────
 // Copy compartido entre Hero.astro y About.astro: mantenerlo acá evita que
 // ambas secciones queden desincronizadas al editar solo una.
