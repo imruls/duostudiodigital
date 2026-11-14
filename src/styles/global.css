@@ -126,20 +126,45 @@
   --duo-transition: 150ms ease-out;
   --duo-hover-translate: translate(-2px, -2px);
   --duo-focus-ring: 4px;
+
+  /* ---------- Grilla (estilos "Dúo/Grid/...", ficha "Sistema de grillas") ----------
+     Mobile first: 4 col / gutter 16 / margen 20. */
+  --duo-grid-columns: 4;
+  --duo-grid-gutter: var(--duo-space-4);
+  --duo-container-margin: var(--duo-space-5);
+  --duo-container-max: 1200px;
+  --duo-section-space: var(--duo-space-9);
+  --duo-navbar-height: 76px;
 }
 
-/* Títulos responsive: estilos Dúo/Tablet/... y Dúo/Mobile/... */
-@media (max-width: 1023px) {
+/* Responsive: estilos Dúo/Mobile/... (base), Dúo/Tablet/... y Desktop.
+   Breakpoints: 768px (tablet) y 1024px (desktop). */
+:root {
+  --duo-fs-hero: 40px;
+  --duo-fs-section-title: 28px;
+}
+
+@media (min-width: 768px) {
   :root {
+    --duo-grid-columns: 8;
+    --duo-grid-gutter: var(--duo-space-6);
+    --duo-container-margin: var(--duo-space-7);
+    --duo-section-space: calc(
+      var(--duo-space-9) + var(--duo-space-4)
+    ); /* 80px */
+    --duo-navbar-height: 80px;
     --duo-fs-hero: 56px;
     --duo-fs-section-title: 36px;
   }
 }
 
-@media (max-width: 767px) {
+@media (min-width: 1024px) {
   :root {
-    --duo-fs-hero: 40px;
-    --duo-fs-section-title: 28px;
+    --duo-grid-columns: 12;
+    --duo-section-space: var(--duo-space-10);
+    --duo-navbar-height: 88px;
+    --duo-fs-hero: 72px;
+    --duo-fs-section-title: 44px;
   }
 }
 
@@ -154,7 +179,7 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px;
+  scroll-padding-top: var(--duo-navbar-height);
   font-size: 16px;
 }
 
@@ -203,17 +228,116 @@ ul {
   border: 0;
 }
 
-/* ---------- Layout ---------- */
+/* ---------- Layout (ficha "Sistema de grillas") ----------
+   Desktop ≥1024: 12 col, gutter 24, contenedor 1200 (margen 120 a 1440).
+   Tablet 768–1023: 8 col, gutter 24, margen 32.
+   Mobile <768: 4 col, gutter 16, margen 20. */
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: calc(var(--duo-container-max) + 2 * var(--duo-container-margin));
   margin-inline: auto;
-  padding-inline: 1.25rem;
+  padding-inline: var(--duo-container-margin);
 }
 
-@media (min-width: 1280px) {
-  .container {
-    padding-inline: 2rem;
+/* Secciones: 96 / 80 / 64px arriba y abajo. Recortan (para la grilla
+   de fondo y los stickers); los contenedores internos no recortan. */
+.section {
+  position: relative;
+  padding-block: var(--duo-section-space);
+  overflow: clip;
+}
+
+/* Grilla de columnas. Los hijos eligen su ancho con .span-*, .span-t-*
+   (≥768) y .span-d-* (≥1024); sin clase ocupan la fila completa.
+   align-items: stretch para que las cards de una fila midan lo mismo. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--duo-grid-columns), minmax(0, 1fr));
+  column-gap: var(--duo-grid-gutter);
+  row-gap: var(--duo-space-7);
+  align-items: stretch;
+}
+
+.grid > * {
+  grid-column: 1 / -1;
+}
+
+.grid > .span-1 {
+  grid-column: span 1;
+}
+.grid > .span-2 {
+  grid-column: span 2;
+}
+.grid > .span-3 {
+  grid-column: span 3;
+}
+.grid > .span-4 {
+  grid-column: span 4;
+}
+
+@media (min-width: 768px) {
+  .grid > .span-t-1 {
+    grid-column: span 1;
+  }
+  .grid > .span-t-2 {
+    grid-column: span 2;
+  }
+  .grid > .span-t-3 {
+    grid-column: span 3;
+  }
+  .grid > .span-t-4 {
+    grid-column: span 4;
+  }
+  .grid > .span-t-5 {
+    grid-column: span 5;
+  }
+  .grid > .span-t-6 {
+    grid-column: span 6;
+  }
+  .grid > .span-t-7 {
+    grid-column: span 7;
+  }
+  .grid > .span-t-8 {
+    grid-column: span 8;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid > .span-d-1 {
+    grid-column: span 1;
+  }
+  .grid > .span-d-2 {
+    grid-column: span 2;
+  }
+  .grid > .span-d-3 {
+    grid-column: span 3;
+  }
+  .grid > .span-d-4 {
+    grid-column: span 4;
+  }
+  .grid > .span-d-5 {
+    grid-column: span 5;
+  }
+  .grid > .span-d-6 {
+    grid-column: span 6;
+  }
+  .grid > .span-d-7 {
+    grid-column: span 7;
+  }
+  .grid > .span-d-8 {
+    grid-column: span 8;
+  }
+  .grid > .span-d-9 {
+    grid-column: span 9;
+  }
+  .grid > .span-d-10 {
+    grid-column: span 10;
+  }
+  .grid > .span-d-11 {
+    grid-column: span 11;
+  }
+  .grid > .span-d-12 {
+    grid-column: span 12;
   }
 }
 

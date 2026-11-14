@@ -9,6 +9,7 @@ export type IconName =
   | "download"
   | "chevron-left"
   | "chevron-right"
+  | "arrow-right"
   | "star"
   | "clock"
   | "shopping-bag";

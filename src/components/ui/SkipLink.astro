@@ -1,0 +1,47 @@
+---
+/**
+ * SkipLink — componente "Saltar al contenido" de Figma (node 52:2467).
+ * Primer elemento enfocable de la página; oculto hasta recibir foco.
+ * Estado=Oculto → fuera de pantalla · Estado=Visible → :focus-visible.
+ */
+import Icon from "@ui/Icon.astro";
+import { skipLinkLabel } from "@data/dataSite";
+
+interface Props {
+  href?: string;
+}
+
+const { href = "#main" } = Astro.props;
+---
+
+<a class="skip-link" href={href}>
+  {skipLinkLabel}
+  <Icon name="arrow-right" size={18} />
+</a>
+
+<style>
+  .skip-link {
+    position: fixed;
+    top: var(--duo-space-4);
+    left: var(--duo-space-4);
+    z-index: 1100; /* por encima del navbar (1000) */
+    display: inline-flex;
+    align-items: center;
+    gap: var(--duo-space-2);
+    min-height: 44px;
+    padding: var(--duo-space-3) var(--duo-space-5);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-bg-inverse);
+    color: var(--duo-text-inverse);
+    font-size: var(--duo-fs-button);
+    font-weight: 600;
+    line-height: 1;
+    transform: translateY(calc(-100% - var(--duo-space-7)));
+  }
+
+  .skip-link:focus-visible {
+    transform: none;
+    outline: 3px solid var(--duo-border-focus-inverse);
+    outline-offset: 0;
+  }
+</style>

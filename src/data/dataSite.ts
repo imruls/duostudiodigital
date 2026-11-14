@@ -30,6 +30,10 @@ export const tiktokUrl = "https://www.tiktok.com/@duo.studio.digital";
 
 // ─── Navbar ──────────────────────────────────────────────
 
+// ---------- Accesibilidad ----------
+// Texto del link "Saltar al contenido" (primer elemento enfocable).
+export const skipLinkLabel = "Saltar al contenido";
+
 export const navLinks = [
   { label: "Novedades", href: "#novedades" },
   { label: "Servicios", href: "#servicios" },
