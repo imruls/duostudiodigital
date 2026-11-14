@@ -1,0 +1,449 @@
+---
+/**
+ * Nosotras — Figma: desktop 22:270 · tablet 54:2600 · mobile 25:609.
+ * Nota de cumplimiento: "Nota/Nosotras".
+ * - Desktop: visual 5 col, 1 col de aire, texto 6 col. Tablet/mobile:
+ *   apilado con el isotipo como banda verde y una fila de datos.
+ * - Valores en grilla 2×2 (1 columna en mobile): ícono, título y texto.
+ * - Isotipo, tarjeta "Mini Studio" e íconos son decorativos.
+ * - Cierra con una acción concreta: "Hablemos de tu proyecto".
+ */
+import { Image } from "astro:assets";
+import BadgeSection from "@ui/BadgeSection.astro";
+import Button from "@ui/Button.astro";
+import Sticker from "@ui/Sticker.astro";
+import Icon from "@ui/Icon.astro";
+import type { IconName } from "@ui/iconTypes";
+import isotipoD from "@images/isotipo-d-cursor.png";
+import {
+  nosotrasSeccion as n,
+  companyDescription,
+  values,
+  whatsappUrl,
+} from "@data/dataSite";
+---
+
+<section
+  class="section nosotras"
+  id="nosotras"
+  aria-labelledby="nosotras-titulo"
+>
+  <div class="nosotras__stickers" aria-hidden="true">
+    <div class="container nosotras__stickers-desktop">
+      <div class="nosotras__stickers-caja">
+        <Sticker
+          tipo="destellos"
+          tamano={67.2}
+          rotacion={-10}
+          class="nosotras__st nosotras__st--destellos"
+        />
+        <Sticker
+          tipo="hoja"
+          tamano={61.6}
+          rotacion={14}
+          class="nosotras__st nosotras__st--hoja"
+        />
+      </div>
+    </div>
+    <Sticker
+      tipo="destellos"
+      tamano={39.2}
+      rotacion={-10}
+      class="nosotras__st nosotras__st--destellos-c"
+    />
+    <Sticker
+      tipo="hoja"
+      tamano={39.2}
+      rotacion={14}
+      class="nosotras__st nosotras__st--hoja-c"
+    />
+  </div>
+
+  <div class="container nosotras__grilla">
+    <div class="nosotras__encabezado">
+      <BadgeSection>{n.badge}</BadgeSection>
+      <h2 class="section-title" id="nosotras-titulo">
+        {n.titulo.antes}<span>{n.titulo.destacado}</span>
+      </h2>
+    </div>
+
+    <div class="nosotras__visual" aria-hidden="true">
+      <div class="nosotras__isotipo">
+        <span class="nosotras__d">
+          <Image src={isotipoD} alt="" widths={[400, 800]} sizes="400px" />
+        </span>
+      </div>
+      <div class="nosotras__tarjeta">
+        <span class="nosotras__tarjeta-icono"
+          ><Icon name="heart" size={24} /></span
+        >
+        <span class="nosotras__tarjeta-texto">
+          <span class="nosotras__tarjeta-titulo">{n.tarjeta.titulo}</span>
+          <span class="nosotras__tarjeta-detalle">{n.tarjeta.texto}</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="nosotras__copy">
+      <p class="nosotras__texto">{companyDescription}</p>
+
+      <dl class="nosotras__datos">
+        {
+          n.datos.map((dato) => (
+            <div class="nosotras__dato">
+              <dt class="nosotras__dato-etiqueta">{dato.etiqueta}</dt>
+              <dd class="nosotras__dato-valor">{dato.valor}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <ul class="nosotras__valores">
+        {
+          values.map((valor) => (
+            <li class="nosotras__valor">
+              <span class="nosotras__valor-icono" aria-hidden="true">
+                <Icon name={valor.icon as IconName} size={24} />
+              </span>
+              <div class="nosotras__valor-texto">
+                <h3 class="nosotras__valor-titulo">{valor.title}</h3>
+                <p class="nosotras__valor-desc">{valor.description}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <Button href={whatsappUrl} icono="whatsapp" externo class="nosotras__cta">
+        {n.cta}
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---------- Sección (mobile first) ---------- */
+  .nosotras {
+    background: var(--duo-bg-cream);
+    color: var(--duo-text-primary);
+  }
+
+  .nosotras__grilla {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-6);
+  }
+
+  .nosotras__encabezado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-6);
+  }
+
+  /* ---------- Visual: banda verde con la D (mobile 350×240) ---------- */
+  .nosotras__visual {
+    position: relative;
+  }
+
+  .nosotras__isotipo {
+    position: relative;
+    height: 240px;
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-lg);
+    background: var(--duo-bg-hero);
+    box-shadow: var(--duo-shadow-card);
+  }
+
+  /* La D (208×140) centrada; el PNG trae aire y se recorta como en Figma */
+  .nosotras__d {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 208px;
+    aspect-ratio: 330 / 222;
+    overflow: hidden;
+    transform: translate(-50%, -50%);
+  }
+
+  .nosotras__d :global(img) {
+    position: absolute;
+    top: -73.17%;
+    left: -6.98%;
+    width: 116.28%;
+    height: 243.9%;
+    max-width: none;
+  }
+
+  .nosotras__tarjeta {
+    display: none;
+  }
+
+  /* ---------- Copy ---------- */
+  .nosotras__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-6);
+  }
+
+  .nosotras__texto {
+    font-size: var(--duo-fs-body);
+    line-height: 1.6;
+  }
+
+  /* Fila de datos (tablet/mobile) */
+  .nosotras__datos {
+    display: flex;
+    align-items: center;
+    gap: var(--duo-space-4);
+    margin: 0;
+  }
+
+  .nosotras__dato {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--duo-space-1);
+  }
+
+  .nosotras__dato + .nosotras__dato {
+    padding-left: var(--duo-space-4);
+    border-left: 1px solid
+      color-mix(in srgb, var(--duo-border-strong) 20%, transparent);
+  }
+
+  .nosotras__dato-valor {
+    margin: 0;
+    font-size: var(--duo-fs-price);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--duo-text-accent);
+  }
+
+  .nosotras__dato-etiqueta {
+    font-size: var(--duo-fs-tag);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--duo-text-secondary);
+  }
+
+  /* Valores */
+  .nosotras__valores {
+    display: grid;
+    gap: var(--duo-space-5);
+    width: 100%;
+    list-style: none;
+  }
+
+  .nosotras__valor {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--duo-space-4);
+  }
+
+  .nosotras__valor-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border: var(--duo-border-thin) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-bg-surface);
+  }
+
+  .nosotras__valor-texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-1);
+  }
+
+  .nosotras__valor-titulo {
+    font-size: var(--duo-fs-h3);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .nosotras__valor-desc {
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
+    color: var(--duo-text-secondary);
+  }
+
+  .nosotras__copy :global(.nosotras__cta) {
+    width: 100%;
+  }
+
+  /* ---------- Stickers ---------- */
+  .nosotras__stickers {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .nosotras__stickers-desktop {
+    display: none;
+  }
+
+  .nosotras__stickers-caja {
+    position: relative;
+  }
+
+  .nosotras :global(.nosotras__st) {
+    position: absolute;
+  }
+
+  .nosotras :global(.nosotras__st--destellos-c) {
+    top: 14px;
+    left: 150px;
+  }
+
+  .nosotras :global(.nosotras__st--hoja-c) {
+    top: 391px;
+    right: 15px;
+  }
+
+  /* ---------- Tablet (768–1023) ---------- */
+  @media (min-width: 768px) {
+    .nosotras__isotipo {
+      height: 320px;
+    }
+
+    .nosotras__valores {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--duo-space-6);
+    }
+
+    .nosotras__copy :global(.nosotras__cta) {
+      width: auto;
+    }
+  }
+
+  /* ---------- Desktop (≥1024): 5 + 1 + 6 columnas ---------- */
+  @media (min-width: 1024px) {
+    .nosotras__grilla {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      /* Filas vacías arriba y abajo: el texto queda centrado respecto
+         del visual, como en Figma (items-center). */
+      grid-template-rows: 1fr auto auto 1fr;
+      column-gap: var(--duo-grid-gutter);
+      row-gap: 0;
+      align-items: start;
+    }
+
+    .nosotras__encabezado {
+      grid-column: 7 / span 6;
+      grid-row: 2;
+    }
+
+    .nosotras__copy {
+      grid-column: 7 / span 6;
+      grid-row: 3;
+      margin-top: var(--duo-space-6);
+    }
+
+    /* Visual de 486×520 que escala con la columna */
+    .nosotras__visual {
+      grid-column: 1 / span 5;
+      grid-row: 1 / -1;
+      align-self: center;
+      width: 100%;
+      aspect-ratio: 486 / 520;
+      container-type: inline-size;
+    }
+
+    .nosotras__isotipo {
+      position: absolute;
+      left: 1.6cqw; /* 7.8 / 486 */
+      top: -1.67cqw; /* -8.1 / 486 */
+      width: 93.83cqw; /* 456 / 486 */
+      height: 93.83cqw;
+      transform: rotate(-2deg);
+    }
+
+    .nosotras__d {
+      top: 25.31%; /* 115.4 / 456 */
+      left: 13.46%; /* 61.4 / 456 */
+      width: 72.37%; /* 330 / 456 */
+      transform: none;
+    }
+
+    .nosotras__tarjeta {
+      position: absolute;
+      left: 40.08cqw; /* 194.8 / 486 */
+      top: 82.3cqw; /* 400 / 486 */
+      display: flex;
+      align-items: center;
+      gap: var(--duo-space-3);
+      padding: var(--duo-space-4) var(--duo-space-5);
+      border: var(--duo-border-thick) solid var(--duo-border-strong);
+      border-radius: var(--duo-radius-md);
+      background: var(--duo-bg-surface);
+      box-shadow: var(--duo-shadow-cta);
+      white-space: nowrap;
+    }
+
+    .nosotras__tarjeta-icono {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border: var(--duo-border-thin) solid var(--duo-border-strong);
+      border-radius: var(--duo-radius-full);
+      background: var(--duo-card-rosa);
+    }
+
+    .nosotras__tarjeta-texto {
+      display: flex;
+      flex-direction: column;
+      gap: var(--duo-space-1);
+    }
+
+    .nosotras__tarjeta-titulo {
+      font-size: var(--duo-fs-button);
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .nosotras__tarjeta-detalle {
+      font-size: var(--duo-fs-caption);
+      line-height: 1.5;
+      color: var(--duo-text-secondary);
+    }
+
+    /* La fila de datos no está en el frame desktop */
+    .nosotras__datos {
+      display: none;
+    }
+
+    .nosotras__stickers-desktop {
+      position: absolute;
+      inset: var(--duo-section-space) 0 auto;
+      display: block;
+      height: 0;
+    }
+
+    .nosotras__stickers > :global(.nosotras__st--destellos-c),
+    .nosotras__stickers > :global(.nosotras__st--hoja-c) {
+      display: none;
+    }
+
+    .nosotras :global(.nosotras__st--destellos) {
+      left: 33.8%;
+      top: -32px;
+    }
+
+    .nosotras :global(.nosotras__st--hoja) {
+      left: -4.03%;
+      top: 470px;
+    }
+  }
+</style>

@@ -382,9 +382,8 @@ export const hero = {
 export const googleRatingResumen = "5,0 en Google · 6 reseñas";
 export const fundadorasLabel = "Cami & Mica, fundadoras";
 
-// ─── About / Hero ───────────────────────────────────────
-// Copy compartido entre Hero.astro y About.astro: mantenerlo acá evita que
-// ambas secciones queden desincronizadas al editar solo una.
+// ─── Nosotras ───────────────────────────────────────────
+// Descripción de la empresa (Nosotras.astro).
 
 export const companyDescription =
   "Dúo Studio es un Mini Studio de Social Media creado por dos mejores amigas, emprendedoras, CM´s y Paid Media. Trabajamos con emprendedores, marcas personales y negocios que buscan crecer de manera auténtica, ordenada y profesional.";
@@ -414,6 +413,20 @@ export const values = [
       "No buscamos seguidores, construimos comunidades que perduran.",
   },
 ];
+
+// ─── Nosotras (rediseño 2026) ───────────────────────────
+export const nosotrasSeccion = {
+  badge: "Nosotras",
+  titulo: { antes: "Somos tu ", destacado: "partner creativo" },
+  tarjeta: { titulo: "Mini Studio", texto: "creado por dos mejores amigas" },
+  // Fila de datos (solo tablet/mobile en Figma). El 5,0 está A CONFIRMAR.
+  datos: [
+    { valor: resenasSeccion.puntaje, etiqueta: "En Google" },
+    { valor: String(servicios.length), etiqueta: "Servicios" },
+    { valor: "48 h", etiqueta: "Informe" },
+  ],
+  cta: "Hablemos de tu proyecto",
+};
 
 // ─── Social Links ───────────────────────────────────────
 
