@@ -43,6 +43,8 @@ export const menuLabels = { abrir: "Menú", cerrar: "Cerrar" };
 export const whatsappCta = {
   label: "Escribinos",
   ariaLabel: "Escribinos por WhatsApp",
+  labelLargo: "Escribinos por WhatsApp",
+  respuesta: "Te respondemos al toque",
 };
 
 export const reviewLabels = {
@@ -72,13 +74,22 @@ export const marqueeItems = [
   "Auditoría de redes",
 ];
 
+// Navegación (rediseño 2026): 5 links + 1 CTA (ley de Hick). "Novedades"
+// deja de ser ítem: vive dentro de Tienda. El orden sigue al de la página.
 export const navLinks = [
-  { label: "Novedades", href: "#novedades" },
   { label: "Servicios", href: "#servicios" },
-  { label: "Tienda", href: "#shop" },
+  { label: "Auditoría", href: "#auditoria" },
   { label: "Reseñas", href: "#resenas" },
-  { label: "Nosotras", href: "#about" },
+  { label: "Nosotras", href: "#nosotras" },
+  { label: "Tienda", href: "#tienda" },
 ];
+
+// Sexto link: solo en el menú mobile y el footer (en desktop lo cubre el CTA).
+export const contactoLink = { label: "Contacto", href: "#contacto" };
+
+// Link del logo al inicio (el logo es decorativo dentro del link).
+export const logoLinkLabel = "Dúo Studio Digital, ir al inicio";
+export const navAriaLabel = "Navegación principal";
 
 // ─── Servicios ──────────────────────────────────────────
 

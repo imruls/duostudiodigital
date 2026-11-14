@@ -1,324 +1,444 @@
 ---
+/**
+ * Navbar — Figma: desktop 53:2488 · tablet 57:3677 · mobile 57:3663 ·
+ * menú abierto 27:733. Nota de cumplimiento: "Nota/Navbar".
+ *
+ * - Sticky arriba. Estado "Con scroll" (> 80px desktop, > 64px tablet/mobile):
+ *   fondo blanco, borde inferior 1,6px, sombra suave y menos padding.
+ * - Scroll-spy: el link de la sección visible lleva aria-current="true".
+ * - Mobile (< 768): isotipo + WhatsApp + Menú. Tablet (768–1023): logo +
+ *   WhatsApp + Menú. Desktop (≥ 1024): logo + 5 links + CTA.
+ * - Menú mobile como <dialog> modal: foco atrapado, Esc cierra y el foco
+ *   vuelve al botón "Menú".
+ */
 import { Image } from "astro:assets";
-import { navLinks as links } from "@data/dataSite";
-import logo from "@images/5.png";
+import NavLink from "@ui/NavLink.astro";
+import Button from "@ui/Button.astro";
+import MenuButton from "@ui/MenuButton.astro";
+import MobileMenuLink from "@ui/MobileMenuLink.astro";
+import Icon from "@ui/Icon.astro";
+import logo from "@images/logo-duo-studio-digital.png";
 import isotipo from "@images/isotipo.png";
+import {
+  navLinks,
+  contactoLink,
+  logoLinkLabel,
+  navAriaLabel,
+  menuLabels,
+  whatsappUrl,
+  whatsappCta,
+  externalLinkHint,
+} from "@data/dataSite";
+
+const menuLinks = [...navLinks, contactoLink];
 ---
 
-<nav class="navbar" id="navbar" aria-label="Navegación principal">
-  <div class="container">
-    <a href="#" class="nav-logo" aria-label="Dúo Studio Digital — Inicio">
+<header class="navbar" data-navbar>
+  <div class="container navbar__barra">
+    <a href="#" class="navbar__logo" aria-label={logoLinkLabel}>
       <Image
         src={isotipo}
-        alt="Dúo Studio Digital"
-        class="nav-logo__mobile"
+        alt=""
+        class="navbar__isotipo"
         width={44}
         height={44}
-        format="webp"
+        densities={[1, 2]}
         loading="eager"
-        decoding="async"
       />
-      <Image
-        src={logo}
-        alt="Dúo Studio Digital"
-        class="nav-logo__desktop"
-        loading="eager"
-        decoding="async"
-        format="webp"
-      />
+      <span class="navbar__logo-recorte">
+        <Image
+          src={logo}
+          alt=""
+          class="navbar__logo-img"
+          width={121}
+          densities={[1, 2]}
+          loading="eager"
+        />
+      </span>
     </a>
 
-    <!-- Desktop links -->
-    <div class="nav-links">
-      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    <nav class="navbar__nav" aria-label={navAriaLabel}>
+      <ul class="navbar__links">
+        {
+          navLinks.map((link) => (
+            <li>
+              <NavLink href={link.href}>{link.label}</NavLink>
+            </li>
+          ))
+        }
+      </ul>
+      <Button href={whatsappUrl} icono="whatsapp" externo class="navbar__cta">
+        {whatsappCta.label}
+      </Button>
+    </nav>
+
+    <div class="navbar__acciones">
+      <a
+        href={whatsappUrl}
+        class="navbar__whatsapp"
+        aria-label={`${whatsappCta.ariaLabel} ${externalLinkHint}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <Icon name="whatsapp" size={24} />
+      </a>
+      <MenuButton controls="menuMobile" id="menuMobileAbrir" />
     </div>
-
-    <a href="#contacto" class="nav-cta">Contacto</a>
-
-    <!-- Mobile toggle -->
-    <button
-      class="nav-toggle"
-      id="navToggle"
-      aria-label="Abrir menú"
-      aria-expanded="false"
-      aria-controls="mobileMenu"
-    >
-      <span></span><span></span><span></span>
-    </button>
   </div>
-</nav>
+</header>
 
-<!-- Mobile overlay -->
-<div class="mobile-overlay" id="mobileOverlay" aria-hidden="true"></div>
+<dialog class="menu-mobile" id="menuMobile" aria-label={menuLabels.abrir}>
+  <div class="container menu-mobile__barra">
+    <a
+      href="#"
+      class="navbar__logo"
+      aria-label={logoLinkLabel}
+      data-cierra-menu
+    >
+      <Image
+        src={isotipo}
+        alt=""
+        class="navbar__isotipo"
+        width={44}
+        height={44}
+        densities={[1, 2]}
+      />
+      <span class="navbar__logo-recorte">
+        <Image
+          src={logo}
+          alt=""
+          class="navbar__logo-img"
+          width={121}
+          densities={[1, 2]}
+        />
+      </span>
+    </a>
+    <MenuButton controls="menuMobile" abierto class="menu-mobile__cerrar" />
+  </div>
 
-<!-- Mobile drawer -->
-<div
-  class="mobile-menu"
-  id="mobileMenu"
-  role="dialog"
-  aria-label="Menú de navegación"
->
-  {links.map((link) => <a href={link.href}>{link.label}</a>)}
-  <a href="#contacto" class="mobile-menu__cta">Contacto →</a>
-</div>
+  <nav class="container menu-mobile__nav" aria-label={navAriaLabel}>
+    <ul class="menu-mobile__links">
+      {
+        menuLinks.map((link) => (
+          <li>
+            <MobileMenuLink href={link.href}>{link.label}</MobileMenuLink>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="container menu-mobile__cta">
+    <Button href={whatsappUrl} icono="whatsapp" externo anchoCompleto>
+      {whatsappCta.labelLargo}
+    </Button>
+    <p class="menu-mobile__respuesta">{whatsappCta.respuesta}</p>
+  </div>
+</dialog>
+
+<script>
+  const navbar = document.querySelector<HTMLElement>("[data-navbar]");
+  const dialog = document.querySelector<HTMLDialogElement>("#menuMobile");
+  const abrir = document.querySelector<HTMLButtonElement>("#menuMobileAbrir");
+
+  // ---------- Estado "Con scroll" ----------
+  const desktop = window.matchMedia("(min-width: 1024px)");
+  if (navbar) {
+    const navbarEl = navbar;
+    const actualizarScroll = () => {
+      const umbral = desktop.matches ? 80 : 64;
+      navbarEl.toggleAttribute("data-con-scroll", window.scrollY > umbral);
+    };
+    actualizarScroll();
+    window.addEventListener("scroll", actualizarScroll, { passive: true });
+  }
+
+  // ---------- Scroll-spy (aria-current) ----------
+  const links = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(
+      ".navbar__links a[href^='#'], .menu-mobile__links a[href^='#']",
+    ),
+  );
+  const ids = [...new Set(links.map((a) => a.hash.slice(1)))].filter(Boolean);
+  let pendiente = false;
+
+  const marcarActivo = () => {
+    pendiente = false;
+    // Activa = la sección cuyo borde superior quedó más cerca por encima de
+    // la línea (navbar + 1/3 de la pantalla). Independiente del orden.
+    const limite = (navbar?.offsetHeight ?? 0) + window.innerHeight / 3;
+    let activo = "";
+    let mejorTop = -Infinity;
+    for (const id of ids) {
+      const top = document.getElementById(id)?.getBoundingClientRect().top;
+      if (top !== undefined && top <= limite && top > mejorTop) {
+        mejorTop = top;
+        activo = id;
+      }
+    }
+    for (const a of links) {
+      if (a.hash === `#${activo}`) a.setAttribute("aria-current", "true");
+      else a.removeAttribute("aria-current");
+    }
+  };
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!pendiente) {
+        pendiente = true;
+        requestAnimationFrame(marcarActivo);
+      }
+    },
+    { passive: true },
+  );
+  marcarActivo();
+
+  // ---------- Menú mobile (diálogo modal) ----------
+  if (dialog && abrir) {
+    const dialogEl = dialog;
+    const abrirEl = abrir;
+    let cerroPorLink = false;
+
+    const cerrar = () => dialogEl.close();
+
+    abrirEl.addEventListener("click", () => {
+      cerroPorLink = false;
+      dialogEl.showModal();
+      abrirEl.setAttribute("aria-expanded", "true");
+      dialogEl.querySelector<HTMLElement>(".menu-mobile__cerrar")?.focus();
+    });
+
+    dialogEl
+      .querySelector(".menu-mobile__cerrar")
+      ?.addEventListener("click", cerrar);
+
+    dialogEl
+      .querySelectorAll<HTMLAnchorElement>(
+        ".menu-mobile__links a, [data-cierra-menu]",
+      )
+      .forEach((a) =>
+        a.addEventListener("click", () => {
+          cerroPorLink = true;
+          cerrar();
+        }),
+      );
+
+    // Esc dispara "close" de forma nativa; en todos los casos el foco
+    // vuelve al botón salvo que se haya elegido un link (navega al ancla).
+    dialogEl.addEventListener("close", () => {
+      abrirEl.setAttribute("aria-expanded", "false");
+      if (!cerroPorLink) abrirEl.focus({ preventScroll: true });
+    });
+
+    // Foco atrapado: Tab en el último vuelve al primero y Shift+Tab al revés
+    // (el <dialog> nativo deja salir el foco hacia la UI del navegador).
+    dialogEl.addEventListener("keydown", (e) => {
+      if (e.key !== "Tab") return;
+      const enfocables = Array.from(
+        dialogEl.querySelectorAll<HTMLElement>("a[href], button"),
+      ).filter((el) => el.offsetParent !== null);
+      const primero = enfocables[0];
+      const ultimo = enfocables[enfocables.length - 1];
+      if (!primero || !ultimo) return;
+      if (e.shiftKey && document.activeElement === primero) {
+        e.preventDefault();
+        ultimo.focus();
+      } else if (!e.shiftKey && document.activeElement === ultimo) {
+        e.preventDefault();
+        primero.focus();
+      }
+    });
+
+    // Si se agranda la ventana a desktop con el menú abierto, se cierra.
+    desktop.addEventListener("change", (e) => {
+      if (e.matches && dialogEl.open) cerrar();
+    });
+  }
+</script>
 
 <style>
+  /* ---------- Barra ---------- */
   .navbar {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    width: 100%;
     z-index: 1000;
-    padding: 0.25rem 0;
-    transition: var(--duo-transition);
-    background: color-mix(in srgb, var(--duo-color-crema-50) 0%, transparent);
+    background: var(--duo-bg-page);
+    transition:
+      background-color var(--duo-transition),
+      box-shadow var(--duo-transition);
   }
 
-  .navbar.scrolled {
-    background: color-mix(in srgb, var(--duo-color-crema-50) 95%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 1px 20px
-      color-mix(in srgb, var(--duo-color-verde-900) 6%, transparent);
-    padding: 0.2rem 0;
+  /* Borde inferior de 1,6px como sombra interna: no suma alto, así el
+     cambio de estado no mueve el contenido. Sombra suave de Figma:
+     0 6px 12px verde/900 18% (= Dúo/Shadow/Soft - Sticker). */
+  .navbar[data-con-scroll] {
+    background: var(--duo-bg-surface);
+    box-shadow:
+      inset 0 calc(var(--duo-border-thick) * -1) 0 var(--duo-border-strong),
+      var(--duo-shadow-sticker);
   }
 
-  .navbar .container {
+  .navbar__barra,
+  .menu-mobile__barra {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    position: relative;
+    padding-block: var(--duo-space-3);
+    transition: padding var(--duo-transition);
   }
 
-  /* Logo */
-  .nav-logo {
+  .navbar[data-con-scroll] .navbar__barra {
+    padding-block: var(--duo-space-2);
+  }
+
+  /* ---------- Logo ---------- */
+  .navbar__logo {
+    display: inline-flex;
+    border-radius: var(--duo-radius-sm);
+  }
+
+  .navbar__isotipo {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* El PNG del logo trae aire alrededor: se recorta igual que en Figma
+     (caja de 106×56, imagen al 113,64% × 303,03% desplazada). */
+  .navbar__logo-recorte {
+    position: relative;
+    display: none;
+    width: 106px;
+    height: 56px;
+    overflow: hidden;
+  }
+
+  .navbar__logo-recorte :global(.navbar__logo-img) {
+    position: absolute;
+    top: -109.09%;
+    left: -6.82%;
+    width: 113.64%;
+    height: 303.03%;
+    max-width: none;
+  }
+
+  /* ---------- Links desktop ---------- */
+  .navbar__nav {
+    display: none;
+    align-items: center;
+    gap: var(--duo-space-3);
+  }
+
+  .navbar__links {
     display: flex;
     align-items: center;
-    transition: var(--duo-transition);
+    gap: var(--duo-space-1);
   }
 
-  .nav-logo__mobile {
-    height: 40px;
-    width: 40px;
-    object-fit: contain;
-    transition: var(--duo-transition);
+  /* ---------- Acciones mobile/tablet ---------- */
+  .navbar__acciones {
+    display: flex;
+    align-items: center;
+    gap: var(--duo-space-2);
   }
 
-  .nav-logo__desktop {
-    display: none;
-    height: 60px;
-    width: auto;
-    transition: var(--duo-transition);
-  }
-
-  .nav-logo:hover img {
-    transform: scale(1.05);
-  }
-
-  /* Desktop links */
-  .nav-links {
-    display: none;
-    gap: 2rem;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .nav-links a {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--duo-text-primary);
-    transition: var(--duo-transition);
-    position: relative;
-  }
-
-  .nav-links a::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--duo-action-secondary-bg);
-    transition: var(--duo-transition);
-  }
-
-  .nav-links a:hover {
-    color: var(--duo-text-accent);
-  }
-
-  .nav-links a:hover::after {
-    width: 100%;
-  }
-
-  /* CTA */
-  .nav-cta {
-    display: none;
-    padding: 0.6rem 1.5rem;
-    background: var(--duo-action-secondary-bg);
-    color: var(--duo-text-inverse);
+  .navbar__whatsapp {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
     border-radius: var(--duo-radius-full);
-    font-size: 0.85rem;
-    font-weight: 500;
-    transition: var(--duo-transition);
+    background: var(--duo-action-primary-bg);
+    color: var(--duo-action-primary-text);
+    transition: background-color var(--duo-transition);
   }
 
-  .nav-cta:hover {
-    background: var(--duo-action-secondary-bg-hover);
-    transform: translateY(-1px);
+  .navbar__whatsapp:hover {
+    background: var(--duo-action-primary-bg-hover);
   }
 
-  /* Mobile toggle */
-  .nav-toggle {
+  /* ---------- Menú mobile ---------- */
+  .menu-mobile {
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--duo-bg-page);
+    color: var(--duo-text-primary);
+  }
+
+  .menu-mobile::backdrop {
+    background: transparent;
+  }
+
+  .menu-mobile__barra {
+    border-bottom: var(--duo-border-thin) solid var(--duo-border-strong);
+  }
+
+  .menu-mobile[open] {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding: 10px;
-    min-width: 44px;
-    min-height: 44px;
-    justify-content: center;
-    align-items: center;
   }
 
-  .nav-toggle span {
-    width: 24px;
-    height: 2px;
-    background: var(--duo-action-secondary-bg-hover);
-    border-radius: 2px;
-    transition: var(--duo-transition);
+  .menu-mobile__nav {
+    padding-block: var(--duo-space-7);
   }
 
-  .nav-toggle.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
-  .nav-toggle.active span:nth-child(2) {
-    opacity: 0;
-  }
-  .nav-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
+  .menu-mobile__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-1);
   }
 
-  /* Mobile overlay */
-  .mobile-overlay {
-    position: fixed;
-    inset: 0;
-    background: color-mix(in srgb, var(--duo-color-verde-900) 30%, transparent);
-    z-index: 998;
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--duo-transition);
+  .menu-mobile__cta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-3);
   }
 
-  .mobile-overlay.open {
-    opacity: 1;
-    visibility: visible;
+  .menu-mobile__respuesta {
+    font-size: var(--duo-fs-caption);
+    line-height: 1.5;
+    color: var(--duo-text-secondary);
+    text-align: center;
   }
 
-  /* Mobile menu drawer */
-  .mobile-menu {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 80%;
-    max-width: 320px;
-    height: 100vh;
-    height: 100dvh;
-    background: var(--duo-bg-page);
-    z-index: 999;
-    padding: 5rem 2rem 2rem;
-    transition: var(--duo-transition);
-    box-shadow: -10px 0 40px
-      color-mix(in srgb, var(--duo-color-verde-900) 10%, transparent);
+  :global(html:has(.menu-mobile[open])) {
+    overflow: hidden;
   }
 
-  .mobile-menu.open {
-    right: 0;
-  }
-
-  .mobile-menu a {
-    display: block;
-    padding: 1rem 0;
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--duo-text-primary);
-    border-bottom: 1px solid var(--duo-color-crema-500);
-    transition: var(--duo-transition);
-  }
-
-  .mobile-menu a:hover {
-    color: var(--duo-text-accent);
-    padding-left: 0.5rem;
-  }
-
-  .mobile-menu__cta {
-    color: var(--duo-text-accent) !important;
-    font-weight: 600 !important;
-    border-bottom: none !important;
-    margin-top: var(--duo-space-4);
-  }
-
-  /* Desktop breakpoint */
-  @media (min-width: 1024px) {
-    .nav-logo__mobile {
+  /* ---------- Tablet ---------- */
+  @media (min-width: 768px) {
+    .navbar__isotipo {
       display: none;
     }
 
-    .nav-logo__desktop {
+    .navbar__logo-recorte {
       display: block;
-      height: 80px;
+    }
+  }
+
+  /* ---------- Desktop ---------- */
+  @media (min-width: 1024px) {
+    .navbar__barra {
+      padding-block: var(--duo-space-4);
     }
 
-    .nav-links {
+    .navbar[data-con-scroll] .navbar__barra {
+      padding-block: var(--duo-space-3);
+    }
+
+    .navbar__nav {
       display: flex;
     }
-    .nav-cta {
-      display: inline-flex;
-    }
-    .nav-toggle {
+
+    .navbar__acciones {
       display: none;
     }
   }
 </style>
-
-<script>
-  const navbar = document.getElementById("navbar");
-  const toggle = document.getElementById("navToggle");
-  const menu = document.getElementById("mobileMenu");
-  const overlay = document.getElementById("mobileOverlay");
-
-  if (navbar) {
-    window.addEventListener(
-      "scroll",
-      () => {
-        navbar.classList.toggle("scrolled", window.scrollY > 60);
-      },
-      { passive: true },
-    );
-  }
-
-  if (toggle && menu && overlay) {
-    // Vinculamos a nuevas const para que TypeScript retenga el narrowing
-    // (no-null) dentro del closure de `toggleMenu`.
-    const toggleEl = toggle;
-    const menuEl = menu;
-    const overlayEl = overlay;
-
-    function toggleMenu() {
-      const isOpen = menuEl.classList.contains("open");
-      menuEl.classList.toggle("open");
-      overlayEl.classList.toggle("open");
-      toggleEl.classList.toggle("active");
-      toggleEl.setAttribute("aria-expanded", String(!isOpen));
-      document.body.style.overflow = isOpen ? "" : "hidden";
-    }
-
-    toggle.addEventListener("click", toggleMenu);
-    overlay.addEventListener("click", toggleMenu);
-
-    menu.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
-        if (menu.classList.contains("open")) toggleMenu();
-      });
-    });
-  }
-</script>
