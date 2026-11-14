@@ -1,608 +1,489 @@
 ---
-import { servicios, auditoriaRedes, getWhatsappLink } from "@data/dataSite";
+/**
+ * Servicios — Figma: desktop 19:95 · tablet 54:2479 · mobile 24:433.
+ * Nota de cumplimiento: "Nota/Servicios".
+ * - Desktop: 4 cards de 3 columnas. Tablet: grilla 2×2. Mobile: carrusel
+ *   con scroll-snap (card de 300px + asomo), puntos y "Deslizá para ver más".
+ * - Todo lo que incluye cada servicio está a la vista (sin acordeones).
+ * - "Consultar" abre WhatsApp con aria-label propio por servicio.
+ * - "¿No sabés por dónde empezar?" deriva a la Auditoría.
+ */
+import BadgeSection from "@ui/BadgeSection.astro";
+import Tag from "@ui/Tag.astro";
+import ListItem from "@ui/ListItem.astro";
+import Button from "@ui/Button.astro";
+import CarouselDot from "@ui/CarouselDot.astro";
+import GridBackground from "@ui/GridBackground.astro";
+import Sticker from "@ui/Sticker.astro";
 import Icon from "@ui/Icon.astro";
+import {
+  servicios,
+  serviciosSeccion as s,
+  getWhatsappLink,
+  externalLinkHint,
+  carouselLabels,
+} from "@data/dataSite";
 
-const MAX_REVEAL_DELAY = 4;
-const auditoriaCtaHref = getWhatsappLink(
-  "Hola, quiero reservar mi Auditoría de Redes Sociales",
-);
+const colores = ["verde", "rosa", "crema", "salvia"] as const;
+const total = servicios.length;
+const plantillaEstado = carouselLabels
+  .estado(0, 0)
+  .replace(/^0/, "{a}")
+  .replace(/0$/, "{t}");
 ---
 
-<!-- SVG symbol reutilizable (se renderiza una sola vez) -->
-<svg class="sr-only" aria-hidden="true">
-  <symbol
-    id="icon-check"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-  >
-    <polyline points="20 6 9 17 4 12"></polyline>
-  </symbol>
-</svg>
+<section
+  class="section servicios"
+  id="servicios"
+  aria-labelledby="servicios-titulo"
+>
+  <GridBackground />
 
-<section class="section servicios" id="servicios">
-  <div class="container">
-    <div class="servicios__header reveal">
-      <span class="section-label">Nuestros servicios</span>
-      <h2 class="section-title">
-        Potenciá tu marca con <span>servicios a medida</span>
+  <div class="servicios__stickers" aria-hidden="true">
+    <div class="container servicios__stickers-desktop">
+      <div class="servicios__stickers-caja">
+        <Sticker
+          tipo="destellos"
+          tamano={67.2}
+          rotacion={10}
+          class="servicios__st servicios__st--destellos"
+        />
+        <Sticker
+          tipo="grafico"
+          tamano={67.2}
+          rotacion={-8}
+          class="servicios__st servicios__st--grafico"
+        />
+        <Sticker
+          tipo="corazon"
+          tamano={50.4}
+          rotacion={-12}
+          class="servicios__st servicios__st--corazon"
+        />
+        <Sticker
+          tipo="burbuja"
+          tamano={56}
+          rotacion={6}
+          class="servicios__st servicios__st--burbuja"
+        />
+      </div>
+    </div>
+    <Sticker
+      tipo="destellos"
+      tamano={39.2}
+      rotacion={-10}
+      class="servicios__st servicios__st--destellos-c"
+    />
+    <Sticker
+      tipo="grafico"
+      tamano={33.6}
+      rotacion={8}
+      class="servicios__st servicios__st--grafico-c"
+    />
+  </div>
+
+  <div class="servicios__cuerpo">
+    <header class="container servicios__encabezado">
+      <BadgeSection>{s.badge}</BadgeSection>
+      <h2 class="section-title" id="servicios-titulo">
+        {s.titulo.antes}<span>{s.titulo.destacado}</span>
       </h2>
-      <p class="section-subtitle">
-        Elegí servicios individuales diseñados para llevar tu presencia digital
-        al siguiente nivel.
-      </p>
-    </div>
+      <p class="section-subtitle servicios__bajada">{s.bajada}</p>
+    </header>
 
-    <div class="servicios__grid">
-      {
-        servicios.map((servicio, i) => {
-          const delay = Math.min(i + 1, MAX_REVEAL_DELAY);
-          const ctaHref = getWhatsappLink(
-            `Hola, me interesa el servicio de ${servicio.title}, quiero más info`,
-          );
-
-          return (
-            <article
-              class:list={["servicio-card", "reveal", `reveal-delay-${delay}`]}
-            >
-              <div class="servicio-card__info">
-                <h3 class="servicio-card__title">{servicio.title}</h3>
-                <p class="servicio-card__desc">{servicio.description}</p>
-              </div>
-
-              <ul class="servicio-card__list">
-                {servicio.items.map((item) => (
-                  <li class="servicio-card__item">
-                    <svg class="servicio-card__item-icon" aria-hidden="true">
-                      <use href="#icon-check" />
-                    </svg>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <a
-                href={ctaHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="servicio-card__cta"
+    <div class="servicios__carrusel" data-carrusel>
+      <ul class="servicios__pista" data-carrusel-pista>
+        {
+          servicios.map((servicio, i) => (
+            <li class="servicios__item">
+              <article
+                class:list={[
+                  "servicio-card",
+                  `servicio-card--${colores[i % 4]}`,
+                ]}
               >
-                Más info
-              </a>
-            </article>
-          );
-        })
-      }
-    </div>
+                <Tag>
+                  {s.numero(i + 1)}
+                  <span class="servicio-card__de">{s.deTotal(total)}</span>
+                </Tag>
+                <h3 class="servicio-card__titulo">{servicio.title}</h3>
+                <p class="servicio-card__desc">{servicio.description}</p>
+                <hr class="servicio-card__divisor" />
+                <p class="servicio-card__incluye">{s.incluye}</p>
+                <ul class="servicio-card__lista">
+                  {servicio.items.map((item) => (
+                    <ListItem>{item}</ListItem>
+                  ))}
+                </ul>
+                <div class="servicio-card__espaciador" />
+                <Button
+                  estilo="verde"
+                  href={getWhatsappLink(s.mensajeWhatsapp(servicio.title))}
+                  icono="whatsapp"
+                  externo
+                  anchoCompleto
+                  aria-label={`${s.consultarAria(servicio.title)} ${externalLinkHint}`}
+                  class="servicio-card__cta"
+                >
+                  {s.consultar}
+                </Button>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
 
-    <div
-      class="servicios__dots"
-      role="tablist"
-      aria-label="Navegar entre servicios"
-    >
-      {
-        servicios.map((servicio, i) => (
-          <button
-            type="button"
-            class="servicios__dot"
-            data-dot-index={i}
-            aria-label={`Ir al servicio ${i + 1}: ${servicio.title}`}
-            aria-current={i === 0 ? "true" : "false"}
-          />
-        ))
-      }
-    </div>
-
-    <div class="auditoria reveal">
-      <div class="auditoria__header">
-        <div class="auditoria__heading">
-          <h3 class="auditoria__title">{auditoriaRedes.title}</h3>
-          <p class="auditoria__audience">{auditoriaRedes.targetAudience}</p>
-        </div>
-
-        <div class="auditoria__price">
-          <span class="auditoria__price-value">{auditoriaRedes.price}</span>
-          <span class="auditoria__price-note">{auditoriaRedes.priceNote}</span>
-        </div>
-      </div>
-
-      <div class="auditoria__body">
-        <div class="auditoria__col">
-          <h4 class="auditoria__col-title">¿Qué incluye?</h4>
-          <ul class="auditoria__list">
-            {
-              auditoriaRedes.includes.map((item) => (
-                <li class="auditoria__list-item">
-                  <svg class="auditoria__list-icon" aria-hidden="true">
-                    <use href="#icon-check" />
-                  </svg>
-                  <span>{item}</span>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-
-        <div class="auditoria__col">
-          <h4 class="auditoria__col-title">¿Cómo funciona?</h4>
-          <ol class="auditoria__steps">
-            {
-              auditoriaRedes.steps.map((step, i) => (
-                <li class="auditoria__step">
-                  <span class="auditoria__step-number">{i + 1}</span>
-                  <span>{step}</span>
-                </li>
-              ))
-            }
-          </ol>
-        </div>
-      </div>
-
-      <div class="auditoria__meta">
-        <Icon name="clock" size={18} />
-        <span>
-          Tiempo de entrega: <strong>{auditoriaRedes.deliveryTime}</strong>
-        </span>
-      </div>
-
-      <div class="auditoria__footer">
-        <p class="auditoria__final-cta">{auditoriaRedes.finalCta}</p>
-        <a
-          href={auditoriaCtaHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="auditoria__cta btn-primary"
+      <div class="container servicios__indicador">
+        {
+          servicios.map((_, i) => (
+            <CarouselDot
+              aria-label={carouselLabels.irAPagina(i + 1)}
+              activo={i === 0}
+              data-carrusel-punto
+            />
+          ))
+        }
+        <p class="servicios__deslizar" aria-hidden="true">{s.deslizar}</p>
+        <p
+          class="sr-only"
+          aria-live="polite"
+          data-carrusel-estado
+          data-plantilla={plantillaEstado}
         >
-          {auditoriaRedes.ctaLabel}
-        </a>
+          {carouselLabels.estado(1, total)}
+        </p>
       </div>
+    </div>
+
+    <div class="container">
+      <a class="servicios__ayuda" href={s.ayuda.href}>
+        <span class="servicios__ayuda-pregunta">{s.ayuda.pregunta}</span>
+        <span class="servicios__ayuda-link">
+          {s.ayuda.link}
+          <Icon name="arrow-right" size={18} />
+        </span>
+      </a>
     </div>
   </div>
 </section>
 
+<script>
+  import { initCarrusel } from "@scripts/carousel";
+  document
+    .querySelectorAll<HTMLElement>(".servicios [data-carrusel]")
+    .forEach(initCarrusel);
+</script>
+
 <style>
+  /* ---------- Estructura (mobile first) ---------- */
   .servicios {
-    background: var(--duo-bg-cream);
-  }
-
-  .servicios__header {
-    text-align: center;
-    margin-bottom: var(--duo-space-9);
-  }
-
-  .servicios__header .section-subtitle {
-    margin-inline: auto;
-  }
-
-  .servicios__header .section-title span {
-    font-family: var(--duo-font-display);
-    font-weight: 400;
-  }
-
-  /* Carrusel (mobile / tablet): grid horizontal con scroll-snap.
-     grid-auto-flow: column + grid-template-rows hace que TODAS las cards
-     compartan las mismas 2 pistas de fila (info / lista), de modo que los
-     listados arrancan siempre en la misma línea del eje X. */
-  .servicios__grid {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 85%;
-    grid-template-rows: auto auto auto;
-    gap: var(--duo-space-6);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    padding-bottom: var(--duo-space-4);
-  }
-
-  .servicios__grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* Dots: solo visibles mientras el layout es carrusel */
-  .servicios__dots {
-    display: none;
-  }
-
-  @media (min-width: 640px) {
-    .servicios__grid {
-      grid-auto-columns: calc((100% - var(--duo-space-6)) / 2);
-    }
-  }
-
-  @media (max-width: 1023px) {
-    /* Indicadores de posición */
-    .servicios__dots {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: var(--duo-space-6);
-    }
-
-    .servicios__dot {
-      width: 8px;
-      height: 8px;
-      padding: 0;
-      border: none;
-      border-radius: 50%;
-      background: color-mix(
-        in srgb,
-        var(--duo-color-verde-600) 30%,
-        transparent
-      );
-      cursor: pointer;
-      transition:
-        width 0.3s ease,
-        background 0.3s ease;
-    }
-
-    .servicios__dot:hover {
-      background: color-mix(
-        in srgb,
-        var(--duo-color-verde-600) 55%,
-        transparent
-      );
-    }
-
-    .servicios__dot[aria-current="true"] {
-      width: 24px;
-      border-radius: var(--duo-radius-full);
-      background: var(--duo-action-secondary-bg);
-    }
-  }
-
-  /* Desktop: las 4 cards visibles a la vez, sin carrusel */
-  @media (min-width: 1024px) {
-    .servicios__grid {
-      grid-auto-flow: row;
-      grid-template-columns: repeat(4, 1fr);
-      overflow: visible;
-      scroll-snap-type: none;
-      padding-bottom: 0;
-    }
-  }
-
-  /* Card */
-  .servicio-card {
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-row: span 3;
-    gap: var(--duo-space-6);
-    padding: var(--duo-space-7);
-    border-radius: var(--duo-radius-lg);
-    overflow: hidden;
-    position: relative;
-    scroll-snap-align: start;
-    transition:
-      transform 0.3s ease,
-      box-shadow 0.3s ease;
     background: var(--duo-bg-page);
-    border: 1px solid
-      color-mix(in srgb, var(--duo-color-verde-600) 20%, transparent);
   }
 
-  .servicio-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px
-      color-mix(in srgb, var(--duo-color-verde-900) 8%, transparent);
+  .servicios__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-7);
   }
 
-  .servicio-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      ellipse at 80% 20%,
-      color-mix(in srgb, var(--duo-color-crema-50) 40%, transparent) 0%,
-      transparent 60%
-    );
-    pointer-events: none;
+  .servicios__encabezado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-3);
   }
 
-  .servicio-card__info {
-    position: relative;
+  .servicios__encabezado .section-title {
+    max-width: 1100px;
   }
 
-  .servicio-card__title {
-    font-size: 1.25rem;
+  /* En tablet/mobile la bajada ocupa todo el ancho (Figma: 704px) */
+  .servicios__bajada {
+    max-width: none;
+  }
+
+  /* ---------- Pista: carrusel en mobile, grilla desde tablet ---------- */
+  .servicios__pista {
+    display: flex;
+    gap: var(--duo-space-4);
+    margin: 0;
+    /* Recorte solo horizontal y aire abajo para la sombra de 6px */
+    padding: var(--duo-space-1) var(--duo-container-margin) var(--duo-space-4);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--duo-container-margin);
+    scrollbar-width: none;
+    list-style: none;
+  }
+
+  .servicios__pista::-webkit-scrollbar {
+    display: none;
+  }
+
+  .servicios__item {
+    display: flex;
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+  }
+
+  /* ---------- Card ---------- */
+  .servicio-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-4);
+    width: 100%;
+    padding: var(--duo-space-6);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-lg);
+    box-shadow: var(--duo-shadow-card);
+    color: var(--duo-text-primary);
+  }
+
+  .servicio-card--verde {
+    background: var(--duo-card-verde);
+  }
+
+  .servicio-card--rosa {
+    background: var(--duo-card-rosa);
+  }
+
+  .servicio-card--crema {
+    background: var(--duo-card-crema);
+  }
+
+  .servicio-card--salvia {
+    background: var(--duo-card-salvia);
+  }
+
+  .servicio-card__titulo {
+    font-size: var(--duo-fs-h3);
     font-weight: 700;
     line-height: 1.3;
-    color: var(--duo-text-primary);
-    margin-bottom: 0.5rem;
   }
 
   .servicio-card__desc {
-    font-size: 0.9rem;
-    color: var(--duo-text-secondary);
+    font-size: var(--duo-fs-body-s);
     line-height: 1.6;
   }
 
-  /* Listado de servicios */
-  .servicio-card__list {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-    list-style: none;
+  /* El divisor solo aparece desde tablet (Figma mobile no lo tiene) */
+  .servicio-card__divisor {
+    display: none;
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background: var(--duo-border-strong);
+    opacity: 0.2;
   }
 
-  .servicio-card__item {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.5rem 0;
-    font-size: 0.9rem;
-    color: var(--duo-text-primary);
-    border-bottom: 1px solid
-      color-mix(in srgb, var(--duo-color-verde-600) 15%, transparent);
-  }
-
-  .servicio-card__item:last-child {
-    border-bottom: none;
-  }
-
-  .servicio-card__item-icon {
-    width: 18px;
-    height: 18px;
-    color: var(--duo-text-accent);
-    flex-shrink: 0;
-  }
-
-  /* CTA */
-  .servicio-card__cta {
-    position: relative;
-    display: block;
-    align-self: end;
-    padding: 0.75rem 1.5rem;
-    border: 1.5px solid var(--duo-color-verde-600);
-    border-radius: var(--duo-radius-full);
-    font-size: 0.85rem;
+  .servicio-card__incluye {
+    font-size: var(--duo-fs-eyebrow);
     font-weight: 600;
-    color: var(--duo-text-accent);
-    text-align: center;
-    text-decoration: none;
-    transition:
-      background 0.3s ease,
-      color 0.3s ease,
-      transform 0.3s ease,
-      box-shadow 0.3s ease;
-  }
-
-  .servicio-card__cta:hover {
-    background: var(--duo-action-secondary-bg);
-    color: var(--duo-text-inverse);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px
-      color-mix(in srgb, var(--duo-color-verde-600) 30%, transparent);
-  }
-
-  /* Auditoría de Redes — subsección destacada */
-  .auditoria {
-    position: relative;
-    margin-top: var(--duo-space-9);
-    padding: var(--duo-space-7);
-    border-radius: var(--duo-radius-lg);
-    background: var(--duo-bg-page);
-    border: 1px solid
-      color-mix(in srgb, var(--duo-color-verde-600) 20%, transparent);
-    box-shadow: 0 12px 40px
-      color-mix(in srgb, var(--duo-color-verde-900) 5%, transparent);
-  }
-
-  .auditoria__badge {
-    display: inline-block;
-    padding: 0.35rem 0.9rem;
-    background: var(--duo-action-secondary-bg);
-    color: var(--duo-text-inverse);
-    border-radius: var(--duo-radius-full);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    line-height: 1;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: var(--duo-space-6);
-  }
-
-  .auditoria__header {
-    display: flex;
-    flex-direction: column;
-    gap: var(--duo-space-6);
-    margin-bottom: var(--duo-space-7);
-  }
-
-  .auditoria__title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--duo-text-primary);
-  }
-
-  .auditoria__audience {
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
     color: var(--duo-text-secondary);
-    line-height: 1.6;
-    max-width: 480px;
   }
 
-  .auditoria__price {
+  .servicio-card__lista {
     display: flex;
     flex-direction: column;
-    align-self: flex-start;
-    padding: 0.85rem 1.5rem;
-    background: var(--duo-bg-page);
-    border-radius: var(--duo-radius-md);
-    box-shadow: 0 4px 16px
-      color-mix(in srgb, var(--duo-color-verde-900) 6%, transparent);
-  }
-
-  .auditoria__price-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--duo-text-accent);
-    white-space: nowrap;
-  }
-
-  .auditoria__price-note {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--duo-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .auditoria__body {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--duo-space-7);
-    margin-bottom: var(--duo-space-7);
-  }
-
-  .auditoria__col-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--duo-text-primary);
-    margin-bottom: var(--duo-space-4);
-  }
-
-  .auditoria__list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
+    gap: var(--duo-space-2);
+    width: 100%;
     list-style: none;
   }
 
-  .auditoria__list-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    padding: 0.55rem 0;
-    font-size: 0.9rem;
-    color: var(--duo-text-primary);
-    line-height: 1.5;
-    border-bottom: 1px solid
-      color-mix(in srgb, var(--duo-color-verde-600) 15%, transparent);
+  /* " de 4": el espacio inicial se conserva dentro del Tag (inline-flex) */
+  .servicio-card__de {
+    white-space: pre;
   }
 
-  .auditoria__list-item:last-child {
-    border-bottom: none;
+  .servicio-card__espaciador {
+    flex: 1 0 0;
   }
 
-  .auditoria__list-icon {
-    width: 18px;
-    height: 18px;
-    margin-top: 2px;
-    color: var(--duo-text-accent);
-    flex-shrink: 0;
-  }
-
-  .auditoria__steps {
-    display: flex;
-    flex-direction: column;
-    gap: var(--duo-space-4);
-    list-style: none;
-  }
-
-  .auditoria__step {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    font-size: 0.9rem;
-    color: var(--duo-text-primary);
-    line-height: 1.5;
-  }
-
-  .auditoria__step-number {
+  /* ---------- Indicador (solo mobile) ---------- */
+  .servicios__indicador {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: var(--duo-action-secondary-bg);
-    color: var(--duo-text-inverse);
-    font-size: 0.8rem;
-    font-weight: 700;
   }
 
-  .auditoria__meta {
+  .servicios__deslizar {
+    margin-left: var(--duo-space-2);
+    font-size: var(--duo-fs-caption);
+    line-height: 1.5;
+    color: var(--duo-text-secondary);
+  }
+
+  /* ---------- Ayuda: link a la Auditoría ---------- */
+  .servicios__ayuda {
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.75rem 1rem;
-    margin-bottom: var(--duo-space-7);
-    background: color-mix(in srgb, var(--duo-color-verde-600) 8%, transparent);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-1);
+    padding: var(--duo-space-4) var(--duo-space-5);
+    border: var(--duo-border-thin) solid var(--duo-border-strong);
     border-radius: var(--duo-radius-md);
-    font-size: 0.85rem;
+    background: var(--duo-bg-cream);
     color: var(--duo-text-primary);
   }
 
-  .auditoria__meta svg {
-    color: var(--duo-text-accent);
-    flex-shrink: 0;
+  .servicios__ayuda-pregunta {
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
   }
 
-  .auditoria__footer {
-    text-align: center;
+  .servicios__ayuda-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--duo-space-2);
+    padding-block: var(--duo-space-3);
+    font-size: var(--duo-fs-button);
+    font-weight: 600;
+    line-height: 1;
+    text-underline-offset: 0.2em;
   }
 
-  .auditoria__final-cta {
-    max-width: 620px;
-    margin: 0 auto var(--duo-space-6);
-    font-size: 1rem;
-    color: var(--duo-text-primary);
-    line-height: 1.7;
+  .servicios__ayuda:hover .servicios__ayuda-link {
+    text-decoration: underline;
   }
 
-  .auditoria__cta {
-    width: 100%;
+  /* ---------- Stickers ---------- */
+  .servicios__stickers {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
   }
 
-  /* Breakpoints */
-  @media (min-width: 640px) {
-    .auditoria__cta {
-      width: auto;
+  .servicios__stickers-desktop {
+    display: none;
+  }
+
+  .servicios__stickers-caja {
+    position: relative;
+  }
+
+  .servicios :global(.servicios__st) {
+    position: absolute;
+    z-index: 2;
+  }
+
+  .servicios :global(.servicios__st--destellos-c) {
+    top: 54px;
+    right: 50px;
+  }
+
+  .servicios :global(.servicios__st--grafico-c) {
+    top: 21px;
+    left: 148px;
+  }
+
+  /* ---------- Tablet (768–1023): grilla 2×2 ---------- */
+  @media (min-width: 768px) {
+    .servicios__pista {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--duo-grid-gutter);
+      max-width: calc(
+        var(--duo-container-max) + 2 * var(--duo-container-margin)
+      );
+      margin-inline: auto;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+
+    .servicio-card__divisor {
+      display: block;
+    }
+
+    .servicio-card__de,
+    .servicios__indicador {
+      display: none;
+    }
+
+    .servicios__ayuda {
+      padding-inline: var(--duo-space-7);
+    }
+
+    .servicios__ayuda-pregunta {
+      font-size: var(--duo-fs-body);
     }
   }
 
+  /* ---------- Desktop (≥1024): 4 cards de 3 columnas ---------- */
   @media (min-width: 1024px) {
-    .auditoria {
-      padding: var(--duo-space-9);
+    .servicios__cuerpo {
+      gap: var(--duo-space-8);
     }
 
-    .auditoria__header {
+    .servicios__encabezado {
+      align-items: center;
+      gap: var(--duo-space-4);
+      text-align: center;
+    }
+
+    .servicios__bajada {
+      max-width: 560px;
+    }
+
+    .servicios__pista {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .servicios__pista :global(.servicio-card__cta) {
+      padding-inline: var(--duo-space-4);
+    }
+
+    .servicios__ayuda {
       flex-direction: row;
-      align-items: flex-start;
-      justify-content: space-between;
+      align-items: center;
+      gap: var(--duo-space-3);
+      width: fit-content;
+      margin-inline: auto;
+      padding: var(--duo-space-4) var(--duo-space-6);
+      border-radius: var(--duo-radius-full);
     }
 
-    .auditoria__price {
-      align-self: auto;
+    .servicios__ayuda-link {
+      padding-block: 0;
     }
 
-    .auditoria__body {
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--duo-space-9);
+    .servicios__stickers-desktop {
+      position: absolute;
+      inset: var(--duo-section-space) 0 auto;
+      display: block;
+      height: 0;
+    }
+
+    .servicios__stickers > :global(.servicios__st--destellos-c),
+    .servicios__stickers > :global(.servicios__st--grafico-c) {
+      display: none;
+    }
+
+    /* Posiciones de Figma: left en % del contenido de 1200px, top desde el
+       inicio del contenido (después del padding de 96px). */
+    .servicios :global(.servicios__st--destellos) {
+      left: 9.47%;
+      top: -35px;
+    }
+
+    .servicios :global(.servicios__st--grafico) {
+      left: 82.9%;
+      top: -41px;
+    }
+
+    .servicios :global(.servicios__st--corazon) {
+      left: 5.4%;
+      top: 148px;
+    }
+
+    .servicios :global(.servicios__st--burbuja) {
+      left: 88.1%;
+      top: 117px;
     }
   }
 </style>
-
-<script>
-  import { initScrollDots } from "@scripts/scrollDots";
-
-  const grid = document.querySelector<HTMLElement>(".servicios__grid");
-
-  if (grid) {
-    const cards = Array.from(
-      grid.querySelectorAll<HTMLElement>(".servicio-card"),
-    );
-    const dots = Array.from(
-      document.querySelectorAll<HTMLButtonElement>(".servicios__dot"),
-    );
-
-    initScrollDots({ container: grid, items: cards, dots });
-  }
-</script>

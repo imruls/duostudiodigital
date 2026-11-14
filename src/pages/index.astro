@@ -16,6 +16,7 @@ import Contacto from "@sections/Contacto.astro";
 import Footer from "@sections/Footer.astro";
 import BotonFlotante from "@ui/BotonFlotante.astro";
 import MarqueeDivider from "@ui/MarqueeDivider.astro";
+import CheckerDivider from "@ui/CheckerDivider.astro";
 import { whatsappUrl } from "@data/dataSite";
 ---
 
@@ -24,11 +25,12 @@ import { whatsappUrl } from "@data/dataSite";
   <main id="main">
     <Hero />
     <MarqueeDivider variante="cruzado" />
-    <Novedades />
     <Servicios />
-    <Shop />
+    <CheckerDivider />
     <Resenas />
     <About />
+    <Novedades />
+    <Shop />
     <Contacto />
   </main>
   <Footer />

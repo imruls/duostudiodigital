@@ -63,6 +63,8 @@ export const carouselLabels = {
   anterior: "Reseña anterior",
   siguiente: "Siguiente reseña",
   irAPagina: (n: number) => `Ir a la página ${n}`,
+  /** Indicador "x de y" (región aria-live). */
+  estado: (actual: number, total: number) => `${actual} de ${total}`,
 };
 
 // Items de las marquesinas decorativas (aria-hidden).
@@ -92,6 +94,28 @@ export const logoLinkLabel = "Dúo Studio Digital, ir al inicio";
 export const navAriaLabel = "Navegación principal";
 
 // ─── Servicios ──────────────────────────────────────────
+
+export const serviciosSeccion = {
+  badge: "Servicios",
+  titulo: { antes: "Potenciá tu marca con ", destacado: "servicios a medida" },
+  bajada:
+    "Elegí servicios individuales diseñados para llevar tu presencia digital al siguiente nivel.",
+  incluye: "Incluye",
+  consultar: "Consultar",
+  consultarAria: (servicio: string) =>
+    `Consultar por WhatsApp sobre ${servicio}`,
+  mensajeWhatsapp: (servicio: string) =>
+    `Hola, me interesa el servicio de ${servicio}, quiero más info`,
+  /** Número de la card: "01". En mobile se suma " de 4". */
+  numero: (n: number) => String(n).padStart(2, "0"),
+  deTotal: (total: number) => ` de ${total}`,
+  deslizar: "Deslizá para ver más",
+  ayuda: {
+    pregunta: "¿No sabés por dónde empezar?",
+    link: "Empezá por la Auditoría de redes",
+    href: "#auditoria",
+  },
+};
 
 export interface Servicio {
   title: string;
@@ -395,4 +419,3 @@ export const contactChannels = [
     href: tiktokUrl,
   },
 ];
-
