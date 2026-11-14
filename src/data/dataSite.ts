@@ -178,43 +178,80 @@ export const servicios: Servicio[] = [
 
 // ─── Auditoría de Redes ─────────────────────────────────
 
+/** Texto con versión corta opcional para tablet/mobile (Figma los acorta). */
+export interface TextoAdaptable {
+  largo: string;
+  corto?: string;
+}
+
 export interface AuditoriaRedes {
+  badge: string;
+  titulo: { antes: string; destacado: string };
+  bajada: string;
+  tag: string;
   title: string;
+  targetAudience: string;
   price: string;
   priceNote: string;
-  includes: string[];
-  steps: string[];
-  targetAudience: string;
-  deliveryTime: string;
+  /** Desktop: fila con reloj. Tablet/mobile: se une a priceNote. */
+  entrega: string;
   ctaLabel: string;
-  finalCta: string;
+  whatsappMensaje: string;
+  includesLabel: string;
+  includes: TextoAdaptable[];
+  stepsLabel: string;
+  steps: TextoAdaptable[];
 }
 
 export const auditoriaRedes: AuditoriaRedes = {
+  badge: "Auditoría de redes",
+  titulo: {
+    antes: "¿Sentís que publicás mucho pero no obtenés ",
+    destacado: "resultados?",
+  },
+  bajada:
+    "Descubrí exactamente qué está frenando el crecimiento de tu marca y llevate un plan de acción listo para implementar.",
+  tag: "Ideal para empezar",
   title: "Auditoría de Redes Sociales",
-  price: "$80.000 ARS",
-  priceNote: "Pago único",
-  includes: [
-    "Análisis completo del perfil de Instagram",
-    "Revisión de biografía, identidad visual y posicionamiento",
-    "Evaluación del contenido publicado, engagement y estrategia",
-    "Análisis de la competencia",
-    "Reunión personalizada de 30 minutos por Google Meet o Zoom",
-    "Informe en PDF con un diagnóstico completo y las 5 acciones prioritarias para mejorar la cuenta",
-  ],
-  steps: [
-    "La persona reserva y realiza el pago",
-    "Recibe un formulario previo para conocer su negocio y objetivos",
-    "Analizamos su cuenta antes de la reunión",
-    "Realizamos una videollamada de 30 minutos",
-    "En un plazo de 48 horas enviamos un informe personalizado en PDF con recomendaciones concretas",
-  ],
   targetAudience:
     "Ideal para emprendedores, marcas y empresas que quieren mejorar sus resultados en redes sociales antes de contratar un servicio mensual o potenciar la estrategia que ya tienen.",
-  deliveryTime: "48 horas posteriores a la reunión",
+  price: "$80.000 ARS",
+  priceNote: "Pago único",
+  entrega: "Informe en 48 h posteriores a la reunión",
   ctaLabel: "Quiero mi Auditoría",
-  finalCta:
-    "¿Sentís que publicás mucho pero no obtenés resultados? Descubrí exactamente qué está frenando el crecimiento de tu marca y llevate un plan de acción listo para implementar.",
+  whatsappMensaje: "Hola, quiero reservar mi Auditoría de Redes Sociales",
+  includesLabel: "Qué incluye",
+  includes: [
+    { largo: "Análisis completo del perfil de Instagram" },
+    { largo: "Revisión de biografía, identidad visual y posicionamiento" },
+    { largo: "Evaluación del contenido publicado, engagement y estrategia" },
+    { largo: "Análisis de la competencia" },
+    { largo: "Reunión personalizada de 30 minutos por Google Meet o Zoom" },
+    {
+      largo:
+        "Informe en PDF con un diagnóstico completo y las 5 acciones prioritarias para mejorar la cuenta",
+      corto:
+        "Informe en PDF con diagnóstico completo y las 5 acciones prioritarias",
+    },
+  ],
+  stepsLabel: "Cómo funciona",
+  steps: [
+    { largo: "Reservás y realizás el pago" },
+    {
+      largo: "Recibís un formulario previo para conocer tu negocio y objetivos",
+      corto: "Recibís un formulario previo sobre tu negocio",
+    },
+    { largo: "Analizamos tu cuenta antes de la reunión" },
+    {
+      largo: "Hacemos una videollamada de 30 minutos",
+      corto: "Videollamada de 30 minutos",
+    },
+    {
+      largo:
+        "En 48 horas te enviamos un informe personalizado en PDF con recomendaciones concretas",
+      corto: "Informe personalizado en PDF en 48 horas",
+    },
+  ],
 };
 
 // ─── Novedades ───────────────────────────────────────────

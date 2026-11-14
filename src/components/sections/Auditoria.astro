@@ -1,0 +1,501 @@
+---
+/**
+ * Auditoría — Figma: desktop 21:160 · tablet 54:2527 · mobile 25:452.
+ * Nota de cumplimiento: "Nota/Auditoría".
+ * - Desktop: card con 3 columnas (oferta 340px · qué incluye · cómo funciona).
+ *   Tablet: oferta arriba y detalle en 2 columnas. Mobile: todo apilado.
+ * - Precio, pago único y plazo visibles antes de contactar.
+ * - "Qué incluye" como <ul> y "Cómo funciona" como <ol> (WCAG 1.3.1).
+ * - Tablet/mobile usan las versiones cortas de algunos textos (Figma).
+ */
+import BadgeSection from "@ui/BadgeSection.astro";
+import Tag from "@ui/Tag.astro";
+import ListItem from "@ui/ListItem.astro";
+import Button from "@ui/Button.astro";
+import GridBackground from "@ui/GridBackground.astro";
+import Sticker from "@ui/Sticker.astro";
+import Icon from "@ui/Icon.astro";
+import { auditoriaRedes as a, getWhatsappLink } from "@data/dataSite";
+---
+
+<section
+  class="section auditoria"
+  id="auditoria"
+  aria-labelledby="auditoria-titulo"
+>
+  <GridBackground class="auditoria__grilla" />
+
+  <div class="auditoria__stickers" aria-hidden="true">
+    <div class="container auditoria__stickers-desktop">
+      <div class="auditoria__stickers-caja">
+        <Sticker
+          tipo="estrella"
+          tamano={56}
+          rotacion={10}
+          class="auditoria__st auditoria__st--estrella"
+        />
+        <Sticker
+          tipo="cursor"
+          tamano={67.2}
+          rotacion={-10}
+          class="auditoria__st auditoria__st--cursor"
+        />
+      </div>
+    </div>
+    <Sticker
+      tipo="cursor"
+      tamano={39.2}
+      rotacion={-10}
+      class="auditoria__st auditoria__st--cursor-c"
+    />
+  </div>
+
+  <div class="container auditoria__cuerpo">
+    <header class="auditoria__encabezado">
+      <BadgeSection>{a.badge}</BadgeSection>
+      <h2 class="section-title" id="auditoria-titulo">
+        {a.titulo.antes}<span>{a.titulo.destacado}</span>
+      </h2>
+      <p class="section-subtitle auditoria__bajada">{a.bajada}</p>
+    </header>
+
+    <article class="auditoria__card">
+      <div class="auditoria__oferta">
+        <Tag>{a.tag}</Tag>
+        <h3 class="auditoria__nombre">{a.title}</h3>
+        <p class="auditoria__publico">{a.targetAudience}</p>
+
+        <div class="auditoria__precio">
+          <p class="auditoria__monto">{a.price}</p>
+          <p class="auditoria__nota">
+            {a.priceNote}<span class="auditoria__nota-entrega">
+              {" · "}{a.entrega}</span
+            >
+          </p>
+        </div>
+
+        <p class="auditoria__entrega">
+          <Icon name="clock" size={18} />
+          {a.entrega}
+        </p>
+
+        <Button
+          href={getWhatsappLink(a.whatsappMensaje)}
+          icono="whatsapp"
+          externo
+          anchoCompleto
+        >
+          {a.ctaLabel}
+        </Button>
+      </div>
+
+      <hr class="auditoria__divisor auditoria__divisor--oferta" />
+
+      <div class="auditoria__detalle">
+        <div class="auditoria__bloque">
+          <h4 class="auditoria__etiqueta">{a.includesLabel}</h4>
+          <ul class="auditoria__incluye">
+            {
+              a.includes.map((item) => (
+                <ListItem>
+                  {item.corto ? (
+                    <>
+                      <span class="auditoria__largo">{item.largo}</span>
+                      <span class="auditoria__corto">{item.corto}</span>
+                    </>
+                  ) : (
+                    item.largo
+                  )}
+                </ListItem>
+              ))
+            }
+          </ul>
+        </div>
+
+        <hr class="auditoria__divisor auditoria__divisor--detalle" />
+
+        <div class="auditoria__bloque">
+          <h4 class="auditoria__etiqueta">{a.stepsLabel}</h4>
+          <ol class="auditoria__pasos">
+            {
+              a.steps.map((paso, i) => (
+                <li class="auditoria__paso">
+                  <span class="auditoria__riel" aria-hidden="true">
+                    <span class="auditoria__numero">{i + 1}</span>
+                    <span class="auditoria__linea" />
+                  </span>
+                  <span class="auditoria__paso-texto">
+                    {paso.corto ? (
+                      <>
+                        <span class="auditoria__largo">{paso.largo}</span>
+                        <span class="auditoria__corto">{paso.corto}</span>
+                      </>
+                    ) : (
+                      paso.largo
+                    )}
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  /* ---------- Sección (mobile first) ---------- */
+  .auditoria {
+    background: var(--duo-bg-cream);
+  }
+
+  .auditoria :global(.auditoria__grilla) {
+    opacity: 0.8;
+  }
+
+  .auditoria__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-7);
+  }
+
+  .auditoria__encabezado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-3);
+  }
+
+  .auditoria__bajada {
+    max-width: none;
+  }
+
+  /* ---------- Card ---------- */
+  .auditoria__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-6);
+    padding: var(--duo-space-6);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-lg);
+    background: var(--duo-bg-surface);
+    box-shadow: var(--duo-shadow-card);
+    color: var(--duo-text-primary);
+  }
+
+  .auditoria__oferta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-6);
+  }
+
+  .auditoria__nombre {
+    font-size: var(--duo-fs-h3);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .auditoria__publico {
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
+    color: var(--duo-text-secondary);
+  }
+
+  .auditoria__precio {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-1);
+    width: 100%;
+    padding: var(--duo-space-5);
+    border: var(--duo-border-thin) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-md);
+    background: var(--duo-card-rosa);
+  }
+
+  .auditoria__monto {
+    font-size: var(--duo-fs-price);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .auditoria__nota {
+    font-size: var(--duo-fs-caption);
+    line-height: 1.5;
+  }
+
+  /* En desktop el plazo va en su propia fila con reloj */
+  .auditoria__entrega {
+    display: none;
+    align-items: center;
+    gap: var(--duo-space-2);
+    font-size: var(--duo-fs-caption);
+    line-height: 1.5;
+    color: var(--duo-text-secondary);
+  }
+
+  .auditoria__divisor {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background: var(--duo-border-strong);
+    opacity: 0.15;
+  }
+
+  /* ---------- Detalle ---------- */
+  .auditoria__detalle {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-6);
+  }
+
+  .auditoria__bloque {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-6);
+  }
+
+  .auditoria__etiqueta {
+    font-size: var(--duo-fs-eyebrow);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--duo-text-secondary);
+  }
+
+  .auditoria__incluye {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-3);
+    list-style: none;
+  }
+
+  .auditoria__largo {
+    display: none;
+  }
+
+  /* Pasos: número + texto centrados, sin riel (tablet/mobile) */
+  .auditoria__pasos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-4);
+    list-style: none;
+  }
+
+  .auditoria__paso {
+    display: flex;
+    align-items: center;
+    gap: var(--duo-space-4);
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
+  }
+
+  .auditoria__riel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--duo-space-1);
+    flex-shrink: 0;
+  }
+
+  .auditoria__numero {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-bg-inverse);
+    color: var(--duo-text-inverse);
+    font-size: var(--duo-fs-button);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .auditoria__linea {
+    display: none;
+  }
+
+  /* ---------- Stickers ---------- */
+  .auditoria__stickers {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .auditoria__stickers-desktop {
+    display: none;
+  }
+
+  .auditoria__stickers-caja {
+    position: relative;
+  }
+
+  .auditoria :global(.auditoria__st) {
+    position: absolute;
+  }
+
+  .auditoria :global(.auditoria__st--cursor-c) {
+    top: 70px;
+    right: 45px;
+  }
+
+  /* ---------- Tablet (768–1023) ---------- */
+  @media (min-width: 768px) {
+    .auditoria__precio {
+      padding-inline: var(--duo-space-7);
+    }
+
+    .auditoria__detalle {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--duo-space-7);
+    }
+
+    .auditoria__divisor--detalle {
+      display: none;
+    }
+  }
+
+  /* ---------- Desktop (≥1024): 3 columnas ---------- */
+  @media (min-width: 1024px) {
+    .auditoria__cuerpo {
+      gap: var(--duo-space-8);
+    }
+
+    .auditoria__encabezado {
+      align-items: center;
+      gap: var(--duo-space-4);
+      text-align: center;
+    }
+
+    .auditoria__encabezado .section-title {
+      max-width: 900px;
+    }
+
+    .auditoria__bajada {
+      max-width: 620px;
+    }
+
+    .auditoria__card {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--duo-space-8);
+      padding: var(--duo-space-8);
+    }
+
+    .auditoria__oferta {
+      flex: 0 0 340px;
+      gap: var(--duo-space-5);
+    }
+
+    .auditoria__precio {
+      padding: var(--duo-space-6);
+    }
+
+    .auditoria__nota-entrega {
+      display: none;
+    }
+
+    .auditoria__entrega {
+      display: flex;
+    }
+
+    /* Divisores verticales entre columnas */
+    .auditoria__divisor {
+      align-self: stretch;
+      width: 1px;
+      height: auto;
+    }
+
+    .auditoria__divisor--detalle {
+      display: block;
+    }
+
+    .auditoria__detalle {
+      display: contents;
+    }
+
+    .auditoria__bloque {
+      flex: 1 1 0;
+      min-width: 0;
+      gap: var(--duo-space-4);
+    }
+
+    .auditoria__incluye {
+      gap: var(--duo-space-4);
+    }
+
+    .auditoria__largo {
+      display: inline;
+    }
+
+    .auditoria__corto {
+      display: none;
+    }
+
+    /* Pasos con riel: número arriba y línea que baja hasta el siguiente */
+    .auditoria__pasos {
+      gap: 0;
+    }
+
+    /* Figma: el riel mide el texto + 20px (mínimo 48px) y después hay
+       24px de aire hasta el número siguiente. */
+    .auditoria__paso {
+      align-items: stretch;
+      padding-bottom: var(--duo-space-6);
+    }
+
+    .auditoria__paso:last-child {
+      padding-bottom: 0;
+    }
+
+    .auditoria__paso-texto {
+      padding-bottom: var(--duo-space-5);
+    }
+
+    .auditoria__paso:last-child .auditoria__paso-texto {
+      padding-bottom: 0;
+    }
+
+    .auditoria__riel {
+      min-height: 48px;
+    }
+
+    .auditoria__linea {
+      display: block;
+      flex: 1 0 12px;
+      width: 2px;
+      background: var(--duo-border-strong);
+      opacity: 0.3;
+    }
+
+    .auditoria__paso:last-child .auditoria__linea {
+      display: none;
+    }
+
+    .auditoria__stickers-desktop {
+      position: absolute;
+      inset: var(--duo-section-space) 0 auto;
+      display: block;
+      height: 0;
+    }
+
+    .auditoria__stickers > :global(.auditoria__st--cursor-c) {
+      display: none;
+    }
+
+    .auditoria :global(.auditoria__st--estrella) {
+      left: 5.47%;
+      top: 18px;
+    }
+
+    .auditoria :global(.auditoria__st--cursor) {
+      left: 89.9%;
+      top: -6px;
+    }
+  }
+</style>
