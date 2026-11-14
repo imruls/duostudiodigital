@@ -1,0 +1,419 @@
+---
+/**
+ * Tienda — Figma: desktop 22:327 · tablet 54:2647 · mobile 27:549.
+ * Nota de cumplimiento: "Nota/Tienda". Reemplaza a Novedades + Shop.
+ * - Desktop: producto destacado (8 col) + card eshop (4 col), misma altura.
+ *   Tablet/mobile: apiladas, con textos cortos (Figma).
+ * - Links externos con ícono y texto oculto "(se abre en otra pestaña)".
+ * - El tag "Novedad" y el rosa destacan el producto nuevo.
+ */
+import BadgeSection from "@ui/BadgeSection.astro";
+import Tag from "@ui/Tag.astro";
+import ListItem from "@ui/ListItem.astro";
+import Button from "@ui/Button.astro";
+import GridBackground from "@ui/GridBackground.astro";
+import Sticker from "@ui/Sticker.astro";
+import Icon from "@ui/Icon.astro";
+import type { IconName } from "@ui/iconTypes";
+import {
+  novedadDuoSystemClient as nov,
+  tiendaSeccion as t,
+  shopHref,
+  shopFeatures,
+} from "@data/dataSite";
+
+const mitad = Math.ceil(nov.items.length / 2);
+const columnas = [nov.items.slice(0, mitad), nov.items.slice(mitad)];
+---
+
+<section class="section tienda" id="tienda" aria-labelledby="tienda-titulo">
+  <GridBackground />
+
+  <div class="tienda__stickers" aria-hidden="true">
+    <div class="container tienda__stickers-desktop">
+      <div class="tienda__stickers-caja">
+        <Sticker
+          tipo="grafico"
+          tamano={61.6}
+          rotacion={8}
+          class="tienda__st tienda__st--grafico"
+        />
+        <Sticker
+          tipo="destellos"
+          tamano={61.6}
+          rotacion={-10}
+          class="tienda__st tienda__st--destellos"
+        />
+        <Sticker
+          tipo="corazon"
+          tamano={50.4}
+          rotacion={10}
+          class="tienda__st tienda__st--corazon"
+        />
+      </div>
+    </div>
+    <Sticker
+      tipo="grafico"
+      tamano={39.2}
+      rotacion={8}
+      class="tienda__st tienda__st--grafico-c"
+    />
+  </div>
+
+  <div class="container tienda__cuerpo">
+    <header class="tienda__encabezado">
+      <BadgeSection>{t.badge}</BadgeSection>
+      <h2 class="section-title" id="tienda-titulo">
+        {t.titulo.antes}<span>{t.titulo.destacado}</span>
+      </h2>
+      <p class="section-subtitle tienda__bajada">{t.bajada}</p>
+    </header>
+
+    <div class="tienda__productos">
+      <article class="tienda__novedad">
+        <Tag>{nov.badge}</Tag>
+        <h3 class="tienda__producto">{nov.title}</h3>
+        <p class="tienda__desc">
+          <span class="tienda__largo">{nov.description.largo}</span>
+          <span class="tienda__corto">{nov.description.corto}</span>
+        </p>
+        <p class="tienda__incluye">{nov.includesLabel}</p>
+        <div class="tienda__lista">
+          {
+            columnas.map((col) => (
+              <ul class="tienda__columna">
+                {col.map((item) => (
+                  <ListItem>
+                    {item.corto ? (
+                      <>
+                        <span class="tienda__largo">{item.largo}</span>
+                        <span class="tienda__corto">{item.corto}</span>
+                      </>
+                    ) : (
+                      item.largo
+                    )}
+                  </ListItem>
+                ))}
+              </ul>
+            ))
+          }
+        </div>
+        <p class="tienda__publico">{nov.targetAudience}</p>
+        <Button
+          estilo="verde"
+          href={nov.ctaHref}
+          icono="external"
+          externo
+          class="tienda__cta"
+        >
+          {nov.ctaLabel}
+        </Button>
+      </article>
+
+      <article class="tienda__eshop">
+        <span class="tienda__eshop-icono" aria-hidden="true">
+          <Icon name="shopping-bag" size={24} />
+        </span>
+        <h3 class="tienda__eshop-titulo">{t.recursosTitulo}</h3>
+        <ul class="tienda__recursos">
+          {
+            shopFeatures.map((f) => (
+              <li class="tienda__recurso">
+                <Icon name={f.icon as IconName} size={20} />
+                <span>{f.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="tienda__espaciador"></div>
+        <Button href={shopHref} icono="external" externo class="tienda__cta">
+          {t.ctaLabel}
+        </Button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---------- Sección (mobile first) ---------- */
+  .tienda {
+    background: var(--duo-bg-page);
+  }
+
+  .tienda__cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-6);
+  }
+
+  .tienda__encabezado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-6);
+  }
+
+  .tienda__bajada {
+    max-width: none;
+  }
+
+  .tienda__productos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-6);
+  }
+
+  /* Versiones de texto: cortas en tablet/mobile, largas en desktop */
+  .tienda__largo {
+    display: none;
+  }
+
+  /* ---------- Card novedad (rosa) ---------- */
+  .tienda__novedad,
+  .tienda__eshop {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-4);
+    padding: var(--duo-space-6);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-lg);
+    box-shadow: var(--duo-shadow-card);
+  }
+
+  .tienda__novedad {
+    background: var(--duo-card-rosa);
+    color: var(--duo-text-primary);
+  }
+
+  .tienda__producto {
+    font-size: var(--duo-fs-section-title);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .tienda__desc {
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
+  }
+
+  /* "Incluye" y público solo en desktop (Figma) */
+  .tienda__incluye,
+  .tienda__publico {
+    display: none;
+  }
+
+  .tienda__incluye {
+    font-size: var(--duo-fs-eyebrow);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .tienda__publico {
+    font-size: var(--duo-fs-caption);
+    line-height: 1.5;
+  }
+
+  .tienda__lista {
+    display: grid;
+    gap: var(--duo-space-3);
+    width: 100%;
+  }
+
+  .tienda__columna {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-3);
+    list-style: none;
+  }
+
+  .tienda__productos :global(.tienda__cta) {
+    width: 100%;
+  }
+
+  /* ---------- Card eshop (verde) ---------- */
+  .tienda__eshop {
+    --duo-focus-color: var(--duo-border-focus-inverse);
+    background: var(--duo-bg-hero);
+    color: var(--duo-text-inverse);
+  }
+
+  .tienda__eshop-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: var(--duo-border-thin) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-action-primary-bg);
+    color: var(--duo-action-primary-text);
+  }
+
+  .tienda__eshop-titulo {
+    font-size: var(--duo-fs-h3);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .tienda__recursos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-4);
+    list-style: none;
+  }
+
+  .tienda__recurso {
+    display: flex;
+    align-items: center;
+    gap: var(--duo-space-3);
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
+  }
+
+  /* Íconos en rosa sobre el verde (Figma) */
+  .tienda__recurso :global(svg) {
+    flex-shrink: 0;
+    color: var(--duo-text-highlight);
+  }
+
+  .tienda__espaciador {
+    display: none;
+  }
+
+  /* ---------- Stickers ---------- */
+  .tienda__stickers {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .tienda__stickers-desktop {
+    display: none;
+  }
+
+  .tienda__stickers-caja {
+    position: relative;
+  }
+
+  .tienda :global(.tienda__st) {
+    position: absolute;
+  }
+
+  .tienda :global(.tienda__st--grafico-c) {
+    top: 56px;
+    right: 51px;
+  }
+
+  /* ---------- Tablet (768–1023) ---------- */
+  @media (min-width: 768px) {
+    .tienda__lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--duo-space-6);
+    }
+
+    .tienda__productos :global(.tienda__cta) {
+      width: auto;
+    }
+  }
+
+  /* ---------- Desktop (≥1024): 8 + 4 columnas ---------- */
+  @media (min-width: 1024px) {
+    .tienda__cuerpo {
+      gap: var(--duo-space-8);
+    }
+
+    .tienda__encabezado {
+      align-items: center;
+      gap: var(--duo-space-4);
+      text-align: center;
+    }
+
+    .tienda__encabezado .section-title {
+      max-width: 800px;
+    }
+
+    .tienda__bajada {
+      max-width: 620px;
+    }
+
+    .tienda__productos {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: var(--duo-grid-gutter);
+      align-items: stretch;
+    }
+
+    .tienda__novedad {
+      grid-column: span 8;
+      gap: var(--duo-space-5);
+      padding: 40px;
+    }
+
+    .tienda__eshop {
+      grid-column: span 4;
+      gap: var(--duo-space-6);
+      padding: 40px;
+    }
+
+    .tienda__largo {
+      display: inline;
+    }
+
+    .tienda__corto {
+      display: none;
+    }
+
+    .tienda__desc {
+      font-size: var(--duo-fs-body);
+    }
+
+    .tienda__incluye,
+    .tienda__publico {
+      display: block;
+    }
+
+    .tienda__eshop-icono {
+      width: 56px;
+      height: 56px;
+    }
+
+    .tienda__espaciador {
+      display: block;
+      flex: 1 0 0;
+    }
+
+    .tienda__eshop :global(.tienda__cta) {
+      width: 100%;
+    }
+
+    .tienda__stickers-desktop {
+      position: absolute;
+      inset: var(--duo-section-space) 0 auto;
+      display: block;
+      height: 0;
+    }
+
+    .tienda__stickers > :global(.tienda__st--grafico-c) {
+      display: none;
+    }
+
+    .tienda :global(.tienda__st--grafico) {
+      left: 21.3%;
+      top: -12px;
+    }
+
+    .tienda :global(.tienda__st--destellos) {
+      left: 72.6%;
+      top: -12px;
+    }
+
+    .tienda :global(.tienda__st--corazon) {
+      left: 97.1%;
+      top: 98px;
+    }
+  }
+</style>

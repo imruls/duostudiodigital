@@ -259,37 +259,73 @@ export const auditoriaRedes: AuditoriaRedes = {
 export interface Novedad {
   badge: string;
   title: string;
-  description: string;
-  items: string[];
+  /** largo: desktop · corto: tablet/mobile (Figma). */
+  description: TextoAdaptable;
+  includesLabel: string;
+  items: TextoAdaptable[];
   targetAudience: string;
   ctaLabel: string;
   ctaHref: string;
 }
 
+// Textos según Figma (Tienda, 22:327): la lista y el público se acortan
+// respecto de la versión anterior del sitio.
 export const novedadDuoSystemClient: Novedad = {
   badge: "Novedad",
   title: "Dúo System Client",
-  description:
-    "Un kit de 8 plantillas profesionales y 100% editables en Canva, pensado para ordenar toda la relación con tus clientes: desde el primer contacto hasta el cierre del proyecto. Sumá tu logo, colores y tipografías y empezá a usarlas sin necesitar experiencia en diseño.",
+  description: {
+    largo:
+      "Un kit de 8 plantillas profesionales y 100% editables en Canva, pensado para ordenar toda la relación con tus clientes: desde el primer contacto hasta el cierre del proyecto. Sumá tu logo, colores y tipografías y empezá a usarlas sin necesitar experiencia en diseño.",
+    corto:
+      "Un kit de 8 plantillas profesionales y 100% editables en Canva para ordenar toda la relación con tus clientes, desde el primer contacto hasta el cierre del proyecto.",
+  },
+  includesLabel: "Incluye",
   items: [
-    "Formulario estratégico de brief para conocer a fondo la marca del cliente",
-    "Propuesta de trabajo lista para presentar",
-    "Guía de bienvenida para nuevos clientes",
-    "Términos y condiciones del servicio",
-    "Guía para planificar la reunión inicial",
-    "Plantilla de cotización de proyectos",
-    "Estructura de brandbook / identidad visual",
-    "Checklist de cierre de cliente",
+    { largo: "Formulario estratégico de brief" },
+    {
+      largo: "Propuesta de trabajo lista para presentar",
+      corto: "Propuesta de trabajo",
+    },
+    {
+      largo: "Guía de bienvenida para nuevos clientes",
+      corto: "Guía de bienvenida",
+    },
+    {
+      largo: "Términos y condiciones del servicio",
+      corto: "Términos y condiciones",
+    },
+    {
+      largo: "Guía para planificar la reunión inicial",
+      corto: "Guía para la reunión inicial",
+    },
+    {
+      largo: "Plantilla de cotización de proyectos",
+      corto: "Plantilla de cotización",
+    },
+    {
+      largo: "Estructura de brandbook / identidad visual",
+      corto: "Estructura de brandbook",
+    },
+    { largo: "Checklist de cierre de cliente", corto: "Checklist de cierre" },
   ],
   targetAudience:
-    "Ideal para freelancers, diseñadoras, community managers, social media managers, estudios, agencias, fotógrafas, videomakers y profesionales independientes que trabajan directo con clientes.",
-  ctaLabel: "Más info",
+    "Ideal para freelancers, diseñadoras, community managers, estudios, agencias, fotógrafas, videomakers y profesionales independientes que trabajan directo con clientes.",
+  ctaLabel: "Ver Dúo System Client",
   ctaHref: "https://duostudioshop.com.ar/p/duo-system-client",
 };
 
 // ─── Shop ────────────────────────────────────────────────
 
 export const shopHref = "https://duostudioshop.com.ar/";
+
+export const tiendaSeccion = {
+  badge: "Tienda",
+  titulo: { antes: "Visitá nuestro ", destacado: "eshop" },
+  bajada:
+    "Encontrá recursos, plantillas y productos digitales pensados para ayudarte a crecer en redes sin perder tiempo empezando de cero.",
+  recursosTitulo: "Recursos para crecer en redes",
+  ctaLabel: "Ir a la tienda",
+};
 
 export const shopFeatures = [
   { icon: "shopping-bag", text: "Recursos y plantillas listas para usar" },
