@@ -1,0 +1,185 @@
+---
+/**
+ * Button — componente "Boton" de Figma (node 17:118).
+ * 4 estilos × 5 estados: Default · Hover (:hover) · Presionado (:active) ·
+ * Foco (:focus-visible, anillo global de 4px) · Deshabilitado (aria-disabled).
+ * Con `href` renderiza <a>; sin `href`, <button>. El texto va en el slot.
+ */
+import type { HTMLAttributes } from "astro/types";
+import Icon from "@ui/Icon.astro";
+import type { IconName } from "@ui/iconTypes";
+import { externalLinkHint } from "@data/dataSite";
+
+type Estilo = "primario" | "secundario" | "verde" | "sobre-verde";
+
+interface Props extends Omit<HTMLAttributes<"a">, "class"> {
+  estilo?: Estilo;
+  href?: string;
+  icono?: IconName | null;
+  deshabilitado?: boolean;
+  externo?: boolean;
+  anchoCompleto?: boolean;
+  type?: "button" | "submit";
+  class?: string;
+}
+
+const {
+  estilo = "primario",
+  href,
+  icono = "arrow-right",
+  deshabilitado = false,
+  externo = false,
+  anchoCompleto = false,
+  type = "button",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const classes = [
+  "boton",
+  `boton--${estilo}`,
+  anchoCompleto && "boton--ancho-completo",
+  className,
+];
+---
+
+{
+  href ? (
+    <a
+      class:list={classes}
+      href={deshabilitado ? undefined : href}
+      role={deshabilitado ? "link" : undefined}
+      aria-disabled={deshabilitado ? "true" : undefined}
+      target={externo ? "_blank" : undefined}
+      rel={externo ? "noopener noreferrer" : undefined}
+      {...rest}
+    >
+      <span class="boton__label">
+        <slot />
+      </span>
+      {icono && <Icon name={icono} size={20} />}
+      {externo && <span class="sr-only">{externalLinkHint}</span>}
+    </a>
+  ) : (
+    <button
+      class:list={classes}
+      type={type}
+      aria-disabled={deshabilitado ? "true" : undefined}
+      {...(rest as HTMLAttributes<"button">)}
+    >
+      <span class="boton__label">
+        <slot />
+      </span>
+      {icono && <Icon name={icono} size={20} />}
+    </button>
+  )
+}
+
+<script>
+  import { initAriaDisabledGuard } from "@scripts/ariaDisabled";
+  initAriaDisabledGuard();
+</script>
+
+<style>
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--duo-space-2);
+    min-height: 48px;
+    padding: var(--duo-space-4) var(--duo-space-7);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-full);
+    font-family: var(--duo-font-body);
+    font-size: var(--duo-fs-button);
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    transition:
+      background-color var(--duo-transition),
+      box-shadow var(--duo-transition),
+      transform var(--duo-transition);
+  }
+
+  .boton--ancho-completo {
+    width: 100%;
+  }
+
+  /* Primario: rosa + sombra CTA */
+  .boton--primario {
+    background: var(--duo-action-primary-bg);
+    color: var(--duo-action-primary-text);
+    box-shadow: var(--duo-shadow-cta);
+  }
+
+  .boton--primario:not([aria-disabled="true"]):hover {
+    background: var(--duo-action-primary-bg-hover);
+    box-shadow: var(--duo-shadow-hover);
+    transform: var(--duo-hover-translate);
+  }
+
+  .boton--primario:not([aria-disabled="true"]):active {
+    background: var(--duo-action-primary-bg-hover);
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Secundario: blanco, sin sombra */
+  .boton--secundario {
+    background: var(--duo-bg-surface);
+    color: var(--duo-text-primary);
+  }
+
+  .boton--secundario:not([aria-disabled="true"]):hover {
+    background: var(--duo-bg-rosa);
+  }
+
+  .boton--secundario:not([aria-disabled="true"]):active {
+    background: var(--duo-card-rosa);
+  }
+
+  /* Verde: verde/600 + sombra CTA */
+  .boton--verde {
+    background: var(--duo-action-secondary-bg);
+    color: var(--duo-action-secondary-text);
+    box-shadow: var(--duo-shadow-cta);
+  }
+
+  .boton--verde:not([aria-disabled="true"]):hover {
+    background: var(--duo-action-secondary-bg-hover);
+    box-shadow: var(--duo-shadow-hover);
+    transform: var(--duo-hover-translate);
+  }
+
+  .boton--verde:not([aria-disabled="true"]):active {
+    background: var(--duo-action-secondary-bg-hover);
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Sobre verde: contorno crema, foco rosa */
+  .boton--sobre-verde {
+    --duo-focus-color: var(--duo-border-focus-inverse);
+    background: transparent;
+    border-color: var(--duo-border-inverse);
+    color: var(--duo-text-inverse);
+  }
+
+  .boton--sobre-verde:not([aria-disabled="true"]):hover {
+    background: var(--duo-bg-hover-inverse);
+  }
+
+  .boton--sobre-verde:not([aria-disabled="true"]):active {
+    background: var(--duo-bg-inverse);
+  }
+
+  /* Deshabilitado (igual en los 4 estilos) */
+  .boton[aria-disabled="true"] {
+    background: var(--duo-action-disabled-bg);
+    border-color: var(--duo-border-disabled);
+    color: var(--duo-action-disabled-text);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+</style>

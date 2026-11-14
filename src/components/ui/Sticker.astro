@@ -1,0 +1,79 @@
+---
+import type { ImageMetadata } from "astro";
+/**
+ * Sticker — componente "Sticker" de Figma (node 31:715). Decorativo
+ * (aria-hidden). Los SVG de src/assets/stickers/ traen la sombra
+ * "Dúo/Shadow/Soft - Sticker" incluida, por eso sobresalen de la caja de
+ * 56px con los mismos insets que en Figma. Rotar entre -15° y 15°.
+ */
+type Tipo =
+  | "destellos"
+  | "corazon"
+  | "cursor"
+  | "burbuja"
+  | "estrella"
+  | "grafico"
+  | "hoja";
+
+interface Props {
+  tipo: Tipo;
+  tamano?: number;
+  rotacion?: number;
+  class?: string;
+}
+
+const { tipo, tamano = 56, rotacion = 0, class: className } = Astro.props;
+
+const svgs = import.meta.glob<{ default: ImageMetadata }>(
+  "../../assets/stickers/*.svg",
+  { eager: true },
+);
+const svg = svgs[`../../assets/stickers/${tipo}.svg`]?.default;
+if (!svg) throw new Error(`Sticker: no existe src/assets/stickers/${tipo}.svg`);
+
+// Cuánto sobresale el SVG (por la sombra) de la caja, en % por lado
+// [arriba, derecha, abajo, izquierda], tal cual los insets de Figma.
+const sobresale: Record<Tipo, [number, number, number, number]> = {
+  destellos: [5, 17.5, 26.43, 12.14],
+  corazon: [0, 13.93, 21.07, 13.93],
+  cursor: [9.29, 3.21, 24.64, 11.07],
+  burbuja: [0, 19.29, 22.86, 15.71],
+  estrella: [5, 14.82, 21.07, 14.82],
+  grafico: [0, 13.93, 17.5, 13.93],
+  hoja: [0, 8.57, 17.5, 6.79],
+};
+const [t, r, b, l] = sobresale[tipo];
+const imgStyle = `top: -${t}%; left: -${l}%; width: ${100 + l + r}%; height: ${100 + t + b}%;`;
+---
+
+<span
+  class:list={["sticker", className]}
+  aria-hidden="true"
+  style={`--sticker-size: ${tamano}px; --sticker-rotacion: ${rotacion}deg;`}
+>
+  <img
+    src={svg.src}
+    width={svg.width}
+    height={svg.height}
+    alt=""
+    loading="lazy"
+    decoding="async"
+    style={imgStyle}
+  />
+</span>
+
+<style>
+  .sticker {
+    position: relative;
+    display: inline-block;
+    width: var(--sticker-size);
+    height: var(--sticker-size);
+    transform: rotate(var(--sticker-rotacion));
+    pointer-events: none;
+  }
+
+  .sticker img {
+    position: absolute;
+    max-width: none;
+  }
+</style>

@@ -1,0 +1,130 @@
+---
+/**
+ * Marquee — componente "Marquee" de Figma (node 30:875). Decorativo
+ * (aria-hidden). Se mueve a 40px/s, se detiene con hover/foco y queda quieto
+ * con prefers-reduced-motion (WCAG 2.2.2). Tono Verde (verde/900) o Rosa.
+ */
+import Icon from "@ui/Icon.astro";
+import { marqueeItems } from "@data/dataSite";
+
+interface Props {
+  tono?: "verde" | "rosa";
+  rotacion?: number;
+  class?: string;
+}
+
+const { tono = "verde", rotacion = 0, class: className } = Astro.props;
+// Copias suficientes para cubrir pantallas anchas mientras se desplaza.
+const copias = 4;
+---
+
+<div
+  class:list={["marquee", `marquee--${tono}`, className]}
+  aria-hidden="true"
+  style={rotacion ? `--marquee-rotacion: ${rotacion}deg;` : undefined}
+  data-marquee
+>
+  <div class="marquee__pista">
+    {
+      Array.from({ length: copias }).map(() => (
+        <ul class="marquee__grupo">
+          {marqueeItems.map((item) => (
+            <li class="marquee__item">
+              {item}
+              <Icon name="sparkle" size={14} class="marquee__estrella" />
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  const VELOCIDAD = 40; // px por segundo (tablero "Estados de comportamiento")
+
+  function ajustar(marquee: HTMLElement) {
+    const grupo = marquee.querySelector<HTMLElement>(".marquee__grupo");
+    if (!grupo) return;
+    const ancho = grupo.getBoundingClientRect().width;
+    marquee.style.setProperty("--marquee-desplazamiento", `-${ancho}px`);
+    marquee.style.setProperty("--marquee-duracion", `${ancho / VELOCIDAD}s`);
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-marquee]").forEach((m) => {
+    ajustar(m);
+    new ResizeObserver(() => ajustar(m)).observe(m);
+  });
+</script>
+
+<style>
+  .marquee {
+    display: flex;
+    align-items: center;
+    height: 56px;
+    overflow: hidden;
+    transform: rotate(var(--marquee-rotacion, 0deg));
+  }
+
+  .marquee--verde {
+    background: var(--duo-bg-inverse);
+    color: var(--duo-text-inverse);
+  }
+
+  .marquee--rosa {
+    background: var(--duo-action-primary-bg);
+    color: var(--duo-text-primary);
+  }
+
+  .marquee__pista {
+    display: flex;
+    flex-shrink: 0;
+    animation: marquee-desplazar var(--marquee-duracion, 30s) linear infinite;
+  }
+
+  .marquee:hover .marquee__pista,
+  .marquee:focus-within .marquee__pista {
+    animation-play-state: paused;
+  }
+
+  .marquee__grupo {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--duo-space-5);
+    padding-right: var(--duo-space-5);
+    list-style: none;
+  }
+
+  .marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--duo-space-5);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .marquee--verde :global(.marquee__estrella) {
+    color: var(--duo-text-highlight);
+  }
+
+  .marquee--rosa :global(.marquee__estrella) {
+    color: var(--duo-text-accent);
+  }
+
+  @keyframes marquee-desplazar {
+    to {
+      transform: translateX(var(--marquee-desplazamiento, -25%));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__pista {
+      animation: none;
+    }
+  }
+</style>

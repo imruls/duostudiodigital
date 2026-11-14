@@ -1,0 +1,35 @@
+---
+/**
+ * GridBackground — componente "Patrón/Grilla" de Figma (node 30:656).
+ * Fondo de grilla de 48px en border/strong al 9%. Va como primer hijo de una
+ * .section (que recorta); el contenido queda por encima.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["grilla-fondo", className]} aria-hidden="true"></div>
+
+<style>
+  .grilla-fondo {
+    --linea: color-mix(in srgb, var(--duo-border-strong) 9%, transparent);
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, var(--linea) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--linea) 1px, transparent 1px);
+    background-size: var(--duo-grid-pattern) var(--duo-grid-pattern);
+  }
+
+  /* El contenido de la sección por encima de la grilla. Especificidad 0
+     (:where) para no pisar el position de stickers u otros absolutos. */
+  :global(:where(.grilla-fondo ~ *)) {
+    position: relative;
+    z-index: 1;
+  }
+</style>

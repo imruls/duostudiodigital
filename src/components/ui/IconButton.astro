@@ -1,0 +1,81 @@
+---
+/**
+ * IconButton — componente "Boton icono" de Figma (node 17:150).
+ * 48×48. Siempre con aria-label. En el primer/último ítem de un carrusel se
+ * deshabilita con aria-disabled="true" (no se oculta).
+ */
+import type { HTMLAttributes } from "astro/types";
+import Icon from "@ui/Icon.astro";
+
+interface Props extends Omit<HTMLAttributes<"button">, "class"> {
+  direccion: "anterior" | "siguiente";
+  "aria-label": string;
+  deshabilitado?: boolean;
+  class?: string;
+}
+
+const {
+  direccion,
+  deshabilitado = false,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<button
+  class:list={["boton-icono", className]}
+  type="button"
+  aria-disabled={deshabilitado ? "true" : undefined}
+  {...rest}
+>
+  <Icon
+    name={direccion === "anterior" ? "chevron-left" : "chevron-right"}
+    size={24}
+  />
+</button>
+
+<script>
+  import { initAriaDisabledGuard } from "@scripts/ariaDisabled";
+  initAriaDisabledGuard();
+</script>
+
+<style>
+  .boton-icono {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: var(--duo-space-3);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-bg-surface);
+    color: var(--duo-text-primary);
+    box-shadow: var(--duo-shadow-badge);
+    cursor: pointer;
+    transition:
+      background-color var(--duo-transition),
+      box-shadow var(--duo-transition),
+      transform var(--duo-transition);
+  }
+
+  .boton-icono:not([aria-disabled="true"]):hover {
+    background: var(--duo-bg-rosa);
+    box-shadow: var(--duo-shadow-hover);
+    transform: var(--duo-hover-translate);
+  }
+
+  .boton-icono:not([aria-disabled="true"]):active {
+    background: var(--duo-card-rosa);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .boton-icono[aria-disabled="true"] {
+    background: var(--duo-action-disabled-bg);
+    border-color: var(--duo-border-disabled);
+    color: var(--duo-action-disabled-text);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+</style>

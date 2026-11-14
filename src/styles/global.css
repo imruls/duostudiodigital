@@ -122,10 +122,16 @@
     color-mix(in srgb, var(--duo-color-verde-900) 18%, transparent); /* Soft - Sticker */
 
   /* ---------- Derivados de la ficha "Convención de estados" ----------
-     No son variables de Figma; se documentan en la ficha. */
+     No son variables de Figma; se documentan en la ficha y en las
+     descripciones de los componentes. */
   --duo-transition: 150ms ease-out;
   --duo-hover-translate: translate(-2px, -2px);
+  --duo-hover-translate-card: translate(-3px, -3px); /* Card contacto */
+  --duo-shadow-card-hover: 9px 9px 0
+    color-mix(in srgb, var(--duo-color-verde-900) 25%, transparent); /* Card contacto: Hover */
   --duo-focus-ring: 4px;
+  --duo-focus-ring-thin: 3px; /* Link de texto, Indicador carrusel, Boton flotante */
+  --duo-grid-pattern: 48px; /* Patrón/Grilla */
 
   /* ---------- Grilla (estilos "Dúo/Grid/...", ficha "Sistema de grillas") ----------
      Mobile first: 4 col / gutter 16 / margen 20. */

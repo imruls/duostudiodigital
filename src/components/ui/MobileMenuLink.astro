@@ -1,0 +1,54 @@
+---
+/**
+ * MobileMenuLink — componente "Link menu mobile" de Figma (node 52:2393).
+ * Área táctil de 64px. Activo = sección actual (aria-current).
+ * Presionado (y hover): fondo rosa suave.
+ */
+import Icon from "@ui/Icon.astro";
+
+interface Props {
+  href: string;
+  activo?: boolean;
+  class?: string;
+}
+
+const { href, activo = false, class: className } = Astro.props;
+---
+
+<a
+  class:list={["link-menu-mobile", className]}
+  href={href}
+  aria-current={activo ? "true" : undefined}
+>
+  <span><slot /></span>
+  <Icon name="arrow-right" size={24} />
+</a>
+
+<style>
+  .link-menu-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 64px;
+    padding: var(--duo-space-4) var(--duo-space-5);
+    border: var(--duo-border-thin) solid transparent;
+    border-radius: var(--duo-radius-md);
+    color: var(--duo-text-primary);
+    /* Dúo/Mobile/H2 - Titulo seccion */
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+    transition: background-color var(--duo-transition);
+  }
+
+  .link-menu-mobile:hover,
+  .link-menu-mobile:active {
+    background: var(--duo-bg-rosa);
+  }
+
+  .link-menu-mobile[aria-current="true"] {
+    background: var(--duo-card-verde);
+    border-color: var(--duo-border-strong);
+  }
+</style>

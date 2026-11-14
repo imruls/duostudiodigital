@@ -1,0 +1,62 @@
+---
+/**
+ * CarouselDot — componente "Indicador carrusel" de Figma (node 52:2402).
+ * Área táctil de 44×44. Activo (aria-current="true"): pastilla larga y oscura.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends Omit<HTMLAttributes<"button">, "class"> {
+  "aria-label": string;
+  activo?: boolean;
+  class?: string;
+}
+
+const { activo = false, class: className, ...rest } = Astro.props;
+---
+
+<button
+  class:list={["indicador", className]}
+  type="button"
+  aria-current={activo ? "true" : undefined}
+  {...rest}
+>
+  <span class="indicador__marca"></span>
+</button>
+
+<style>
+  .indicador {
+    --duo-focus-ring: var(--duo-focus-ring-thin);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--duo-radius-full);
+    transition: background-color var(--duo-transition);
+  }
+
+  .indicador__marca {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-border-strong);
+    opacity: 0.3;
+    transition:
+      width var(--duo-transition),
+      opacity var(--duo-transition);
+  }
+
+  .indicador:hover {
+    background: var(--duo-bg-rosa);
+  }
+
+  .indicador:hover .indicador__marca {
+    opacity: 0.7;
+  }
+
+  .indicador[aria-current="true"] .indicador__marca {
+    width: 28px;
+    background: var(--duo-bg-inverse);
+    opacity: 1;
+  }
+</style>

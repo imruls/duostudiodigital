@@ -1,0 +1,216 @@
+---
+/**
+ * ReviewCard — componente "Card reseña" de Figma (node 51:2400).
+ * Completa: reseñas cortas. Recortada: más de 5 líneas, corta con "…" y
+ * muestra "Leer más" (button con aria-expanded/aria-controls). Expandida:
+ * texto completo y "Leer menos". El estado se decide en el cliente midiendo
+ * si el texto desborda las 5 líneas.
+ */
+import Tag from "@ui/Tag.astro";
+import Stars from "@ui/Stars.astro";
+import { reviewLabels } from "@data/dataSite";
+
+interface Props {
+  nombre: string;
+  texto: string;
+  rating?: number;
+  id: string;
+  class?: string;
+}
+
+const { nombre, texto, rating = 5, id, class: className } = Astro.props;
+
+const iniciales = nombre
+  .split(/\s+/)
+  .slice(0, 2)
+  .map((p) => p.charAt(0).toUpperCase())
+  .join("");
+const textId = `${id}-texto`;
+// Comillas tipográficas como en Figma (“…”), sin espacios del template.
+const textoCitado = `\u201C${texto.trim()}\u201D`;
+---
+
+<article class:list={["card-resena", className]} data-card-resena>
+  <div class="card-resena__top">
+    <Tag>{reviewLabels.tag}</Tag>
+    <span class="card-resena__comilla" aria-hidden="true"></span>
+  </div>
+
+  <Stars rating={rating} />
+
+  <p class="card-resena__texto" id={textId} data-recortado="true">
+    {textoCitado}
+  </p>
+
+  <button
+    class="card-resena__toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls={textId}
+    data-leer-mas={reviewLabels.leerMas}
+    data-leer-menos={reviewLabels.leerMenos}
+    hidden
+  >
+    {reviewLabels.leerMas}
+  </button>
+
+  <div class="card-resena__espaciador"></div>
+  <hr class="card-resena__divisor" />
+
+  <div class="card-resena__autor">
+    <span class="card-resena__avatar" aria-hidden="true">{iniciales}</span>
+    <div class="card-resena__autor-texto">
+      <p class="card-resena__nombre">{nombre}</p>
+      <p class="card-resena__fuente">{reviewLabels.fuente}</p>
+    </div>
+  </div>
+</article>
+
+<script>
+  function initCardResena(card: HTMLElement) {
+    const texto = card.querySelector<HTMLElement>(".card-resena__texto");
+    const toggle = card.querySelector<HTMLButtonElement>(
+      ".card-resena__toggle",
+    );
+    if (!texto || !toggle) return;
+
+    const medir = () => {
+      if (toggle.getAttribute("aria-expanded") === "true") return;
+      texto.dataset.recortado = "true";
+      const desborda = texto.scrollHeight > texto.clientHeight + 1;
+      toggle.hidden = !desborda;
+      if (!desborda) delete texto.dataset.recortado;
+    };
+
+    toggle.addEventListener("click", () => {
+      const abierto = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!abierto));
+      toggle.textContent = abierto
+        ? (toggle.dataset.leerMas ?? "")
+        : (toggle.dataset.leerMenos ?? "");
+      if (abierto) texto.dataset.recortado = "true";
+      else delete texto.dataset.recortado;
+    });
+
+    medir();
+    new ResizeObserver(medir).observe(card);
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-card-resena]")
+    .forEach(initCardResena);
+</script>
+
+<style>
+  .card-resena {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-4);
+    height: 100%;
+    padding: var(--duo-space-7);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-lg);
+    background: var(--duo-bg-surface);
+    box-shadow: var(--duo-shadow-card-rosa);
+  }
+
+  .card-resena__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  /* Comilla decorativa: Poppins Bold 40px, text/accent */
+  .card-resena__comilla::before {
+    content: "\201D";
+    display: block;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 32px;
+    color: var(--duo-text-accent);
+  }
+
+  .card-resena__texto {
+    font-size: var(--duo-fs-body);
+    line-height: 1.6;
+    color: var(--duo-text-primary);
+  }
+
+  .card-resena__texto[data-recortado] {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    overflow: hidden;
+  }
+
+  .card-resena__toggle {
+    min-height: 44px;
+    padding: var(--duo-space-3) 0;
+    font-size: var(--duo-fs-button);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--duo-text-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .card-resena__toggle[hidden] {
+    display: none;
+  }
+
+  .card-resena__espaciador {
+    flex: 1 0 0;
+  }
+
+  .card-resena__divisor {
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background: var(--duo-border-strong);
+    opacity: 0.15;
+  }
+
+  .card-resena__autor {
+    display: flex;
+    align-items: center;
+    gap: var(--duo-space-3);
+  }
+
+  .card-resena__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: var(--duo-border-thin) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-card-rosa);
+    color: var(--duo-text-primary);
+    font-size: var(--duo-fs-button);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .card-resena__autor-texto {
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-1);
+  }
+
+  .card-resena__nombre {
+    font-size: var(--duo-fs-button);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--duo-text-primary);
+  }
+
+  .card-resena__fuente {
+    font-size: var(--duo-fs-caption);
+    line-height: 1.5;
+    color: var(--duo-text-secondary);
+  }
+</style>

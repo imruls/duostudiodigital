@@ -1,0 +1,27 @@
+---
+/**
+ * CheckerDivider — componente "Divisor/Cuadros" de Figma (node 30:740).
+ * Cinta de cuadros de 16px entre secciones: verde, rosa, verde oscuro y crema.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["divisor-cuadros", className]} aria-hidden="true"></div>
+
+<style>
+  .divisor-cuadros {
+    --cuadro: 16px;
+    height: var(--cuadro);
+    background: repeating-linear-gradient(
+      to right,
+      var(--duo-bg-brand) 0 var(--cuadro),
+      var(--duo-card-rosa) var(--cuadro) calc(var(--cuadro) * 2),
+      var(--duo-bg-inverse) calc(var(--cuadro) * 2) calc(var(--cuadro) * 3),
+      var(--duo-bg-cream) calc(var(--cuadro) * 3) calc(var(--cuadro) * 4)
+    );
+  }
+</style>

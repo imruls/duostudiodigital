@@ -1,7 +1,19 @@
 ---
+/**
+ * BotonFlotante — componente "Boton flotante WhatsApp" de Figma (52:2460).
+ * Pedido del cliente: se mantiene siempre en la página.
+ * Desktop (≥1024): pill "Escribinos" + círculo rosa con WhatsApp.
+ * Tablet/mobile: círculo de 60px solo con ícono (aria-label).
+ * Fijo abajo a la derecha con 24px de margen.
+ * Foco: outline 3px verde/900 + box-shadow 0 0 0 6px rosa (se ve sobre
+ * cualquier fondo). El ocultamiento cuando el footer es visible se suma en
+ * el paso de comportamiento.
+ */
+import Icon from "@ui/Icon.astro";
 import {
   whatsappUrl as defaultWhatsappUrl,
-  whatsappIconSvg,
+  whatsappCta,
+  externalLinkHint,
 } from "@data/dataSite";
 
 interface Props {
@@ -11,45 +23,99 @@ interface Props {
 const { whatsappUrl = defaultWhatsappUrl } = Astro.props;
 ---
 
-<!-- WhatsApp -->
 <a
   href={whatsappUrl}
-  class="whatsapp-btn"
-  aria-label="Contactar por WhatsApp"
+  class="boton-flotante"
+  aria-label={`${whatsappCta.ariaLabel} ${externalLinkHint}`}
   target="_blank"
   rel="noopener noreferrer"
+  data-boton-flotante
 >
-  <Fragment set:html={whatsappIconSvg} />
+  <span class="boton-flotante__texto">{whatsappCta.label}</span>
+  <span class="boton-flotante__circulo">
+    <Icon name="whatsapp" size={22} />
+  </span>
+  <span class="boton-flotante__icono-mobile">
+    <Icon name="whatsapp" size={28} />
+  </span>
 </a>
 
 <style>
-  .whatsapp-btn {
+  .boton-flotante {
     position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: var(--duo-action-primary-bg);
-    color: var(--duo-action-primary-text);
-    border: var(--duo-border-thick) solid var(--duo-border-strong);
-    display: flex;
+    right: var(--duo-space-6);
+    bottom: calc(var(--duo-space-6) + env(safe-area-inset-bottom, 0px));
+    z-index: 90;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--duo-shadow-cta);
-    transition: var(--duo-transition);
-    z-index: 90;
+    width: 60px;
+    height: 60px;
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-bg-hero);
+    color: var(--duo-text-inverse);
+    box-shadow: var(--duo-shadow-toggle);
+    transition:
+      background-color var(--duo-transition),
+      box-shadow var(--duo-transition),
+      transform var(--duo-transition);
   }
 
-  .whatsapp-btn:hover {
-    background: var(--duo-action-primary-bg-hover);
-    transform: var(--duo-hover-translate);
+  .boton-flotante:hover {
+    background: var(--duo-bg-hover-inverse);
     box-shadow: var(--duo-shadow-hover);
+    transform: var(--duo-hover-translate);
   }
 
-  .whatsapp-btn svg {
-    width: 26px;
-    height: 26px;
+  .boton-flotante:active {
+    box-shadow: none;
+    transform: none;
+  }
+
+  .boton-flotante:focus-visible {
+    outline: var(--duo-focus-ring-thin) solid var(--duo-border-focus);
+    box-shadow: 0 0 0 6px var(--duo-border-focus-inverse);
+  }
+
+  .boton-flotante__texto,
+  .boton-flotante__circulo {
+    display: none;
+  }
+
+  .boton-flotante__icono-mobile {
+    display: inline-flex;
+  }
+
+  @media (min-width: 1024px) {
+    .boton-flotante {
+      gap: var(--duo-space-3);
+      width: auto;
+      height: auto;
+      padding: var(--duo-space-3) var(--duo-space-3) var(--duo-space-3)
+        var(--duo-space-5);
+    }
+
+    .boton-flotante__texto {
+      display: inline;
+      font-size: var(--duo-fs-button);
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .boton-flotante__circulo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--duo-radius-full);
+      background: var(--duo-action-primary-bg);
+      color: var(--duo-action-primary-text);
+    }
+
+    .boton-flotante__icono-mobile {
+      display: none;
+    }
   }
 </style>

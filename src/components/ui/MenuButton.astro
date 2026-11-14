@@ -1,0 +1,84 @@
+---
+/**
+ * MenuButton — componente "Boton menu" de Figma (node 52:2376).
+ * aria-expanded false → "Menú" · true → "Cerrar" (ícono + texto).
+ * La lógica de abrir/cerrar el diálogo vive en el Navbar.
+ */
+import Icon from "@ui/Icon.astro";
+import { menuLabels } from "@data/dataSite";
+
+interface Props {
+  controls: string;
+  id?: string;
+  abierto?: boolean;
+  class?: string;
+}
+
+const { controls, id, abierto = false, class: className } = Astro.props;
+---
+
+<button
+  class:list={["boton-menu", className]}
+  type="button"
+  id={id}
+  aria-expanded={abierto ? "true" : "false"}
+  aria-controls={controls}
+>
+  <span class="boton-menu__estado boton-menu__estado--cerrado">
+    <Icon name="menu" size={24} />
+    {menuLabels.abrir}
+  </span>
+  <span class="boton-menu__estado boton-menu__estado--abierto">
+    <Icon name="close" size={24} />
+    {menuLabels.cerrar}
+  </span>
+</button>
+
+<style>
+  .boton-menu {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: var(--duo-space-3) var(--duo-space-4);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-bg-surface);
+    color: var(--duo-text-primary);
+    font-size: var(--duo-fs-button);
+    font-weight: 600;
+    line-height: 1;
+    transition: background-color var(--duo-transition);
+  }
+
+  .boton-menu:hover {
+    background: var(--duo-bg-rosa);
+  }
+
+  .boton-menu__estado {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--duo-space-2);
+  }
+
+  .boton-menu__estado--abierto {
+    display: none;
+  }
+
+  .boton-menu[aria-expanded="true"] {
+    --duo-focus-color: var(--duo-border-focus-inverse);
+    background: var(--duo-bg-inverse);
+    color: var(--duo-text-inverse);
+  }
+
+  .boton-menu[aria-expanded="true"]:hover {
+    background: var(--duo-bg-hover-inverse);
+  }
+
+  .boton-menu[aria-expanded="true"] .boton-menu__estado--cerrado {
+    display: none;
+  }
+
+  .boton-menu[aria-expanded="true"] .boton-menu__estado--abierto {
+    display: inline-flex;
+  }
+</style>

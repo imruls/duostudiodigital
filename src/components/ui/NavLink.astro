@@ -1,0 +1,49 @@
+---
+/**
+ * NavLink — componente "Link nav" de Figma (node 52:2351).
+ * Activo = sección visible (scroll-spy) con aria-current="true": fondo + borde.
+ * Hover: fondo rosa suave. Foco: anillo global de 4px.
+ */
+interface Props {
+  href: string;
+  activo?: boolean;
+  class?: string;
+}
+
+const { href, activo = false, class: className } = Astro.props;
+---
+
+<a
+  class:list={["link-nav", className]}
+  href={href}
+  aria-current={activo ? "true" : undefined}
+>
+  <slot />
+</a>
+
+<style>
+  .link-nav {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--duo-space-3) var(--duo-space-4);
+    border: var(--duo-border-thin) solid transparent;
+    border-radius: var(--duo-radius-full);
+    color: var(--duo-text-primary);
+    font-size: var(--duo-fs-button);
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background-color var(--duo-transition);
+  }
+
+  .link-nav:hover {
+    background: var(--duo-bg-rosa);
+  }
+
+  .link-nav[aria-current="true"] {
+    background: var(--duo-card-verde);
+    border-color: var(--duo-border-strong);
+    font-weight: 600;
+  }
+</style>

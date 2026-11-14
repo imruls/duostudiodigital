@@ -1,0 +1,23 @@
+---
+/**
+ * BadgeSection — componente "Badge sección" de Figma (node 30:880).
+ * Etiqueta inclinada sobre el título de cada sección. Estilos en la clase
+ * global .badge-section (global.css). Texto en el slot.
+ */
+interface Props {
+  tono?: "oscuro" | "rosa";
+  class?: string;
+}
+
+const { tono = "oscuro", class: className } = Astro.props;
+---
+
+<p
+  class:list={[
+    "badge-section",
+    tono === "rosa" && "badge-section--rosa",
+    className,
+  ]}
+>
+  <slot />
+</p>

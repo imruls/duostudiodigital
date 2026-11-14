@@ -34,6 +34,44 @@ export const tiktokUrl = "https://www.tiktok.com/@duo.studio.digital";
 // Texto del link "Saltar al contenido" (primer elemento enfocable).
 export const skipLinkLabel = "Saltar al contenido";
 
+// Texto oculto que acompaña a todo link externo (WCAG 3.2.5).
+export const externalLinkHint = "(se abre en otra pestaña)";
+
+// ---------- Textos de componentes UI (rediseño 2026) ----------
+export const menuLabels = { abrir: "Menú", cerrar: "Cerrar" };
+
+export const whatsappCta = {
+  label: "Escribinos",
+  ariaLabel: "Escribinos por WhatsApp",
+};
+
+export const reviewLabels = {
+  tag: "Google",
+  fuente: "Reseña de Google",
+  leerMas: "Leer más",
+  leerMenos: "Leer menos",
+};
+
+/** Texto que acompaña a las estrellas: "5 de 5" (WCAG 1.1.1 / 1.4.1). */
+export function ratingLabel(rating: number, max = 5): string {
+  return `${rating} de ${max}`;
+}
+
+export const carouselLabels = {
+  anterior: "Reseña anterior",
+  siguiente: "Siguiente reseña",
+  irAPagina: (n: number) => `Ir a la página ${n}`,
+};
+
+// Items de las marquesinas decorativas (aria-hidden).
+export const marqueeItems = [
+  "Branding",
+  "Estrategia",
+  "Diseño web",
+  "Contenido para redes",
+  "Auditoría de redes",
+];
+
 export const navLinks = [
   { label: "Novedades", href: "#novedades" },
   { label: "Servicios", href: "#servicios" },

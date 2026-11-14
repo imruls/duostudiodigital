@@ -1,0 +1,19 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="75.6" height="68.8" viewBox="0 0 75.6 68.8" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Sticker" filter="url(#filter0_d_0_24)">
+<path id="Vector" d="M20.8 8H54.8C59.2 8 62.8 11.6 62.8 16V34C62.8 38.4 59.2 42 54.8 42H32.8L22.8 50V42H20.8C16.4 42 12.8 38.4 12.8 34V16C12.8 11.6 16.4 8 20.8 8Z" fill="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke="#2C321D"/>
+<path id="Vector_2" d="M26.8 28.2C28.5673 28.2 30 26.7673 30 25C30 23.2327 28.5673 21.8 26.8 21.8C25.0327 21.8 23.6 23.2327 23.6 25C23.6 26.7673 25.0327 28.2 26.8 28.2Z" fill="#6C774A"/>
+<path id="Vector_3" d="M37.8 28.2C39.5673 28.2 41 26.7673 41 25C41 23.2327 39.5673 21.8 37.8 21.8C36.0327 21.8 34.6 23.2327 34.6 25C34.6 26.7673 36.0327 28.2 37.8 28.2Z" fill="#6C774A"/>
+<path id="Vector_4" d="M48.8 28.2C50.5673 28.2 52 26.7673 52 25C52 23.2327 50.5673 21.8 48.8 21.8C47.0327 21.8 45.6 23.2327 45.6 25C45.6 26.7673 47.0327 28.2 48.8 28.2Z" fill="#6C774A"/>
+</g>
+<defs>
+<filter id="filter0_d_0_24" x="-3.2" y="-6" width="80" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="6"/>
+<feGaussianBlur stdDeviation="6"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.173 0 0 0 0 0.196 0 0 0 0 0.114 0 0 0 0.18 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_24"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_24" result="shape"/>
+</filter>
+</defs>
+</svg>

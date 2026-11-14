@@ -1,0 +1,54 @@
+---
+/**
+ * ListItem — componente "Item de lista" de Figma (Tono=Oscuro | Claro).
+ * Va dentro de un <ul>. Oscuro: para fondos claros. Claro: para fondos verdes.
+ */
+import Icon from "@ui/Icon.astro";
+
+interface Props {
+  tono?: "oscuro" | "claro";
+  class?: string;
+}
+
+const { tono = "oscuro", class: className } = Astro.props;
+---
+
+<li class:list={["item-lista", `item-lista--${tono}`, className]}>
+  <span class="item-lista__check"><Icon name="check" size={14} /></span>
+  <span><slot /></span>
+</li>
+
+<style>
+  .item-lista {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--duo-space-3);
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
+  }
+
+  .item-lista__check {
+    display: inline-flex;
+    flex-shrink: 0;
+    padding: var(--duo-space-1);
+    border-radius: var(--duo-radius-full);
+    /* centra el círculo con la primera línea de texto (14.4px × 1.6) */
+    margin-top: 0.03em;
+  }
+
+  .item-lista--oscuro {
+    color: var(--duo-text-primary);
+  }
+
+  .item-lista--oscuro .item-lista__check {
+    background: var(--duo-card-verde);
+  }
+
+  .item-lista--claro {
+    color: var(--duo-text-inverse);
+  }
+
+  .item-lista--claro .item-lista__check {
+    background: var(--duo-bg-inverse);
+  }
+</style>

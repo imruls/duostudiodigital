@@ -1,0 +1,55 @@
+---
+/**
+ * TextLink — componente "Link de texto" de Figma (node 52:2415).
+ * Links del footer y links sueltos. Hover: subrayado. Foco: anillo de 3px
+ * (verde sobre claro, rosa sobre verde). Área de 44px de alto.
+ */
+import { externalLinkHint } from "@data/dataSite";
+
+interface Props {
+  href: string;
+  tono?: "claro" | "verde";
+  externo?: boolean;
+  class?: string;
+}
+
+const { href, tono = "claro", externo = false, class: className } = Astro.props;
+---
+
+<a
+  class:list={["link-texto", `link-texto--${tono}`, className]}
+  href={href}
+  target={externo ? "_blank" : undefined}
+  rel={externo ? "noopener noreferrer" : undefined}
+>
+  <slot />
+  {externo && <span class="sr-only">{externalLinkHint}</span>}
+</a>
+
+<style>
+  .link-texto {
+    --duo-focus-ring: var(--duo-focus-ring-thin);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--duo-space-2);
+    min-height: 44px;
+    padding: var(--duo-space-3) var(--duo-space-1);
+    border-radius: var(--duo-space-1);
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
+    text-underline-offset: 0.2em;
+  }
+
+  .link-texto:hover {
+    text-decoration: underline;
+  }
+
+  .link-texto--claro {
+    color: var(--duo-text-primary);
+  }
+
+  .link-texto--verde {
+    --duo-focus-color: var(--duo-border-focus-inverse);
+    color: var(--duo-text-inverse);
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+/**
+ * ContactCard — componente "Card contacto" de Figma (node 51:2341).
+ * Toda la card es el link. Hover: sombra 6→9px + translate(-3px,-3px).
+ * Presionado: sin sombra y fondo rosa suave. Foco: anillo de 4px.
+ */
+import Icon from "@ui/Icon.astro";
+import type { IconName } from "@ui/iconTypes";
+import { externalLinkHint } from "@data/dataSite";
+
+interface Props {
+  href: string;
+  canal: string;
+  descripcion: string;
+  icono: IconName;
+  externo?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  canal,
+  descripcion,
+  icono,
+  externo = true,
+  class: className,
+} = Astro.props;
+---
+
+<a
+  class:list={["card-contacto", className]}
+  href={href}
+  target={externo ? "_blank" : undefined}
+  rel={externo ? "noopener noreferrer" : undefined}
+>
+  <span class="card-contacto__top">
+    <span class="card-contacto__icono"><Icon name={icono} size={24} /></span>
+    <Icon name="external" size={24} />
+  </span>
+  <span class="card-contacto__canal">{canal}</span>
+  <span class="card-contacto__descripcion">{descripcion}</span>
+  {externo && <span class="sr-only">{externalLinkHint}</span>}
+</a>
+
+<style>
+  .card-contacto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-4);
+    height: 100%;
+    padding: var(--duo-space-6);
+    border: var(--duo-border-thick) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-lg);
+    background: var(--duo-bg-surface);
+    color: var(--duo-text-primary);
+    box-shadow: var(--duo-shadow-card);
+    transition:
+      background-color var(--duo-transition),
+      box-shadow var(--duo-transition),
+      transform var(--duo-transition);
+  }
+
+  .card-contacto:hover {
+    box-shadow: var(--duo-shadow-card-hover);
+    transform: var(--duo-hover-translate-card);
+  }
+
+  .card-contacto:active {
+    background: var(--duo-bg-rosa);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .card-contacto__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .card-contacto__icono {
+    display: inline-flex;
+    padding: var(--duo-space-3);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-card-verde);
+  }
+
+  .card-contacto__canal {
+    font-size: var(--duo-fs-h3);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .card-contacto__descripcion {
+    font-size: var(--duo-fs-body-s);
+    line-height: 1.6;
+    color: var(--duo-text-secondary);
+  }
+</style>

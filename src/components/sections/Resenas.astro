@@ -35,12 +35,7 @@ import Icon from "@ui/Icon.astro";
                 <span class="resena-card__name">{r.name}</span>
                 <div class="resena-card__stars">
                   {Array.from({ length: r.rating }).map(() => (
-                    <Icon
-                      name="star"
-                      size={16}
-                      fill="currentColor"
-                      stroke="none"
-                    />
+                    <Icon name="star" size={16} />
                   ))}
                 </div>
                 <p class="resena-card__text">"{r.text}"</p>

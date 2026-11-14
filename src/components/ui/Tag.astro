@@ -1,0 +1,28 @@
+---
+/** Tag — componente "Tag" de Figma (node 17:120). Texto en el slot. */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span class:list={["tag", className]}><slot /></span>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--duo-space-2) var(--duo-space-3);
+    border: var(--duo-border-thin) solid var(--duo-border-strong);
+    border-radius: var(--duo-radius-full);
+    background: var(--duo-bg-surface);
+    color: var(--duo-text-primary);
+    font-size: var(--duo-fs-tag);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+</style>
