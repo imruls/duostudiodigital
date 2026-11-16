@@ -13,14 +13,23 @@ interface Props {
   icono: IconName;
   label: string;
   externo?: boolean;
+  /** Color de fondo por red (Figma: rosa, crema, verde, blanco). */
+  fondo?: "rosa" | "crema" | "verde" | "blanco";
   class?: string;
 }
 
-const { href, icono, label, externo = true, class: className } = Astro.props;
+const {
+  href,
+  icono,
+  label,
+  externo = true,
+  fondo = "rosa",
+  class: className,
+} = Astro.props;
 ---
 
 <a
-  class:list={["social", className]}
+  class:list={["social", `social--${fondo}`, className]}
   href={href}
   aria-label={externo ? `${label} ${externalLinkHint}` : label}
   target={externo ? "_blank" : undefined}
@@ -45,6 +54,18 @@ const { href, icono, label, externo = true, class: className } = Astro.props;
     transition:
       box-shadow var(--duo-transition),
       transform var(--duo-transition);
+  }
+
+  .social--crema {
+    background: var(--duo-bg-cream);
+  }
+
+  .social--verde {
+    background: var(--duo-card-verde);
+  }
+
+  .social--blanco {
+    background: var(--duo-bg-surface);
   }
 
   .social:hover {
