@@ -265,8 +265,8 @@ const menuLinks = [...navLinks, contactoLink];
     z-index: 1000;
     background: var(--duo-bg-page);
     transition:
-      background-color var(--duo-transition),
-      box-shadow var(--duo-transition);
+      background-color var(--duo-transition-lenta),
+      box-shadow var(--duo-transition-lenta);
   }
 
   /* Borde inferior de 1,6px como sombra interna: no suma alto, así el
@@ -285,7 +285,7 @@ const menuLinks = [...navLinks, contactoLink];
     align-items: center;
     justify-content: space-between;
     padding-block: var(--duo-space-3);
-    transition: padding var(--duo-transition);
+    transition: padding var(--duo-transition-lenta);
   }
 
   .navbar[data-con-scroll] .navbar__barra {

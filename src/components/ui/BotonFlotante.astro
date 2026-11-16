@@ -6,8 +6,9 @@
  * Tablet/mobile: círculo de 60px solo con ícono (aria-label).
  * Fijo abajo a la derecha con 24px de margen.
  * Foco: outline 3px verde/900 + box-shadow 0 0 0 6px rosa (se ve sobre
- * cualquier fondo). El ocultamiento cuando el footer es visible se suma en
- * el paso de comportamiento.
+ * cualquier fondo).
+ * Se oculta (opacity 0 + visibility hidden, 200ms) cuando el footer entra en
+ * pantalla, para no tapar los links de redes (IntersectionObserver).
  */
 import Icon from "@ui/Icon.astro";
 import {
@@ -40,6 +41,18 @@ const { whatsappUrl = defaultWhatsappUrl } = Astro.props;
   </span>
 </a>
 
+<script>
+  const boton = document.querySelector<HTMLElement>("[data-boton-flotante]");
+  const footer = document.querySelector<HTMLElement>("[data-footer]");
+
+  if (boton && footer && "IntersectionObserver" in window) {
+    const botonEl = boton;
+    new IntersectionObserver(([entrada]) => {
+      botonEl.toggleAttribute("data-oculto", Boolean(entrada?.isIntersecting));
+    }).observe(footer);
+  }
+</script>
+
 <style>
   .boton-flotante {
     position: fixed;
@@ -59,7 +72,19 @@ const { whatsappUrl = defaultWhatsappUrl } = Astro.props;
     transition:
       background-color var(--duo-transition),
       box-shadow var(--duo-transition),
-      transform var(--duo-transition);
+      transform var(--duo-transition),
+      opacity var(--duo-transition-lenta),
+      visibility 0s;
+  }
+
+  /* Footer visible: se desvanece y sale del orden de tabulación. La
+     visibilidad cambia al final del fundido para que se vea la transición. */
+  .boton-flotante[data-oculto] {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--duo-transition-lenta),
+      visibility 0s linear 200ms;
   }
 
   .boton-flotante:hover {

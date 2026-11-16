@@ -125,6 +125,8 @@
      No son variables de Figma; se documentan en la ficha y en las
      descripciones de los componentes. */
   --duo-transition: 150ms ease-out;
+  /* Tablero "Estados de comportamiento": navbar con scroll y botón flotante */
+  --duo-transition-lenta: 200ms ease-out;
   --duo-hover-translate: translate(-2px, -2px);
   --duo-hover-translate-card: translate(-3px, -3px); /* Card contacto */
   --duo-shadow-card-hover: 9px 9px 0
