@@ -66,12 +66,6 @@ const iconos: IconName[] = [
   "close",
   "sparkle",
 ];
-const iconoCanal: Record<string, IconName> = {
-  WhatsApp: "whatsapp",
-  Email: "mail",
-  Instagram: "instagram",
-  TikTok: "tiktok",
-};
 const stickers = [
   "destellos",
   "corazon",
@@ -204,8 +198,9 @@ const items = servicios[0]?.items.slice(0, 3) ?? [];
                 href={c.href}
                 canal={c.name}
                 descripcion={c.description}
-                icono={iconoCanal[c.name] ?? "external"}
-                externo={c.name !== "Email"}
+                icono={c.icon}
+                externo={c.externo}
+                destacada={c.destacado}
               />
             ))
           }

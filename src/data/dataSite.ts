@@ -499,25 +499,47 @@ export const socialLinks = [
 
 // ─── Contacto ───────────────────────────────────────────
 
+export const contactoSeccion = {
+  badge: "Contacto",
+  titulo: { antes: "¿Charlamos? ", destacado: "Escribinos" },
+  bajada: "Elegí el canal que más te guste y hablemos sobre tu proyecto.",
+};
+
+// Ubicación del estudio (fila de datos de Contacto y footer).
+export const ubicacion = "Buenos Aires, Argentina";
+
+// `destacado`: canal recomendado, en rosa (Figma: "te respondemos al toque").
 export const contactChannels = [
   {
     name: "WhatsApp",
     description: "Escribinos directo y te respondemos al toque.",
     href: whatsappUrl,
+    icon: "whatsapp",
+    externo: true,
+    destacado: true,
   },
   {
     name: "Email",
     description: "Para consultas, propuestas o lo que necesites.",
     href: contactEmailUrl,
+    icon: "mail",
+    externo: false,
+    destacado: false,
   },
   {
     name: "Instagram",
     description: "Seguinos y mirá nuestro día a día creativo.",
     href: instagramUrl,
+    icon: "instagram",
+    externo: true,
+    destacado: false,
   },
   {
     name: "TikTok",
     description: "Tips, tendencias y detrás de escena.",
     href: tiktokUrl,
+    icon: "tiktok",
+    externo: true,
+    destacado: false,
   },
-];
+] as const;

@@ -1,249 +1,288 @@
 ---
-import { contactChannels, whatsappIconSvg } from "@data/dataSite";
+/**
+ * Contacto — Figma: desktop 23:333 · tablet 54:2688 · mobile 27:640.
+ * Nota de cumplimiento: "Nota/Contacto".
+ * - 4 cards de 3 columnas en desktop, 2×2 en tablet, apiladas en mobile.
+ * - WhatsApp destacado en rosa como canal recomendado.
+ * - La card completa es el link y cada canal explica qué esperar.
+ * - Desktop: email visible (para copiar) y ubicación debajo de las cards.
+ */
+import BadgeSection from "@ui/BadgeSection.astro";
+import ContactCard from "@ui/ContactCard.astro";
+import Sticker from "@ui/Sticker.astro";
+import Icon from "@ui/Icon.astro";
+import {
+  contactoSeccion as c,
+  contactChannels,
+  contactEmail,
+  contactEmailUrl,
+  ubicacion,
+} from "@data/dataSite";
 ---
 
-<section class="section contacto" id="contacto">
-  <div class="container">
-    <div class="contacto__header reveal">
-      <span class="section-label">Contacto</span>
-      <h2 class="section-title">
-        ¿Charlamos? <span>Escribinos</span>
-      </h2>
-      <p class="contacto__subtitle">
-        Elegí el canal que más te guste y hablemos sobre tu proyecto.
-      </p>
+<section
+  class="section contacto"
+  id="contacto"
+  aria-labelledby="contacto-titulo"
+>
+  <div class="contacto__stickers" aria-hidden="true">
+    <div class="container contacto__stickers-desktop">
+      <div class="contacto__stickers-caja">
+        <Sticker
+          tipo="burbuja"
+          tamano={67.2}
+          rotacion={8}
+          class="contacto__st contacto__st--burbuja"
+        />
+        <Sticker
+          tipo="corazon"
+          tamano={61.6}
+          rotacion={-10}
+          class="contacto__st contacto__st--corazon"
+        />
+        <Sticker
+          tipo="destellos"
+          tamano={56}
+          rotacion={6}
+          class="contacto__st contacto__st--destellos"
+        />
+        <Sticker
+          tipo="cursor"
+          tamano={56}
+          rotacion={-12}
+          class="contacto__st contacto__st--cursor"
+        />
+      </div>
     </div>
+    <Sticker
+      tipo="burbuja"
+      tamano={39.2}
+      rotacion={8}
+      class="contacto__st contacto__st--burbuja-c"
+    />
+    <Sticker
+      tipo="corazon"
+      tamano={33.6}
+      rotacion={-10}
+      class="contacto__st contacto__st--corazon-c"
+    />
+  </div>
 
-    <div class="contacto__grid">
+  <div class="container contacto__cuerpo">
+    <header class="contacto__encabezado">
+      <BadgeSection tono="rosa">{c.badge}</BadgeSection>
+      <h2 class="section-title contacto__titulo" id="contacto-titulo">
+        {c.titulo.antes}<span>{c.titulo.destacado}</span>
+      </h2>
+      <p class="contacto__bajada">{c.bajada}</p>
+    </header>
+
+    <ul class="contacto__canales">
       {
-        contactChannels.map((channel, i) => (
-          <a
-            href={channel.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={`contacto__card reveal reveal-delay-${i + 1}`}
-          >
-            <div class="contacto__icon">
-              {channel.name === "WhatsApp" && (
-                <span class="contacto__icon-whatsapp">
-                  <Fragment set:html={whatsappIconSvg} />
-                </span>
-              )}
-              {channel.name === "Email" && (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <rect x="2" y="4" width="20" height="16" rx="2" />
-                  <path d="M22 4L12 13 2 4" />
-                </svg>
-              )}
-              {channel.name === "Instagram" && (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01" />
-                </svg>
-              )}
-              {channel.name === "TikTok" && (
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.34-6.34V8.55a8.28 8.28 0 004.76 1.51V6.69h-1z" />
-                </svg>
-              )}
-            </div>
-            <h3 class="contacto__name">{channel.name}</h3>
-            <p class="contacto__desc">{channel.description}</p>
-            <span class="contacto__arrow">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                width="20"
-                height="20"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </span>
-          </a>
+        contactChannels.map((canal) => (
+          <li class="contacto__canal">
+            <ContactCard
+              href={canal.href}
+              canal={canal.name}
+              descripcion={canal.description}
+              icono={canal.icon}
+              externo={canal.externo}
+              destacada={canal.destacado}
+            />
+          </li>
         ))
       }
-    </div>
+    </ul>
+
+    <ul class="contacto__datos">
+      <li class="contacto__dato">
+        <Icon name="mail" size={18} />
+        <a class="contacto__email" href={contactEmailUrl}>{contactEmail}</a>
+      </li>
+      <li class="contacto__dato">
+        <Icon name="pin" size={18} />
+        <span>{ubicacion}</span>
+      </li>
+    </ul>
   </div>
 </section>
 
 <style>
+  /* ---------- Sección (mobile first) ---------- */
   .contacto {
-    background: var(--duo-bg-page);
-  }
-
-  .contacto__header {
-    text-align: center;
-    margin-bottom: var(--duo-space-9);
-  }
-
-  .contacto__header .section-title {
-    margin-top: var(--duo-space-4);
-  }
-
-  .contacto__subtitle {
-    font-size: 1.05rem;
-    color: var(--duo-text-secondary);
-    margin-top: var(--duo-space-4);
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.7;
-  }
-
-  .contacto__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--duo-space-6);
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .contacto__card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: var(--duo-space-7) var(--duo-space-6);
-    background: var(--duo-bg-page);
-    border-radius: var(--duo-radius-lg);
-    text-decoration: none;
-    color: inherit;
-    transition: var(--duo-transition);
-    position: relative;
-  }
-
-  .contacto__card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px
-      color-mix(in srgb, var(--duo-color-verde-900) 8%, transparent);
-  }
-
-  .contacto__icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--duo-color-verde-600) 10%, transparent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: var(--duo-space-4);
-    transition: var(--duo-transition);
-  }
-
-  .contacto__card:hover .contacto__icon {
-    background: var(--duo-action-secondary-bg);
-  }
-
-  .contacto__icon svg {
-    width: 24px;
-    height: 24px;
-    color: var(--duo-text-accent);
-    transition: var(--duo-transition);
-  }
-
-  /*
-   * El SVG de WhatsApp se inyecta con `set:html`, así que Astro no le agrega
-   * el atributo de scoping (data-astro-cid-*) y los selectores normales
-   * (ej. `.contacto__icon svg`) nunca lo alcanzan. Por eso acá usamos
-   * `:global()` en el nodo `svg`. Además ese SVG oficial llega hasta los
-   * bordes del viewBox (0-24), a diferencia de los íconos de línea
-   * (Email/Instagram/TikTok) que dejan ~2px de margen interno, por eso se
-   * reduce a 20px para igualar el peso visual.
-   */
-  .contacto__icon-whatsapp :global(svg) {
-    display: block;
-    width: 20px;
-    height: 20px;
-    color: var(--duo-text-accent);
-    transition: var(--duo-transition);
-  }
-
-  .contacto__card:hover .contacto__icon svg,
-  .contacto__card:hover .contacto__icon-whatsapp :global(svg) {
+    --duo-focus-color: var(--duo-border-focus-inverse);
+    background: var(--duo-bg-hero);
     color: var(--duo-text-inverse);
   }
 
-  .contacto__name {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--duo-text-primary);
-    margin-bottom: 0.35rem;
+  .contacto__cuerpo {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--duo-space-6);
   }
 
-  .contacto__desc {
-    font-size: 0.85rem;
-    color: var(--duo-text-secondary);
+  .contacto__encabezado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--duo-space-6);
+  }
+
+  .contacto__titulo {
+    color: var(--duo-text-inverse);
+  }
+
+  .contacto__titulo span {
+    color: var(--duo-text-highlight);
+  }
+
+  .contacto__bajada {
+    font-size: var(--duo-fs-body);
     line-height: 1.6;
-    max-width: 260px;
   }
 
-  .contacto__arrow {
-    margin-top: var(--duo-space-4);
-    color: var(--duo-text-accent);
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: var(--duo-transition);
+  /* ---------- Canales ---------- */
+  .contacto__canales {
+    display: grid;
+    gap: var(--duo-space-4);
+    list-style: none;
   }
 
-  .contacto__card:hover .contacto__arrow {
-    opacity: 1;
-    transform: translateX(0);
+  .contacto__canal {
+    display: flex;
   }
 
-  /* Mobile: show arrows always + active feedback */
-  @media (max-width: 639px) {
-    .contacto__card {
-      flex-direction: row;
-      text-align: left;
+  .contacto__canal :global(.card-contacto) {
+    width: 100%;
+  }
+
+  /* Email y ubicación: solo desktop (Figma) */
+  .contacto__datos {
+    display: none;
+    list-style: none;
+  }
+
+  /* ---------- Stickers ---------- */
+  .contacto__stickers {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .contacto__stickers-desktop {
+    display: none;
+  }
+
+  .contacto__stickers-caja {
+    position: relative;
+  }
+
+  .contacto :global(.contacto__st) {
+    position: absolute;
+  }
+
+  .contacto :global(.contacto__st--burbuja-c) {
+    top: 50px;
+    right: 51px;
+  }
+
+  .contacto :global(.contacto__st--corazon-c) {
+    top: 24px;
+    right: 106px;
+  }
+
+  /* ---------- Tablet (768–1023): 2×2 ---------- */
+  @media (min-width: 768px) {
+    .contacto__canales {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--duo-grid-gutter);
+    }
+  }
+
+  /* ---------- Desktop (≥1024): 4 cards de 3 columnas ---------- */
+  @media (min-width: 1024px) {
+    .contacto__cuerpo {
+      gap: var(--duo-space-8);
+    }
+
+    .contacto__encabezado {
+      align-items: center;
       gap: var(--duo-space-4);
-      padding: var(--duo-space-6);
+      text-align: center;
     }
 
-    .contacto__icon {
-      margin-bottom: 0;
+    .contacto__titulo {
+      max-width: 800px;
     }
 
-    .contacto__desc {
+    .contacto__bajada {
+      max-width: 560px;
+    }
+
+    .contacto__canales {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .contacto__datos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--duo-space-6);
+      font-size: var(--duo-fs-body-s);
+      line-height: 1.6;
+    }
+
+    .contacto__dato {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--duo-space-2);
+    }
+
+    .contacto__dato :global(svg) {
+      color: var(--duo-text-highlight);
+    }
+
+    .contacto__email {
+      text-underline-offset: 0.2em;
+    }
+
+    .contacto__email:hover {
+      text-decoration: underline;
+    }
+
+    .contacto__stickers-desktop {
+      position: absolute;
+      inset: var(--duo-section-space) 0 auto;
+      display: block;
+      height: 0;
+    }
+
+    .contacto__stickers > :global(.contacto__st--burbuja-c),
+    .contacto__stickers > :global(.contacto__st--corazon-c) {
       display: none;
     }
 
-    .contacto__arrow {
-      opacity: 1;
-      transform: translateX(0);
-      margin-top: 0;
-      margin-left: auto;
-      align-self: center;
+    .contacto :global(.contacto__st--burbuja) {
+      left: 19.85%;
+      top: -12px;
     }
 
-    .contacto__card:active {
-      transform: scale(0.98);
-      background: var(--duo-bg-cream);
+    .contacto :global(.contacto__st--corazon) {
+      left: 76.2%;
+      top: -32px;
     }
-  }
 
-  /* Breakpoints */
-  @media (min-width: 640px) {
-    .contacto__grid {
-      grid-template-columns: repeat(2, 1fr);
+    .contacto :global(.contacto__st--destellos) {
+      left: 98.9%;
+      top: 77px;
     }
-  }
 
-  @media (min-width: 1024px) {
-    .contacto__grid {
-      grid-template-columns: repeat(4, 1fr);
-      max-width: 1000px;
+    .contacto :global(.contacto__st--cursor) {
+      left: -3.73%;
+      top: 48px;
     }
   }
 </style>
