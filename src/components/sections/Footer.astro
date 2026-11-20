@@ -294,8 +294,12 @@ const anio = new Date().getFullYear();
       gap: var(--duo-space-4);
     }
 
+    /* Área táctil de 44px (CLAUDE.md) */
     .footer__email {
-      display: inline;
+      display: inline-flex;
+      align-items: center;
+      align-self: flex-start;
+      min-height: 44px;
       font-size: var(--duo-fs-body-s);
       line-height: 1.6;
       text-underline-offset: 0.2em;

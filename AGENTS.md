@@ -67,8 +67,8 @@ import { servicios } from "@data/dataSite";
 import Layout from "@layouts/Layout.astro";
 import Hero from "@sections/Hero.astro";
 import Icon from "@ui/Icon.astro";
-import logo from "@images/5.png";
-import { initScrollDots } from "@scripts/scrollDots";
+import isotipo from "@images/isotipo.png";
+import { initCarrusel } from "@scripts/carousel";
 ```
 
 No uses rutas relativas (`../../layouts/Layout.astro`) si existe un alias equivalente.

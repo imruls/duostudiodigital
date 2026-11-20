@@ -24,22 +24,24 @@ interface Props {
 const { whatsappUrl = defaultWhatsappUrl } = Astro.props;
 ---
 
-<a
-  href={whatsappUrl}
-  class="boton-flotante"
-  aria-label={`${whatsappCta.ariaLabel} ${externalLinkHint}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  data-boton-flotante
->
-  <span class="boton-flotante__texto">{whatsappCta.label}</span>
-  <span class="boton-flotante__circulo">
-    <Icon name="whatsapp" size={22} />
-  </span>
-  <span class="boton-flotante__icono-mobile">
-    <Icon name="whatsapp" size={28} />
-  </span>
-</a>
+<aside class="boton-flotante-region" aria-label={whatsappCta.regionLabel}>
+  <a
+    href={whatsappUrl}
+    class="boton-flotante"
+    aria-label={`${whatsappCta.ariaLabel} ${externalLinkHint}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    data-boton-flotante
+  >
+    <span class="boton-flotante__texto">{whatsappCta.label}</span>
+    <span class="boton-flotante__circulo">
+      <Icon name="whatsapp" size={22} />
+    </span>
+    <span class="boton-flotante__icono-mobile">
+      <Icon name="whatsapp" size={28} />
+    </span>
+  </a>
+</aside>
 
 <script>
   const boton = document.querySelector<HTMLElement>("[data-boton-flotante]");

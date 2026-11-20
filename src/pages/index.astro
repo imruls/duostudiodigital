@@ -22,6 +22,9 @@ import { whatsappUrl } from "@data/dataSite";
 
 <Layout>
   <Navbar />
+  <!-- Antes del <main> para que el teclado lo alcance: al final de la
+       página queda oculto porque el footer está visible. -->
+  <BotonFlotante whatsappUrl={whatsappUrl} />
   <main id="main">
     <Hero />
     <MarqueeDivider variante="cruzado" />
@@ -39,5 +42,4 @@ import { whatsappUrl } from "@data/dataSite";
     <Contacto />
   </main>
   <Footer />
-  <BotonFlotante whatsappUrl={whatsappUrl} />
 </Layout>

@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import "@fontsource/poppins/300.css";
 import "@fontsource/poppins/400.css";
 import "@fontsource/poppins/500.css";
 import "@fontsource/poppins/600.css";
@@ -8,6 +7,14 @@ import "@fontsource/poppins/700.css";
 import "@fontsource/pacifico/400.css";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import SkipLink from "@ui/SkipLink.astro";
+// Fuentes del primer pantallazo: se precargan para evitar el salto de
+// layout (CLS) cuando reemplazan a la fuente de respaldo.
+import poppins400 from "@fontsource/poppins/files/poppins-latin-400-normal.woff2?url";
+import poppins600 from "@fontsource/poppins/files/poppins-latin-600-normal.woff2?url";
+import poppins700 from "@fontsource/poppins/files/poppins-latin-700-normal.woff2?url";
+import pacifico400 from "@fontsource/pacifico/files/pacifico-latin-400-normal.woff2?url";
+
+const fuentesPrecargadas = [poppins400, poppins600, poppins700, pacifico400];
 import {
   servicios,
   contactEmail,
@@ -35,6 +42,17 @@ const {
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    {
+      fuentesPrecargadas.map((href) => (
+        <link
+          rel="preload"
+          href={href}
+          as="font"
+          type="font/woff2"
+          crossorigin
+        />
+      ))
+    }
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
@@ -134,22 +152,5 @@ const {
     <slot />
 
     <SpeedInsights />
-
-    <!-- Reveal observer -->
-    <script>
-      const revealElements = document.querySelectorAll(".reveal");
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("visible");
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
-      );
-      revealElements.forEach((el) => observer.observe(el));
-    </script>
   </body>
 </html>

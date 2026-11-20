@@ -91,64 +91,61 @@ El sitio está diseñado como una **landing single-page** que comunica los servi
 ```
 astro-duo/
 ├── public/                      # Assets estáticos (servidos tal cual)
-│   ├── favicon.ico
-│   ├── favicon-192.png
-│   ├── favicon-512.png
+│   ├── favicon.ico / favicon-192.png / favicon-512.png
 │   ├── og-image.png             # Open Graph / preview en redes
 │   └── robots.txt
 │
 ├── src/
 │   ├── assets/
+│   │   ├── icons/               # 24 íconos SVG del tablero "Iconos" de Figma
+│   │   ├── stickers/            # 7 stickers decorativos (SVG con sombra incluida)
 │   │   └── images/              # Imágenes optimizadas por sharp en build
-│   │       ├── isotipo.png      # Isotipo (icono de marca)
-│   │       ├── 5.png            # Logo desktop
-│   │       ├── 2.png            # Hero visual
-│   │       ├── PortadaEbook.png
-│   │       ├── photo-duo.jpg
-│   │       └── ...
+│   │       ├── logo-duo-studio-digital.png
+│   │       ├── isotipo.png / isotipo-d-cursor.png
+│   │       ├── foto-cami-y-mica.jpg
+│   │       └── sello-duo-studio-digital.png
 │   │
 │   ├── components/
-│   │   ├── sections/            # Secciones full-width de la home
-│   │   │   ├── Navbar.astro
+│   │   ├── sections/            # Secciones full-width de la home (orden de la página)
+│   │   │   ├── Navbar.astro     # + menú mobile (<dialog>)
 │   │   │   ├── Hero.astro
 │   │   │   ├── Servicios.astro
-│   │   │   ├── Ebook.astro
-│   │   │   ├── Recursos.astro
-│   │   │   ├── About.astro
+│   │   │   ├── Auditoria.astro
+│   │   │   ├── Resenas.astro
+│   │   │   ├── Nosotras.astro
+│   │   │   ├── Tienda.astro
 │   │   │   ├── Contacto.astro
 │   │   │   └── Footer.astro
-│   │   └── ui/                  # Componentes UI reutilizables
-│   │       ├── BotonFlotante.astro
-│   │       └── Icon.astro
+│   │   └── ui/                  # Componentes del tablero "Componentes" de Figma
+│   │       ├── Button, IconButton, Tag, BadgeSection, ListItem, Stars
+│   │       ├── ReviewCard, ContactCard, Sticker, Icon
+│   │       ├── Marquee, MarqueeDivider, CheckerDivider, GridBackground
+│   │       ├── NavLink, MenuButton, MobileMenuLink, CarouselDot
+│   │       ├── TextLink, SocialButton, SkipLink
+│   │       └── BotonFlotante.astro  # WhatsApp fijo (pedido del cliente)
 │   │
 │   ├── data/
 │   │   └── dataSite.ts          # ⚙️ Single source of truth de contenido
 │   │
 │   ├── layouts/
-│   │   └── Layout.astro         # Layout base (head, fonts, JSON-LD, scripts)
+│   │   └── Layout.astro         # Layout base (head, fonts, JSON-LD, SkipLink)
 │   │
 │   ├── pages/
-│   │   └── index.astro          # Home — compone todas las secciones
+│   │   └── index.astro          # Home — compone secciones y divisores
 │   │
 │   ├── scripts/
-│   │   └── scrollDots.ts        # Lógica compartida de carruseles (Servicios/Ebook)
+│   │   ├── carousel.ts          # Carruseles: scroll-snap, puntos, flechas, aria-live
+│   │   └── ariaDisabled.ts      # Bloquea la activación de controles aria-disabled
 │   │
 │   └── styles/
-│       └── global.css           # Tokens + reset + utilidades globales
+│       └── global.css           # Tokens Dúo + reset + grilla + tipografía
 │
 ├── scripts/
 │   └── check-content-drift.mjs  # Verifica que no haya datos de contacto hardcodeados
 │
-├── astro.config.mjs             # Config Astro + adapter Vercel
-├── tsconfig.json                # Path aliases + TypeScript estricto
-├── eslint.config.js             # Lint (flat config)
-├── .prettierrc.json             # Formato
-├── .editorconfig                # Convenciones de editor
-├── AGENTS.md                    # Convenciones del proyecto para agentes de IA
-├── package.json                 # Scripts, deps, engines, packageManager pinned
-├── pnpm-workspace.yaml          # allowBuilds: lifecycle scripts permitidos
-├── pnpm-lock.yaml               # Lockfile reproducible
-└── .npmrc                       # Config endurecida (frozen-lockfile, integrity)
+├── CLAUDE.md / AGENTS.md        # Convenciones del proyecto para agentes de IA
+├── PLAN-REDISENO.md             # Plan de implementación del rediseño 2026
+└── astro.config.mjs, tsconfig.json, eslint.config.js, .prettierrc.json, ...
 ```
 
 ### Path aliases
@@ -159,70 +156,65 @@ Configurados en `tsconfig.json` para evitar imports relativos largos:
 import { servicios } from "@data/dataSite";
 import Layout from "@layouts/Layout.astro";
 import Hero from "@sections/Hero.astro";
-import Icon from "@ui/Icon.astro";
-import logo from "@images/5.png";
-import { initScrollDots } from "@scripts/scrollDots";
+import Button from "@ui/Button.astro";
+import isotipo from "@images/isotipo.png";
+import { initCarrusel } from "@scripts/carousel";
 ```
 
 ---
 
 ## Sistema de diseño
 
-Todos los tokens viven en [`src/styles/global.css`](./src/styles/global.css) como CSS custom properties.
+El diseño sale del archivo de Figma "Duo" (página "Rediseño Landing"), que es la
+fuente de verdad visual. Todos los tokens viven en
+[`src/styles/global.css`](./src/styles/global.css) como CSS custom properties con
+el nombre de Code Syntax de cada variable de Figma (`--duo-*`).
 
-### 🎨 Paleta de colores
+### 🎨 Color
 
-| Token          | Hex       | Muestra                                                            |
-| -------------- | --------- | ------------------------------------------------------------------ |
-| `--olive`      | `#7b8b3e` | ![](https://img.shields.io/badge/-7b8b3e-7b8b3e?style=flat-square) |
-| `--olive-dark` | `#5c6a2e` | ![](https://img.shields.io/badge/-5c6a2e-5c6a2e?style=flat-square) |
-| `--olive-deep` | `#4a5524` | ![](https://img.shields.io/badge/-4a5524-4a5524?style=flat-square) |
-| `--pink-light` | `#f2c4ce` | ![](https://img.shields.io/badge/-f2c4ce-f2c4ce?style=flat-square) |
-| `--blush`      | `#eacfc8` | ![](https://img.shields.io/badge/-eacfc8-eacfc8?style=flat-square) |
-| `--tan`        | `#c4b9a0` | ![](https://img.shields.io/badge/-c4b9a0-c4b9a0?style=flat-square) |
-| `--cream`      | `#f0ede4` | ![](https://img.shields.io/badge/-f0ede4-f0ede4?style=flat-square) |
-| `--white`      | `#fefdfb` | ![](https://img.shields.io/badge/-fefdfb-fefdfb?style=flat-square) |
-| `--text-dark`  | `#0c0d0d` | ![](https://img.shields.io/badge/-0c0d0d-0c0d0d?style=flat-square) |
-| `--text-muted` | `#6b6b5a` | ![](https://img.shields.io/badge/-6b6b5a-6b6b5a?style=flat-square) |
+- **Primitivos** (`Dúo / Primitives`): escalas `--duo-color-verde-*`, `--duo-color-rosa-*`,
+  `--duo-color-crema-*` y `--duo-color-blanco`. Colores de marca: verde `#828F59`,
+  rosa `#F8D0D8`, crema `#EFEDDC`.
+- **Semánticos** (`Dúo / Color`): `--duo-bg-*`, `--duo-text-*`, `--duo-border-*`,
+  `--duo-action-*` (con variantes `-hover` y `disabled`) y `--duo-card-*`.
+- Los componentes usan solo tokens semánticos: nada de hex, rgba ni sombras a mano.
 
 ### ✍️ Tipografía
 
-- **Body** — [Poppins](https://fonts.google.com/specimen/Poppins), self-hosted vía `@fontsource/poppins`.
-- **Display** — [Pacifico](https://fonts.google.com/specimen/Pacifico), self-hosted vía `@fontsource/pacifico`.
+- **Poppins** para texto, UI y títulos (700) y **Pacifico** solo para la palabra
+  destacada de los títulos. Self-hosted vía `@fontsource` (sin requests a Google
+  Fonts); las fuentes del primer pantallazo se precargan en `Layout.astro`.
+- Tamaños `--duo-fs-*` (`Dúo / Typography`); los títulos cambian por breakpoint
+  según los estilos `Dúo/Tablet/...` y `Dúo/Mobile/...`.
 
-Sin requests externos a Google Fonts → mejor performance y privacidad.
+### 📐 Espaciado, grilla y sombras
 
-### 📐 Escala de espaciado
-
-| Token         | Valor    |
-| ------------- | -------- |
-| `--space-xs`  | `0.5rem` |
-| `--space-sm`  | `1rem`   |
-| `--space-md`  | `1.5rem` |
-| `--space-lg`  | `2.5rem` |
-| `--space-xl`  | `4rem`   |
-| `--space-2xl` | `6rem`   |
-| `--space-3xl` | `8rem`   |
-
-### 🟫 Radios y motion
-
-Radios desde `--radius-sm` (8px) hasta `--radius-full` (pill). Easing `cubic-bezier(0.25, 0.46, 0.45, 0.94)` aplicado vía `--ease-out`.
+- Espaciado `--duo-space-1` a `--duo-space-10` (4 a 96px) y radios `--duo-radius-*`.
+- Grilla: 12 columnas / 1200px en desktop (≥1024), 8 en tablet (≥768) y 4 en mobile.
+  Utilidades `.container`, `.section` (padding 96/80/64) y `.grid` con `.span-*`.
+- Sombras duras de los estilos `Dúo/Shadow/*` (`--duo-shadow-card`, `-cta`, `-hover`…).
+- Estados según la ficha "Convención de estados": `:hover`, `:active`,
+  `:focus-visible` (anillo de 4px), `[aria-disabled]`, `[aria-current]`, `[aria-expanded]`.
 
 ---
 
 ## Secciones de la web
 
-| #   | Sección        | Componente            | Función                                                                                                                                                                                                                                                         |
-| --- | -------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Navbar         | `Navbar.astro`        | Logo + navegación + menú móvil                                                                                                                                                                                                                                  |
-| 2   | Hero           | `Hero.astro`          | Headline principal y CTA                                                                                                                                                                                                                                        |
-| 3   | Servicios      | `Servicios.astro`     | Cards de servicios (título, descripción, listado de items y CTA a WhatsApp) — carrusel en mobile, grid de 4 columnas en desktop. Incluye además una subsección destacada de "Auditoría de Redes Sociales" (precio, qué incluye, cómo funciona y CTA a WhatsApp) |
-| 4   | Ebook          | `Ebook.astro`         | Promoción del ebook descargable + reviews                                                                                                                                                                                                                       |
-| 5   | Recursos       | `Recursos.astro`      | Recursos gratuitos (prompts, plantillas)                                                                                                                                                                                                                        |
-| 6   | About          | `About.astro`         | Quiénes somos + valores                                                                                                                                                                                                                                         |
-| 7   | Contacto       | `Contacto.astro`      | Canales de contacto                                                                                                                                                                                                                                             |
-| 8   | Footer         | `Footer.astro`        | Cierre + redes                                                                                                                                                                                                                                                  |
-| ➕  | Botón flotante | `BotonFlotante.astro` | WhatsApp siempre accesible                                                                                                                                                                                                                                      |
+| #   | Sección        | Componente            | Función                                                                 |
+| --- | -------------- | --------------------- | ----------------------------------------------------------------------- |
+| 1   | Navbar         | `Navbar.astro`        | Sticky con estado "con scroll", scroll-spy y menú mobile como diálogo   |
+| 2   | Hero           | `Hero.astro`          | Propuesta de valor, CTAs y prueba social                                |
+| 3   | Servicios      | `Servicios.astro`     | 4 servicios con lo que incluyen (carrusel en mobile) y link a Auditoría |
+| 4   | Auditoría      | `Auditoria.astro`     | Oferta de entrada: precio, qué incluye y cómo funciona                  |
+| 5   | Reseñas        | `Resenas.astro`       | Carrusel de reseñas de Google con "Leer más"                            |
+| 6   | Nosotras       | `Nosotras.astro`      | Quiénes somos y valores                                                 |
+| 7   | Tienda         | `Tienda.astro`        | Producto destacado (Dúo System Client) + eshop                          |
+| 8   | Contacto       | `Contacto.astro`      | Canales de contacto (WhatsApp destacado)                                |
+| 9   | Footer         | `Footer.astro`        | Navegación, redes y "Volver arriba"                                     |
+| ➕  | Botón flotante | `BotonFlotante.astro` | WhatsApp siempre accesible; se oculta cuando el footer está visible     |
+
+Entre secciones van divisores decorativos (`MarqueeDivider` y `CheckerDivider`) en
+el orden del frame desktop de Figma.
 
 ---
 
@@ -293,15 +285,20 @@ pnpm preview
 - `whatsappNumber` / `whatsappUrl` / `getWhatsappLink(mensaje?)` — número y helpers de contacto. No hardcodear `"https://wa.me/..."` en componentes.
 - `contactEmail` / `contactEmailUrl` — email de contacto. No hardcodear `"mailto:..."` en componentes.
 - `instagramUrl` / `tiktokUrl` — URLs de redes sociales, reusadas en `socialLinks`, `contactChannels` y el JSON-LD de `Layout.astro`.
-- `companyDescription` — copy compartido entre Hero y About.
-- `navLinks` — items del menú
+- `navLinks` / `contactoLink` — items del navbar, menú mobile y footer
+- `hero`, `serviciosSeccion`, `auditoriaRedes`, `resenasSeccion`, `nosotrasSeccion`,
+  `tiendaSeccion`, `contactoSeccion`, `footerSeccion` — textos de cada sección
 - `servicios` — cards de servicios (título, descripción y listado de items)
-- `auditoriaRedes` — subsección destacada de "Auditoría de Redes Sociales" (precio, qué incluye, cómo funciona, público, tiempo de entrega y CTAs)
-- `ebookHref`, `ebookFeatures`, `ebookReviews` — ebook + testimonios
-- `values` — valores de la sección About
-- `socialLinks` — redes (Instagram, TikTok, WhatsApp, Email)
-- `contactChannels` — canales de la sección Contacto
-- `recursos` — recursos descargables
+- `clientReviews` — reseñas de Google (el orden es el del carrusel)
+- `companyDescription` y `values` — sección Nosotras
+- `novedadDuoSystemClient`, `shopHref`, `shopFeatures` — sección Tienda
+- `contactChannels`, `ubicacion`, `socialLinks` — contacto y redes
+- Textos de UI compartidos: `whatsappCta`, `menuLabels`, `reviewLabels`,
+  `carouselLabels`, `externalLinkHint`, `marqueeItems`
+- Algunos textos tienen versión `largo` / `corto` (`TextoAdaptable`): la corta se
+  usa en tablet y mobile, como en Figma.
+- **A confirmar con el estudio:** `googleRatingResumen`, `resenasSeccion.puntaje`
+  y `fundadorasLabel`.
 
 ### Añadir un nuevo servicio
 

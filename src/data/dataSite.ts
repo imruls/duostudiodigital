@@ -45,6 +45,8 @@ export const whatsappCta = {
   ariaLabel: "Escribinos por WhatsApp",
   labelLargo: "Escribinos por WhatsApp",
   respuesta: "Te respondemos al toque",
+  /** Landmark del botón flotante (axe: todo el contenido dentro de regiones). */
+  regionLabel: "Contacto rápido",
 };
 
 export const reviewLabels = {
